@@ -1,0 +1,271 @@
+{{ $client_id := delimit (shuffle (seq 21 87)) "" | base64Encode | truncate 25 "" }}
+
+{{ with $.Page.Params }}
+
+{{- $author := ($.Params.author | default $.Site.Params.author)}}
+
+<!-- blog_posts -->
+
+<script>
+  var session_id = function () {  
+    var d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+        d += performance.now();
+    }
+    return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+  //
+   // session storage user
+  var session_id_st = window.sessionStorage.getItem('session_id');
+  // if(!session_id_st) {
+  //   window.sessionStorage.setItem('session_id', session_id());
+  // }
+  var objSession_id = eval("(function(){return " + session_id_st + ";})()");
+  if(objSession_id && typeof objSession_id === 'object' && objSession_id !== null) {
+    session_id = objSession_id;
+    } else {
+      var objSession_id = {
+        'session_id': session_id(),
+    }
+      window.sessionStorage.setItem('user', JSON.stringify(objSession_id));
+      session_id = objSession_id;
+  }
+  // local storage user
+  var user = window.localStorage.getItem('user');
+  var objUser = eval("(function(){return " + user + ";})()");
+  if(objUser && typeof objUser === 'object' && objUser !== null) {
+      user = objUser;
+    } else {
+      var objUser = {
+        'client_id': {{$client_id}},
+    }
+    window.localStorage.setItem('user', JSON.stringify(objUser));
+    user = objUser;
+  }
+  // user properties combined for session and local storage
+  user = Object.assign(user, session_id);
+
+  // dataLayer
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    "event": "init",
+    "general": {
+      {{ if eq hugo.IsProduction false}}"environment": "staging",{{else}}"environment": "production",{{end}}
+      "version_hugo": {{ hugo.Version }},
+      "theme_color": {{$.Site.Params.defaultTheme}},
+      "epoch": {{ now.Unix }},
+      "date_full": {{ now }},
+      "date": {{ now.Format "2-01-2006"}},
+      "year": {{ now.Format "2006"}},
+      "month": {{ now.Format "01"}},
+      "day": {{ now.Format "2"}},
+      "time": {{ now.Format "15:04:05"}},
+      "hour": {{ now.Format "15"}},
+      "minutes": {{ now.Format "04"}},
+      "seconds": {{ now.Format "05"}}
+    },
+    "user": user,
+    "page": {
+      {{ with $.Kind }}"page_type": {{$.Kind}},{{end}}
+      {{ with $author }}"author": {{$author}},{{end}}
+      {{ with $.Params.tags }}"tags": {{$.Params.tags}},{{end}}
+      {{ with $.Params.title }}"title": {{$.Params.title}},{{end}}
+      {{ with $.Params.summary }}"summary": {{$.Params.summary}},{{end}}
+      {{ with .UniqueID }}"id": {{.UniqueID}},{{end}}
+      {{ with $.Site.Language.Lang }}"language": {{$.Site.Language.Lang}},{{end}}
+      {{ with $.Params.keywords }}"keywords": {{$.Params.keywords}},{{end}}
+      {{ with $.Page.Date }}"date_published": {{ dateFormat "2-01-2006" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}"year_published": {{ dateFormat "2006" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}"month_published": {{ dateFormat "01" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}{{ with $.Page.Lastmod }}"day_published": {{ dateFormat "2" $.Page.Date }}, "lastmod": {{ dateFormat "2-01-2006" $.Page.Lastmod }},{{end}}{{end}}
+      {{ with $.Params.draft }}"draft": {{ $.Params.draft }},{{end}}
+      {{ with $.File }}"id": {{ .UniqueID }},{{ end }}
+      {{ with $.Page.ReadingTime }}"reading_time": {{ $.Page.ReadingTime }},{{end}}
+      {{ with $.Page.WordCount }}"words": {{ $.Page.WordCount }},{{end}}
+      {{ with $.Params.aliases}}"aliases": {{$.Params.aliases}},{{end}}
+      {{ with $.Permalink }}"url": {{ $.Permalink }},{{end}}
+      {{ if $.IsHome }}"path": "/"{{else}}{{ with $.File }}"path": {{ .Dir }} + {{ end }}{{ with $.File }}{{ .BaseFileName }}{{ end }}{{ end }}
+    }
+  });
+</script>
+
+<!-- /////////////////////////// -->
+<!-- Analytics script -->
+<!-- /////////////////////////// -->
+
+<script>
+  /// Cookies
+  var cookieObj = {};
+
+function getPageCookies(){
+
+  // cookie is a string containing a semicolon-separated list, this split puts it into an array
+  var cookieArr = document.cookie.split(";");
+
+  // Iterate the array of flat cookies to get their key value pair
+  for(var i = 0; i < cookieArr.length; i++){
+
+      // Remove the standardized whitespace
+      var cookieSeg = cookieArr[i].trim();
+
+      // Index of the split between key and value
+      var firstEq = cookieSeg.indexOf("=");
+
+      // Assignments
+      var name = cookieSeg.substr(0,firstEq);
+      var value = cookieSeg.substr(firstEq+1);
+      cookieObj[name] = value;
+ }
+ return cookieObj;
+};
+getPageCookies();
+
+  // Viewport Size
+  // Get Viewport resize
+var viewportHeigth
+var viewportWidth
+function getViewportSize(w) {
+
+  // Use the specified window or the current window if no argument
+  w = w || window;
+
+  // This works for all browsers except IE8 and before
+  if (w.innerWidth != null) return { viewportWidth: w.innerWidth, viewportHeigth: w.innerHeight };
+
+  // For IE (or any browser) in Standards mode
+  var d = w.document;
+  if (document.compatMode == "CSS1Compat")
+      return { viewportWidth: d.documentElement.clientWidth,
+         viewportHeigth: d.documentElement.clientHeight };
+
+  // For browsers in Quirks mode
+  return { viewportWidth: d.body.clientWidth, viewportHeigth: d.body.clientHeight };
+}
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    
+    // theme color
+    var themeColor = localStorage.getItem("pref-theme") || undefined;
+    
+    // performance
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        var pageReload = 'yes'; // reloaded
+      } else {
+        var pageReload = 'no'; // not reloaded
+      }
+    }
+
+    // push to datalayer
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+    "event": "init",
+      'event': 'dom',
+      'theme_color_user': themeColor || 'auto',
+      'page': {
+        'page_reload': pageReload,
+        'cookies': cookieObj,
+        'viewport': getViewportSize()
+      }
+    })
+
+    ///////
+    var blogpost_array = [];
+    blogpost_array = document.querySelectorAll('[data-analytics-blogpost]');
+    var analytics_blogposts = [];
+
+    for (var i in blogpost_array) if (blogpost_array.hasOwnProperty(i)) {
+      var data = (blogpost_array[i].getAttribute('data-analytics-blogpost'));
+      var blogpostJSON = JSON.parse(data);
+      analytics_blogposts.push(blogpostJSON);
+    }
+    ///////
+    // Observer for blog posts
+    ///////
+    if ('IntersectionObserver' in window) {
+    let config = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5
+    };
+
+    let observer = new IntersectionObserver(function (entries, self) {
+      console.log('start', analytics_blogposts);
+
+      entries.forEach(entry => {
+          if (entry.isIntersecting && entry.target.dataset.analyticsBlogpost) {
+              var blog_post = JSON.parse(entry.target.dataset.analyticsBlogpost);
+              console.log('start');
+              customLog('blog_post in view: ' + blog_post.title, 'success')
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+              "event": "blogpost_view",
+              "url": window.location.href,
+              "page_id": "",
+              blog_post
+            });
+          
+            self.unobserve(entry.target);
+          }
+      });
+    }, config);
+
+    blogpost_array.forEach(blogpost => observer.observe(blogpost)); // watch blog posts
+    } 
+  }, false);
+
+  console.log(window.dataLayer)
+</script>
+
+<script>
+////
+// Custom Logging
+////
+//var emoji_success = String.fromCodePoint(0x1F44D) 
+function customLog(message, color='black') {
+  var logType = 'log';
+  switch (color) {
+      case 'success':  
+          color = 'color: green';	
+          emoji = String.fromCodePoint(0x1F44F);
+          break
+      case 'info':     
+          color = 'background: #bc5090; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x1F44D);
+          logType = 'info';
+          break;
+      case 'validation':     
+          color = 'background: #21e5d7; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'notification':     
+          color = 'background: #eee; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'error':   
+          color = 'background: #ff6361; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;'; 
+          logType = 'error';
+          break;
+      case 'warning':  
+          color = 'background: #D93B38; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x26A0);
+          logType = 'warn';
+          break;
+      case 'productinfo':  
+          color = 'background: #ffa600; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+          
+      default: 
+          color = color
+      }
+
+  console[logType](`${emoji}` + " " + `%c${message}`, `${color}`);
+}
+</script>
+{{ end }}

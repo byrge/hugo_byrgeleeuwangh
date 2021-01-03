@@ -1,0 +1,12 @@
+<!--<div>{{ if .IsPage }}<small class="gray"><em>Updated: {{ .Page.Lastmod }}, Version: {{ .GitInfo.AbbreviatedHash }}</em></small>{{ end }}</div>-->
+
+<div class="git-committed">
+    <!--Updated: {{ dateFormat "2 - 01 - 2006" .Page.Lastmod }}. -->
+    {{ with .GitInfo }} <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
+    {{ $git := . }}
+    {{ with $.Site.Params.source }}
+        This page was created/modified in commit <a href="{{ .url }}/commit/{{- $git.Hash -}}">
+        {{- $git.AbbreviatedHash -}}</a> "{{ $git.Subject }}" on <b>{{ dateFormat "2 - 01 - 2006" $git.AuthorDate }}</b>.
+    {{ end }}
+    {{ end }}
+  </div>

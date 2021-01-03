@@ -1,0 +1,61 @@
+{{ with .GitInfo }} 
+{{ $git := . }}
+{{ with $.Site.Params.source }}
+{{ $client_id := delimit (shuffle (seq 21 87)) "" | base64Encode | truncate 25 "" }}
+<script>
+  console.log("start here");
+  var session_id = function () {  
+    var d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+        d += performance.now();
+    }
+    return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+  //
+    
+  var user = window.localStorage.getItem('user');
+  var objUser = eval("(function(){return " + user + ";})()");
+  if(objUser && typeof objUser === 'object' && objUser !== null) {
+      user = objUser;
+    } else {
+      var objUser = {
+        'session_id': session_id(),
+        'client_id': {{$client_id}},
+    }
+      window.localStorage.setItem('user', JSON.stringify(objUser));
+      user = objUser;
+  }
+</script>
+<script>
+  var user = objUser
+  var git = {
+    "abbreviatedHash": {{$git.AbbreviatedHash}},
+    "hash": {{$git.Hash}},
+    "date": {{dateFormat "2-01-2006" $git.AuthorDate}},
+  }
+  var page = {
+    "url": {{ $.Permalink }},
+    "path": {{$.Page.File.Dir}}+{{$.Page.File.BaseFileName}},
+    "title": {{ $.Title }},
+    "date": {{ dateFormat "2-01-2006" $.Page.Lastmod }},
+    "type": {{ $.Kind }},
+    'id': {{ $.File.UniqueID }},
+    'reading_time': {{ $.Page.ReadingTime }},
+    'words': {{ $.Page.WordCount }},
+  }
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    "event": "init",
+    "git": git,
+    "page": page,
+    "user": user
+  });
+  console.log(window.dataLayer)
+</script>
+
+{{ end }}
+{{ end }}
