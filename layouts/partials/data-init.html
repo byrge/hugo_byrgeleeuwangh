@@ -195,12 +195,12 @@ function getViewportSize(w) {
     };
 
     let observer = new IntersectionObserver(function (entries, self) {
-      console.log('start', analytics_blogposts);
 
       entries.forEach(entry => {
+        // console.log('>>> start', analytics_blogposts);
+
           if (entry.isIntersecting && entry.target.dataset.analyticsBlogpost) {
               var blog_post = JSON.parse(entry.target.dataset.analyticsBlogpost);
-              console.log('start');
               customLog('blog_post in view: ' + blog_post.title, 'success')
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
