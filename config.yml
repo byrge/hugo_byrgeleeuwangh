@@ -4,6 +4,8 @@ paginate: 8
 theme: hugo-PaperMod
 enableInlineShortcodes: true
 enableRobotsTXT: true
+enableGitInfo: true
+
 
 # googleAnalytics: UA-123-45
 

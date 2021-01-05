@@ -92,3 +92,7 @@ create a new [Pull Request](https://github.com/adityatelange/hugo-PaperMod/pulls
 [![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/adityatelange/hugo-PaperMod)](https://github.com/adityatelange/hugo-PaperMod/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/adityatelange/hugo-papermod)](https://github.com/adityatelange/hugo-PaperMod/pulls?q=is%3Aopen+is%3Apr)
 [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/adityatelange/hugo-papermod)](https://github.com/adityatelange/hugo-PaperMod/pulls?q=is%3Apr+is%3Aclosed)
+
+## Status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b8a7232e-4431-435a-acc5-16cba538f4fa/deploy-status)](https://app.netlify.com/sites/compassionate-mirzakhani-5f1e43/deploys)

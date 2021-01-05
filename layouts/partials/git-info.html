@@ -1,0 +1,9 @@
+<div class="git-committed">
+    {{ with .GitInfo }}
+    {{ $git := . }}
+    {{ with $.Site.Params.source }}
+        This page was created/modified in commit <a href="{{ .url }}/commit/{{- $git.Hash -}}">
+        {{- $git.AbbreviatedHash -}}</a> "{{ $git.Subject }}" on <b>{{ dateFormat "2 - 01 - 2006" $git.AuthorDate }}</b>.
+    {{ end }}
+    {{ end }}
+  </div>
