@@ -6,7 +6,6 @@ enableInlineShortcodes: true
 enableRobotsTXT: true
 enableGitInfo: true
 
-
 # googleAnalytics: UA-123-45
 
 minify:
@@ -93,6 +92,7 @@ outputs:
 params:
     env: production
     description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
+    GitSourceUrl: "https://github.com/byrge/hugo_byrgeleeuwangh"
     author: Theme PaperMod
     # author: ["Me", "You"] # multiple authors
     ShowReadingTime: true
@@ -133,7 +133,7 @@ params:
         - name: linkedin
           url: "#"
         - name: github
-          url: "https://github.com/adityatelange/hugo-PaperMod"
+          url: "https://github.com/byrge/hugo_byrgeleeuwangh"
 
 taxonomies:
     category: categories
