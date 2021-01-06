@@ -93,7 +93,7 @@ params:
     env: production
     description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
     GitSourceUrl: "https://github.com/byrge/hugo_byrgeleeuwangh"
-    author: Theme PaperMod
+    author: Byrge Leeuwangh
     # author: ["Me", "You"] # multiple authors
     ShowReadingTime: true
     defaultTheme: auto
@@ -119,19 +119,19 @@ params:
     homeInfoParams:
         Title: "Hi there \U0001F44B"
         Content: >
-            Welcome to demo of hugo's theme PaperMod.
+            Welcome to my website.
 
-            - **PaperMod** is a simple but fast and responsive theme with useful feature-set that enhances UX.
+            - I'm **Byrge Leeuwangh** and working as a Technical Web Analyst in The Netherlands.
 
     socialIcons:
         - name: twitter
-          url: "#"
-        - name: stackoverflow
-          url: "#"
+          url: "https://twitter.com/leeuwangh"
+        # - name: stackoverflow
+        #   url: "#"
         - name: codepen
           url: "#"
         - name: linkedin
-          url: "#"
+          url: "https://www.linkedin.com/in/byrgeleeuwangh/"
         - name: github
           url: "https://github.com/byrge/hugo_byrgeleeuwangh"
 

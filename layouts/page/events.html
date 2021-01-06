@@ -1,0 +1,12 @@
+{{- define "main" }}
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+</header>
+{{ .Content }}
+
+<!-- Event listing -->
+{{- partial "events.html" (dict "homepage" false) }}
+<!-- end-->
+
+{{- end  }}{{/* end main */}}

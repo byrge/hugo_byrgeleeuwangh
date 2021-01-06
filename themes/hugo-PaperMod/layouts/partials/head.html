@@ -34,6 +34,8 @@
 {{- else}}
 <link href="{{ $stylesheet.Permalink }}" rel="preload stylesheet" as="style">
 {{- end}}
+<!-- Load 'web-vitals' using a classic script that sets the global 'webVitals' object. -->
+<script defer src="https://unpkg.com/web-vitals@1.0.1/dist/web-vitals.umd.js"></script>
 <!-- Search -->
 {{- if (eq .Layout `search`) -}}
 <link rel="preload" as="fetch" href="../index.json" crossOrigin="anonymous">

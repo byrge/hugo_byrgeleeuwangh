@@ -185,7 +185,7 @@ function getViewportSize(w) {
       analytics_blogposts.push(blogpostJSON);
     }
     ///////
-    // Observer for blog posts
+    // Observer for blog post impressions
     ///////
     if ('IntersectionObserver' in window) {
     let config = {
@@ -201,7 +201,7 @@ function getViewportSize(w) {
 
           if (entry.isIntersecting && entry.target.dataset.analyticsBlogpost) {
               var blog_post = JSON.parse(entry.target.dataset.analyticsBlogpost);
-              customLog('blog_post in view: ' + blog_post.title, 'success')
+              customLog('blog_post impression: ' + blog_post.title, 'success')
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
               "event": "blogpost_view",
@@ -219,6 +219,7 @@ function getViewportSize(w) {
     } 
   }, false);
 </script>
+
 
 <script>
 ////
@@ -265,5 +266,22 @@ function customLog(message, color='black') {
 
   console[logType](`${emoji}` + " " + `%c${message}`, `${color}`);
 }
+</script>
+
+<script>
+  ////////////////////
+  // Web Vitals performance
+  ////////////////////
+  function sendToGTM(name, delta, id) {
+    dataLayer.push({
+      event: 'web-vitals',
+      web_vitals: name
+    });
+  }
+  window.addEventListener('load', (event) => {
+    webVitals.getCLS(sendToGTM);
+    webVitals.getFID(sendToGTM);
+    webVitals.getLCP(sendToGTM);
+  });
 </script>
 {{ end }}

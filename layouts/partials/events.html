@@ -1,0 +1,36 @@
+<div class="events">
+    {{ $icon := ":loudspeaker:" }}
+    <div>
+        <table class="event list table">
+        {{ $url := "/data/events/events.csv" }}
+        {{ $sep := "," }}
+        {{ range $i, $r := getCSV $sep $url }}
+            {{ if ne $i 0 }}
+                {{ $event_start_date := index $r 1 }}
+                {{ $event_start_date := (time $event_start_date) }}
+                {{ $event_end_date := index $r 2 }}
+                {{ $event_end_date := (time $event_end_date) }}
+                {{ $event_name := index $r 0 }}
+                {{ $event_location := index $r 3 }}
+                {{ $event_url := index $r 4 }}
+                <!-- date logic for showing events 4 weeks before the event -->
+                {{ $show_event := $event_start_date.After now }}
+                {{ $show_event_start := $event_start_date.AddDate 0 -1 0 }}
+                {{ $show_event_publishdate := $show_event_start.Before now }}
+                {{ if and ($show_event) ($show_event_publishdate) ($.homepage) }}
+                <!---->
+                    <tr>
+                        <td title="Next event" class="event homepage"><span class="mirror">{{ $icon | emojify }}</span> <a href="/events">{{ $event_start_date.Month }} {{ $event_start_date.Day }}, {{ $event_start_date.Year }}: {{ $event_name }}, {{ $event_location }}</a></td>
+                    </tr>
+                {{ else if not $.homepage }}
+                    <tr data-analytics-event= "{{ $r | jsonify }}">
+                        <td title="All events" class="event list">{{ $event_start_date.Month }} {{ $event_start_date.Day }}</td>
+                        <td title="All events" class="event list"><a href="{{ $event_url }}" target="_blank" rel="noopener noreferrer">{{ $event_name }}</a></td>
+                        <td title="All events" class="event list">{{ $event_location }}</td>
+                    </tr>
+                {{end}}
+            {{end}}
+        {{ end }}
+        </table>
+    </div>
+</div>
