@@ -46,10 +46,10 @@
     window.localStorage.setItem('user', JSON.stringify(objUser));
     user = objUser;
   }
-  // user properties combined for session and local storage
+  //// user properties combined for session and local storage
   user = Object.assign(user, session_id);
 
-  // dataLayer
+  //// dataLayer
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     "event": "init",
@@ -174,7 +174,32 @@ function getViewportSize(w) {
       }
     })
 
-    ///////
+    /////// events
+    var events_array, analytics_events_arr = [];
+    events_array = document.querySelectorAll('[data-analytics-event]');
+
+    for (var i in events_array) if (events_array.hasOwnProperty(i)) {
+      var data = (events_array[i].getAttribute('data-analytics-event'));
+      var eventJSON = JSON.parse(data);
+      analytics_events_arr.push(eventJSON);
+    }
+
+    var events = analytics_events_arr.map(item =>{
+      var rItem = {};
+      rItem = {
+          event_name: item[0],
+          event_location: item[3],
+          event_url: item[4],
+          event_startdate: item[1],
+      };
+      return rItem;
+    });
+    dataLayer.push({
+      event: 'upcoming event',
+      events
+    });
+
+    /////// blog posts
     var blogpost_array = [];
     blogpost_array = document.querySelectorAll('[data-analytics-blogpost]');
     var analytics_blogposts = [];

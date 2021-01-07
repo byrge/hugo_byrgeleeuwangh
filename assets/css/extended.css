@@ -16,7 +16,32 @@ td.event.list {
   width: 30vw;
   text-align: left;
   margin: 1vh;
+  padding: 1rem 2rem;
 }
-table.event.list.table {
+table.eventhome {
+  overflow-x: hidden;
+}
+table.eventoverview {
+  position: relative;
   margin-top: 5vh;
+  border-radius: var(--radius);
+  margin-bottom: var(--gap);
+  background: var(--entry);
+  overflow: hidden;
+}
+span.bold {
+  font-weight: 600;
+}
+a.event {
+  border-bottom: dotted 1px black;
+  text-decoration: none;
+}
+a.event:visited {
+  border-bottom: dotted 1px gray;
+  text-decoration: none;
+}
+a.event:hover {
+  cursor: pointer;
+  border-bottom: dotted 0px gray;
+  text-decoration: none;
 }

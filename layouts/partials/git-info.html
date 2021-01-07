@@ -1,7 +1,7 @@
 <div class="git-committed">
     {{ with $.GitInfo }}
+    <!-- {{ . | jsonify }} -->
     {{ with $.Site.Params }}
-    <!-- {{ printf "GitInfo debug:: %#v" $.GitInfo }} -->
         This page was created/modified in commit <a href="{{ .GitSourceUrl }}/commit/{{- $.GitInfo.Hash -}}">
         {{- $.GitInfo.AbbreviatedHash -}}</a> "{{ $.GitInfo.Subject }}" on <b>{{ dateFormat "2 - 01 - 2006" $.GitInfo.AuthorDate }}</b>.
     {{ end }}
