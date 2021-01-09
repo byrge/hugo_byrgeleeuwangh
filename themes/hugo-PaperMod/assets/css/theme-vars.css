@@ -8,6 +8,7 @@
     --radius: 8px;
     --theme: #fff;
     --entry: #fff;
+    --svg-icon: #2e2e33;
     --primary: rgba(0, 0, 0, 0.88);
     --secondary: rgba(0, 0, 0, 0.56);
     --tertiary: rgba(0, 0, 0, 0.16);
@@ -26,6 +27,7 @@
 .dark {
     --theme: #1d1e20;
     --entry: #2e2e33;
+    --svg-icon: #fff;
     --primary: rgba(255, 255, 255, 0.84);
     --secondary: rgba(255, 255, 255, 0.56);
     --tertiary: rgba(255, 255, 255, 0.16);

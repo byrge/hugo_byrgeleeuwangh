@@ -12,7 +12,7 @@ span.mirror {
     -ms-transform: scale(-1, 1);
     transform: scale(-1, 1);
 }
-td.event.list {
+td.event.listing {
   width: 30vw;
   text-align: left;
   margin: 1vh;
@@ -54,7 +54,7 @@ a.event:hover {
   margin-top: var(--gap);
   margin-bottom: var(--gap);
   padding: var(--gap);
-  background: #F5F5F5;
+  background: var(--entry);
   border-radius: var(--radius);
   transition: transform .1s;
 }
@@ -78,5 +78,6 @@ p.events {
 svg.icon {
   margin-right: .5em;
   vertical-align: middle;
+  fill: var(--svg-icon);;
   /* font-size: 0.9em; */
 }
