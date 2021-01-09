@@ -23,7 +23,7 @@
 
         <!-- show on homepage -->
         {{- if and ($show_event) ($show_event_publishdate) ($.homepage) }}
-        <article class="first-entry">
+        <article class="event entry">
             <table class="eventhome">
                 <tr>
                     <td title="upcoming event: {{ $event_name }}" data-analytics-event= "{{ $r | jsonify }}" title="event {{ $event_name }}" class="event homepage"><span class="mirror">{{ $icon_loudspeaker | emojify }}</span> <a href="/events">{{ $event_start_date.Month }} {{ $event_start_date.Day }}, {{ $event_start_date.Year }}: {{ $event_name }}, {{ $event_location }}</a></td>
