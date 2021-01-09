@@ -9,6 +9,7 @@
     --theme: #fff;
     --entry: #fff;
     --svg-icon: #2e2e33;
+    --event-listing: #ddd;
     --primary: rgba(0, 0, 0, 0.88);
     --secondary: rgba(0, 0, 0, 0.56);
     --tertiary: rgba(0, 0, 0, 0.16);
@@ -28,6 +29,7 @@
     --theme: #1d1e20;
     --entry: #2e2e33;
     --svg-icon: #fff;
+    --event-listing: #2e2e33;
     --primary: rgba(255, 255, 255, 0.84);
     --secondary: rgba(255, 255, 255, 0.56);
     --tertiary: rgba(255, 255, 255, 0.16);

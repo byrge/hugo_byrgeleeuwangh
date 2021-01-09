@@ -54,7 +54,7 @@ a.event:hover {
   margin-top: var(--gap);
   margin-bottom: var(--gap);
   padding: var(--gap);
-  background: var(--entry);
+  background: var(--event-listing);
   border-radius: var(--radius);
   transition: transform .1s;
 }
