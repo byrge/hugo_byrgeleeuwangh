@@ -45,6 +45,10 @@ a.event:hover {
   border-bottom: dotted 0px gray;
   text-decoration: none;
 }
+.upcoming-event {
+  display: flex;
+  place-items: center;
+}
 .event-entry {
   position: relative;
   margin-top: var(--gap);
