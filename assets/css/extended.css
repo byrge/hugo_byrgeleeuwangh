@@ -16,7 +16,7 @@ td.event.list {
   width: 30vw;
   text-align: left;
   margin: 1vh;
-  padding: 1rem 2rem;
+  padding: .5rem .5rem;
 }
 table.eventhome {
   overflow-x: hidden;
@@ -44,4 +44,35 @@ a.event:hover {
   cursor: pointer;
   border-bottom: dotted 0px gray;
   text-decoration: none;
+}
+.event-entry {
+  position: relative;
+  margin-top: var(--gap);
+  margin-bottom: var(--gap);
+  padding: var(--gap);
+  background: #F5F5F5;
+  border-radius: var(--radius);
+  transition: transform .1s;
+}
+.event-entry.first {
+  background: none;
+}
+table.eventnothome {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow-x: auto;
+  word-break: keep-all;
+}
+p.events {
+  padding-left: 3vw;
+  font-size: 110%;
+}
+.first {
+  margin-top: 3em;
+}
+svg.icon {
+  margin-right: .5em;
+  vertical-align: middle;
+  /* font-size: 0.9em; */
 }

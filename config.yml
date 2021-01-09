@@ -12,24 +12,33 @@ minify:
     disableXML: true
     # minifyOutput: true
 
+outputs:
+  home:
+      - HTML
+      - RSS
+      - JSON
+
+permalinks:
+  posts: /:title/
+
 languages:
     en:
         languageName: "English"
         weight: 1
         menu:
             main:
-                - name: Archive
-                  url: archives
-                  weight: 20
-                - name: Search
-                  url: search/
-                  weight: 10
                 - name: Tags
                   url: tags/
                   weight: 5
+                - name: Search
+                  url: search/
+                  weight: 10
                 - name: About me
                   url: about-me/
                   weight: 15
+                - name: Archive
+                  url: archives
+                  weight: 20
 
     # l2:
     #     languageName: "Lang2"

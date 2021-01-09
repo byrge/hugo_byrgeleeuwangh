@@ -194,10 +194,14 @@ function getViewportSize(w) {
       };
       return rItem;
     });
-    dataLayer.push({
-      event: 'upcoming event',
-      events
-    });
+    if(events && events.length) {
+      dataLayer.push({
+        event: 'upcoming event',
+        page_path: window.location.pathname,
+        {{ with $.Kind }}page_type: {{$.Kind}},{{end}}
+        events
+      });
+    }
 
     /////// blog posts
     var blogpost_array = [];
