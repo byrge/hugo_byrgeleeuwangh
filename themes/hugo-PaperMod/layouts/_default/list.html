@@ -13,7 +13,7 @@
 {{- $pages := union .RegularPages .Sections }}
 
 {{- if .IsHome }}
-{{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $pages = (where site.RegularPages "Type" "in" site.Params.mainSections).ByDate.Reverse }}
 {{- end}}
 
 {{ $paginator := .Paginate $pages }}

@@ -83,12 +83,15 @@ svg.icon {
   margin-right: .5em;
   vertical-align: middle;
   fill: var(--svg-icon);
-  /* font-size: 0.9em; */
+}
+td.event.homepage {
+  display: flex;
+  place-items: center;
 }
 
 /* Contact form */
 form.contact-form.width-normal {
-  padding: 2em 0em 2em 0em;
+  padding-bottom: 2em;
   width: calc(var(--main-width)/2);
 }
 .form-group {
