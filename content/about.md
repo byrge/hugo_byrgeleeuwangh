@@ -59,3 +59,5 @@ Although there are many blog posts about web analytics there is less information
 Data collection is also hard to do right. Many companies struggle with collecting quality data points instead of quantitive data. Nowadays collecting data according to the law is becoming more and more difficult. Do we, analysts, legal department, online marketeers and other stakeholders, still understand what can or can't be tracked and when?
 
 Furthermore I started working on a 'middleware' tagging solution to improve the quality of the data collection. My learnings, about JavaScript and how to work together with frontend developers and app developers, are in the blog posts.
+
+If you want to contact me fill out the [form](/contact "Contact Form").
