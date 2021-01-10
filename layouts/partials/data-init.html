@@ -1,11 +1,12 @@
-{{ $client_id := delimit (shuffle (seq 21 87)) "" | base64Encode | truncate 25 "" }}
+{{ $seed := now.Unix }}
+{{ $client_id := delimit (shuffle (split (md5 $seed) "" )) "" }}
+{{ $client_id := replace (replace $client_id "0" "-") "4" "-" }}
 
 {{ with $.Page.Params }}
 
 {{- $author := ($.Params.author | default $.Site.Params.author)}}
 
 <!-- blog_posts -->
-
 <script>
   var session_id = function () {  
     var d = new Date().getTime();
@@ -44,6 +45,7 @@
         'client_id': {{$client_id}},
     }
     window.localStorage.setItem('user', JSON.stringify(objUser));
+    console.log( JSON.stringify(objUser) )
     user = objUser;
   }
   //// user properties combined for session and local storage

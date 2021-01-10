@@ -5,12 +5,14 @@
 {{- end -}}
 
 {{- if $.Site.Params.ShowReadingTime -}}
+{{- if not $.Page.Params.form }}
 {{- $scratch.Add "meta" (slice (i18n "read_time" .ReadingTime | default (printf "%s min" .ReadingTime))) }}
-{{- end -}}
+{{- end -}}{{- end -}}
 
 {{ with (partial "author.html" . ) }}
+{{ if not $.Page.Params.form }}
 {{ $scratch.Add "meta" (slice .)}}
-{{end}}
+{{end}}{{end}}
 
 {{- with ($scratch.Get "meta")}}
 {{- delimit . "&nbsp;·&nbsp;"}}

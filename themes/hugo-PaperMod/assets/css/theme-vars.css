@@ -8,6 +8,7 @@
     --radius: 8px;
     --theme: #fff;
     --entry: #fff;
+    --button: #ddd;
     --svg-icon: #2e2e33;
     --event-listing: #ddd;
     --primary: rgba(0, 0, 0, 0.88);
@@ -16,7 +17,9 @@
     --content: rgba(0, 0, 0, 0.88);
     --hljs-bg: #1c1d21;
     --code-bg: #f5f5f5;
-    --border: #eee
+    --border: #eee;
+    --border-form: #ddd;
+    --form-text: #333;
 }
 
 @media screen and (max-width:600px) {
@@ -28,6 +31,9 @@
 .dark {
     --theme: #1d1e20;
     --entry: #2e2e33;
+    --button: #666;
+    --border-form: #666;
+    --form-text: #ddd;
     --svg-icon: #fff;
     --event-listing: #2e2e33;
     --primary: rgba(255, 255, 255, 0.84);

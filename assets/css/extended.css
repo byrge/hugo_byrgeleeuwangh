@@ -82,6 +82,38 @@ p.events {
 svg.icon {
   margin-right: .5em;
   vertical-align: middle;
-  fill: var(--svg-icon);;
+  fill: var(--svg-icon);
   /* font-size: 0.9em; */
+}
+
+/* Contact form */
+form.contact-form.width-normal {
+  padding: 2em 0em 2em 0em;
+  width: calc(var(--main-width)/2);
+}
+.form-group {
+  padding: .5em 0em .5em 0em;
+  width: calc(var(--main-width)/2.5);
+}
+textarea {
+  width: calc(var(--main-width)/2.5);
+}
+input, textarea {
+  color: var(--form-text);
+}
+label {
+  color: red;
+}
+button,
+input[type=button],
+input[type=submit] {
+    color: var(--primary);
+    background: var(--button)!important;
+}
+button#Form-submit {
+  padding: 0.3em 2em;
+  border-radius: var(--radius);
+}
+.underline-form {
+  border-bottom: 2px solid var(--border-form);
 }
