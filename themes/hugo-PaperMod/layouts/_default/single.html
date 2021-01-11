@@ -2,11 +2,11 @@
 
 <!---->
 {{ $default_params := .Params }}
-{{ $page_id_param := dict "page_id" .File.UniqueID }}
+{{ $page_id_param := dict "page_id" .Page.Params.page_id }}
 {{ $params := merge $default_params $page_id_param }}
 <!---->
 
-<article class="post-single" data-analytics-blogpost= "{{ $params | jsonify }}" data-analytics-blogpost-id="{{ .File.UniqueID }}">
+<article class="post-single" data-analytics-blogpost= "{{ $params | jsonify }}" data-analytics-blogpost-id="{{ $page_id_param }}">
   <header class="post-header">
     <h1 class="post-title">
       {{ .Title }}
@@ -50,6 +50,25 @@
   <div class="post-content">
     {{- partial "anchored_headings.html" .Content -}}
   </div>
+
+  <!-- Related Posts -->
+  <div class="related posts">
+    {{- partial "related.html" . }}
+    <!-- {{ $related := (where (.Site.RegularPages.Related .) "Type" "in" site.Params.mainSections) }}
+        {{ range first 3  $related }}
+	        <li class="d-flex mb-4">
+	          <div class="post-body">
+	            <span class="text-capitalize">- {{ dateFormat "Monday, Jan 2, 2006" .Date }}</span>
+	            <a href="{{ .Permalink }}">
+	              <h5>{{ .Title }}</h5>
+	            </a>
+	          </div>
+          </li>
+        {{ end }} -->
+
+  </div>
+  <!---->
+
   <footer class="post-footer">
     {{- if .Params.tags }}
     <ul class="post-tags">

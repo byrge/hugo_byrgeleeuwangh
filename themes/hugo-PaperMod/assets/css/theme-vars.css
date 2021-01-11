@@ -8,6 +8,7 @@
     --radius: 8px;
     --theme: #fff;
     --entry: #fff;
+    --related: #999;
     --button: #ddd;
     --svg-icon: #2e2e33;
     --event-listing: #ddd;
@@ -31,6 +32,7 @@
 .dark {
     --theme: #1d1e20;
     --entry: #2e2e33;
+    --related: #ccc;
     --button: #666;
     --border-form: #666;
     --form-text: #ddd;

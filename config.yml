@@ -1,6 +1,6 @@
 baseURL: "https://byrgeleeuwangh.com/"
 title: Byrge Leeuwangh
-paginate: 8
+paginate: 6
 theme: hugo-PaperMod
 enableInlineShortcodes: true
 enableRobotsTXT: true
@@ -20,6 +20,18 @@ outputs:
 
 permalinks:
   posts: /:title/
+
+related:
+  includeNewer: false
+  indices:
+  - name: tags
+    weight: 60
+  - name: keywords
+    weight: 30
+  - name: date
+    weight: 10
+  threshold: 80
+  toLower: false
 
 languages:
     en:

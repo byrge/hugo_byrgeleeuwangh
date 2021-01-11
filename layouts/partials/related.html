@@ -1,0 +1,9 @@
+{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ with $related }}
+<h4 class="related">Related posts</h4>
+<ul class="related">
+	{{ range . }}
+	<li class="related"><a class="related" href="{{ .RelPermalink }}">{{ .Title }}</a></li><li class="related date">{{ dateFormat "Monday, Jan 2, 2006" .Date }}</li>
+	{{ end }}
+</ul>
+{{ end }}
