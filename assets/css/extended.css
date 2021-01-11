@@ -147,14 +147,12 @@ button#Form-submit {
 /* related posts */
 .related.posts {
   background: var(--related);
-  color: var(--theme);
+  color: var(--related-text)!important;
   width: calc(var(--main-width)/1.3);
   margin-top: calc(var(--gap)*2);
   padding-inline-start: var(--radius);
   padding: 20px;
   border-radius: var(--radius);
-  display: flex;
-  overflow-x: auto;
 }
 @media screen and (max-width:650px) {
   .related.posts {
@@ -162,13 +160,25 @@ button#Form-submit {
   }
 }
 h4.related {
-  color: var(--theme)!important;
+  color: var(--related-text)!important;
+  margin-bottom: 1em;
 }
-li.related {
-  color: var(--theme)!important;
+.related {
+  color: var(--related-text)!important;
+  font-size: 95%;
+  list-style-type: none!important;
+  overflow-x: auto;
+}
+.related a {
+  color: var(--related-text)!important;
   list-style-type: none!important;
 }
-li.related a {
-  color: var(--theme)!important;
-  list-style-type: none!important;
+a.related:hover {
+  cursor: pointer;
+  border-bottom: dotted 1px #000;
+  text-decoration: none;
+}
+.related.date {
+  font-size: 65%;
+  vertical-align: middle;
 }
