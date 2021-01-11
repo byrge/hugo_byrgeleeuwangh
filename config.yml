@@ -140,9 +140,9 @@ params:
     homeInfoParams:
         Title: "Hi there \U0001F44B"
         Content: >
-            Welcome to my blog.
+            Welcome to my blog
 
-            - I'm **Byrge Leeuwangh** and working as a Technical Web Analyst in The Netherlands.
+            - I'm **Byrge Leeuwangh** and working as a Technical Web Analyst in The Netherlands
 
     socialIcons:
         - name: twitter
