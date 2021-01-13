@@ -33,11 +33,12 @@
   function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
   // date
   var options_weekday = { weekday: 'long' };
+  var options_day = { day: '2-digit' };
   var options_month = { month: 'long' };
+  var options_month_digit = { month: '2-digit' };
   var dateobj= new Date() ;
-  var month = dateobj.getMonth() + 1;
-  var day = dateobj.getDate() ;
   var year = dateobj.getFullYear();
+  var month = dateobj.getMonth() + 1;
   var seconds = dateobj.getSeconds();
   var minutes = dateobj.getMinutes();
   var hour = dateobj.getHours();
@@ -92,12 +93,12 @@
       "version_hugo": {{ hugo.Version }},
       "theme_color": {{$.Site.Params.defaultTheme}},
       "epoch": seconds_since_epoch(),
-      "date_full": dateobj,
+      "date_full": dateobj.toString(),
       "date": dateobj.toLocaleDateString('nl-NL'),
       "year": year,
-      "month": month,
+      "month": parseInt(dateobj.toLocaleDateString('en-GB', options_month_digit)),
       "month_long": dateobj.toLocaleDateString('en-GB', options_month),
-      "day": day,
+      "day": parseInt(dateobj.toLocaleDateString('en-GB', options_day)),
       "day_long": dateobj.toLocaleDateString('en-GB', options_weekday),
       "time": dateobj.toLocaleTimeString(),
       "hour": hour,
