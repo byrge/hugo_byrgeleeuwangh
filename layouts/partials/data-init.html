@@ -1,13 +1,21 @@
-{{ $seed := now.Unix }}
-{{ $client_id := delimit (shuffle (split (md5 $seed) "" )) "" }}
-{{ $client_id := replace (replace $client_id "0" "-") "4" "-" }}
-
 {{ with $.Page.Params }}
 
 {{- $author := ($.Params.author | default $.Site.Params.author)}}
 
 <!-- blog_posts -->
 <script>
+  var git_info = undefined;
+  {{- with $.GitInfo }}
+  {{ $git := . }}
+  var git_info = {
+    "abbreviatedHash": "{{$git.AbbreviatedHash}}",
+    "hash": "{{$git.Hash}}",
+    "commitDate": "{{ dateFormat "2-01-2006" $git.CommitDate }}",
+    "subject": "{{ $git.Subject }}",
+  };
+  {{- end }}  
+
+  // create session id
   var session_id = function () {  
     var d = new Date().getTime();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
@@ -19,6 +27,22 @@
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
   }
+  // create client_id
+  var array = new Uint32Array(3);
+  window.crypto.getRandomValues(array);
+  function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
+  // date
+  var options_weekday = { weekday: 'long' };
+  var options_month = { month: 'long' };
+  var dateobj= new Date() ;
+  var month = dateobj.getMonth() + 1;
+  var day = dateobj.getDate() ;
+  var year = dateobj.getFullYear();
+  var seconds = dateobj.getSeconds();
+  var minutes = dateobj.getMinutes();
+  var hour = dateobj.getHours();
+  //
+  var client_id = array[0] + "-" + year + "-" + month + "-" + array[1] + "-e-" + seconds_since_epoch() + "-" + array[2];
   //
    // session storage user
   var session_id_st = window.sessionStorage.getItem('session_id');
@@ -42,33 +66,43 @@
       user = objUser;
     } else {
       var objUser = {
-        'client_id': {{$client_id}},
+        'client_id': client_id,
     }
     window.localStorage.setItem('user', JSON.stringify(objUser));
-    console.log( JSON.stringify(objUser) )
     user = objUser;
   }
   //// user properties combined for session and local storage
   user = Object.assign(user, session_id);
 
   //// dataLayer
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
+  const removeEmpty = (obj) => {
+    let newObj = {};
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === Object(obj[key])) newObj[key] = removeEmpty(obj[key]);
+      else if (obj[key] !== undefined) newObj[key] = obj[key];
+    });
+    return newObj;
+  };
+  var dataCollection = [];
+  dataCollection = removeEmpty({
     "event": "init",
     "general": {
-      {{ if eq hugo.IsProduction false}}"environment": "staging",{{else}}"environment": "production",{{end}}
+      "git": git_info,
+      {{ if eq hugo.IsProduction false }}"environment": "staging",{{else}}"environment": "production",{{end}}
       "version_hugo": {{ hugo.Version }},
       "theme_color": {{$.Site.Params.defaultTheme}},
-      "epoch": {{ now.Unix }},
-      "date_full": {{ now }},
-      "date": {{ now.Format "2-01-2006"}},
-      "year": {{ now.Format "2006"}},
-      "month": {{ now.Format "01"}},
-      "day": {{ now.Format "2"}},
-      "time": {{ now.Format "15:04:05"}},
-      "hour": {{ now.Format "15"}},
-      "minutes": {{ now.Format "04"}},
-      "seconds": {{ now.Format "05"}}
+      "epoch": seconds_since_epoch(),
+      "date_full": dateobj,
+      "date": dateobj.toLocaleDateString('nl-NL'),
+      "year": year,
+      "month": month,
+      "month_long": dateobj.toLocaleDateString('en-GB', options_month),
+      "day": day,
+      "day_long": dateobj.toLocaleDateString('en-GB', options_weekday),
+      "time": dateobj.toLocaleTimeString(),
+      "hour": hour,
+      "minutes": minutes,
+      "seconds": seconds
     },
     "user": user,
     "page": {
@@ -93,6 +127,9 @@
       {{ if $.IsHome }}"path": "/"{{else}}{{ with $.File }}"path": {{ .Dir }} + {{ end }}{{ with $.File }}{{ .BaseFileName }}{{ end }}{{ end }}
     }
   });
+
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push(dataCollection);
 </script>
 
 <!-- /////////////////////////// -->
@@ -163,16 +200,27 @@ function getViewportSize(w) {
       }
     }
 
+    // Git info
+    if (window.__data_git) {
+    git_info = {
+        "abbreviatedHash": window.__data_git.abbreviatedHash,
+        "hash": window.__data_git.hash,
+        "commitDate": window.__data_git.commitDate,
+        "subject": window.__data_git.subject
+      }
+    }
+
     // push to datalayer
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
     "event": "init",
-      'event': 'dom',
+      'event': 'dom page',
       'theme_color_user': themeColor || 'auto',
       'page': {
         'page_reload': pageReload,
         'cookies': cookieObj,
-        'viewport': getViewportSize()
+        'viewport': getViewportSize(){{ if ne $.Kind "page" }},
+        'git': git_info{{- end }}
       }
     })
 

@@ -5,7 +5,7 @@ page_id: 58272c88b063be4ea0bef5fa4df767f4
 showtoc: true
 tocOpen: false
 aliases: ["/debug-your-app-analytics"]
-tags: ["app, analytics, proxy"]
+tags: ["app", "analytics", "proxy"]
 keywords: ["app","proxy","debug"]
 author: "Byrge Leeuwangh"
 draft: true

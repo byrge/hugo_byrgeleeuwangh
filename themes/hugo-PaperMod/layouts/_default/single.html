@@ -2,11 +2,9 @@
 
 <!---->
 {{ $default_params := .Params }}
-{{ $page_id_param := dict "page_id" .Page.Params.page_id }}
-{{ $params := merge $default_params $page_id_param }}
 <!---->
 
-<article class="post-single" data-analytics-blogpost= "{{ $params | jsonify }}" data-analytics-blogpost-id="{{ $page_id_param }}">
+<article class="post-single" data-analytics-blogpost= "{{ $default_params | jsonify }}" data-analytics-blogpost-id="{{ $default_params.page_id }}">
   <header class="post-header">
     <h1 class="post-title">
       {{ .Title }}
@@ -53,24 +51,12 @@
 
   <!-- Related Posts -->
   {{- partial "related.html" . }}
-    <!-- {{ $related := (where (.Site.RegularPages.Related .) "Type" "in" site.Params.mainSections) }}
-        {{ range first 3  $related }}
-	        <li class="d-flex mb-4">
-	          <div class="post-body">
-	            <span class="text-capitalize">- {{ dateFormat "Monday, Jan 2, 2006" .Date }}</span>
-	            <a href="{{ .Permalink }}">
-	              <h5>{{ .Title }}</h5>
-	            </a>
-	          </div>
-          </li>
-        {{ end }} -->
-
-
   <!---->
 
   <footer class="post-footer">
     {{- if .Params.tags }}
     <ul class="post-tags">
+      <li><a class="post-tags-text"> tags </a></li>
       {{- range ($.GetTerms "tags") }}
       <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}

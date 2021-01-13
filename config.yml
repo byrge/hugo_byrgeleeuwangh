@@ -1,6 +1,6 @@
 baseURL: "https://byrgeleeuwangh.com/"
 title: Byrge Leeuwangh
-paginate: 6
+paginate: 7
 theme: hugo-PaperMod
 enableInlineShortcodes: true
 enableRobotsTXT: true

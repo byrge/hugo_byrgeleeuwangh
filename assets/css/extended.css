@@ -182,3 +182,7 @@ a.related:hover {
   font-size: 65%;
   vertical-align: middle;
 }
+a.post-tags-text {
+  background: #666!important;
+  color: white!important;
+}

@@ -6,6 +6,6 @@ summary: "upcoming events"
 draft: false
 ---
 An overview of all upcoming events interesting for data & analytics enthusiasts …  
-If you have an interesting event to add here, let me know.  
+If you have an interesting event to add here, let me [know](/contact).  
   
   
