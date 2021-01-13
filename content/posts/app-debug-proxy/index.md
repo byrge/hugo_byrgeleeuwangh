@@ -8,7 +8,7 @@ aliases: ["/debug-your-app-analytics"]
 tags: ["app", "analytics", "proxy"]
 keywords: ["app","proxy","debug"]
 author: "Byrge Leeuwangh"
-draft: true
+draft: false
 ---
 
 # Debugging your app analytics with a proxy
