@@ -38,10 +38,14 @@ So, follow the next steps for the first time installation of the proxy:
 12. Now you are able to open your app and you should see your requests coming from your app in the web interface of the MITM proxy
 
   
-Find your ip address –_to use in step 8_– in your MacOS network settings: ![iOS certificate](/img/macos_settings-network.png)
+Find your ip address –_to use in step 8_– in your MacOS network settings:  
 
-### Start MITM web via the terminal
-![iOS certificate](/img/mitm-terminal.png)
+{{< img src="images/macos_settings-network.png" alt="macOS network settings" >}}
+
+
+### Start MITM web via the terminal  
+
+{{< img src="images/mitm-terminal.png" alt="Start MITM web via the terminal" >}}
 
 ## Install MITM on Android / MacOS
 You need to install the [proxy](https://mitmproxy.org/) via the terminal, but no worries. There is also a Web Interface after installation to monitor your app traffic.
@@ -67,21 +71,21 @@ Next time when you have the need to debug your app, it's easier to start and les
 1. Now you are able to open your app and you should see your requests coming from your app in the web interface of the MITM proxy
 
 ### Internet sharing on MacOS
-Start your own WiFi network by enabling `Internet Sharing` on your Mac.
-![iOS certificate](/img/macos_settings_sharing.png)
+Start your own WiFi network by enabling `Internet Sharing` on your Mac.  
+
+{{< img src="images/macos_settings_sharing.png" alt="macOS settings sharing internet" >}}
 
 ### MITM web interface
 In the MITM web interface you can **color** the requests for easier debugging. Click on the left hand on the request you want to analyze and see your (batched) request data on your right:
 
-![iOS certificate](/img/mitm-web.png)
-
+{{< img src="images/mitm-web.png" alt="MITM web interface" >}}
 
 ## Done testing?
 When you are done with testing, don't forget to disable the certificate on your mobile device! This is important for security reasons.
 
 * On your iPhone go to: `Settings` →  `General` →  `About` → `Certificate Trust Settings`. Under "Enable full trust for root certificates," turn off trust for the 'mitmproxy' certificate.  
 
-![iOS certificate](/img/ios_certificate_trust.png)  
+{{< img src="images/ios_certificate_trust.png" alt="iOS trust the certificate" >}}
 
 * In your terminal stop **mitmweb** with `CONTROL - C`
 * Disable `Internet Sharing` on your Mac
