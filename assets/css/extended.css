@@ -186,3 +186,8 @@ a.post-tags-text {
   background: #666!important;
   color: white!important;
 }
+.section.content {
+  padding-bottom: 2em;
+  padding-left: 1.5em;
+  width: 60vw;
+}

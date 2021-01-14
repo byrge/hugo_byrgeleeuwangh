@@ -8,6 +8,7 @@
 <header class="page-header">
   <h1>{{ .Title }}</h1>
 </header>
+<div class="section content">{{.Content }}</div>
 {{- end }}
 
 {{- $pages := union .RegularPages .Sections }}
@@ -72,6 +73,12 @@
     <a class="next" href="{{ $paginator.Next.URL | absURL }}">{{ i18n "next_page" }} »</a>
     {{- end }}
   </nav>
+  <div class="w3c-validate">
+    {{ if in (.Site.BaseURL | string) "localhost" }}
+      <a href="https://validator.w3.org/nu/?doc={{ "https://byrgeleeuwangh.com" }}{{ .RelPermalink }}"
+      target="_blank">Validate @ W3C</a>
+    {{ end }}
+  </div>
 </footer>
 {{- end }}
 {{end}}{{/* end profileMode */}}
