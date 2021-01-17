@@ -45,11 +45,8 @@
   //
   var client_id = array[0] + "-" + year + "-" + month + "-" + array[1] + "-e-" + seconds_since_epoch() + "-" + array[2];
   //
-   // session storage user
   var session_id_st = window.sessionStorage.getItem('session_id');
-  // if(!session_id_st) {
-  //   window.sessionStorage.setItem('session_id', session_id());
-  // }
+
   var objSession_id = eval("(function(){return " + session_id_st + ";})()");
   if(objSession_id && typeof objSession_id === 'object' && objSession_id !== null) {
     session_id = objSession_id;
@@ -75,6 +72,23 @@
   //// user properties combined for session and local storage
   user = Object.assign(user, session_id);
 
+
+  //// ISOWeek
+  function ISO8601_week_no(dt) {
+     var tdt = new Date(dt.valueOf());
+     var dayn = (dt.getDay() + 6) % 7;
+     tdt.setDate(tdt.getDate() - dayn + 3);
+     var firstThursday = tdt.valueOf();
+     tdt.setMonth(0, 1);
+     if (tdt.getDay() !== 4) 
+       {
+      tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+        }
+     return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+  }
+
+  var week_number = new Date(dateobj);
+
   //// dataLayer
   const removeEmpty = (obj) => {
     let newObj = {};
@@ -95,6 +109,7 @@
       "epoch": seconds_since_epoch(),
       "date_full": dateobj.toString(),
       "date": dateobj.toLocaleDateString('nl-NL'),
+      "ISOWeek": ISO8601_week_no(week_number),
       "year": year,
       "month": parseInt(dateobj.toLocaleDateString('en-GB', options_month_digit)),
       "month_long": dateobj.toLocaleDateString('en-GB', options_month),

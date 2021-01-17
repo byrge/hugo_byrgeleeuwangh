@@ -1,0 +1,30 @@
+{{ $all := (.Site.GetPage "Section" "sponsors").Pages.ByPublishDate.Reverse }}{{ range first 1 $all }}
+  <!-- check if draft is false to publish a sponsor-->
+  {{ if eq .Draft true }}
+  <!-- check publish date-->
+  {{ $show_sponsor_end_date := .Date.AddDate 0 0 7 }}
+  {{ if $show_sponsor_end_date.After now }}
+    <article class="sponsor post-entry" data-analytics-sponsor= "{{ .Page.Params | jsonify }}" data-analytics-sponsor-id="{{ .Page.Params.Page_id }}" data-analytics-sponsor-name="{{ .Title | lower }}">
+        <header class="entry-header">
+            <aside class="weeknumber">
+              sponsor | {{- partial "sponsor-date.html" . -}}
+            </aside>
+          <h2>
+            {{ .Title }}
+            {{- if .Draft }}<div class="entry-isdraft"><sup>&nbsp;&nbsp;[draft]</sup></div>{{- end }}
+          </h2>
+        </header>
+        {{- if (ne .Site.Params.hideSummary true)}}
+        <section class="entry-content sponsor">
+          <p>{{ .Summary | plainify | htmlUnescape }}</p>
+        </section>
+        <footer class="footer"> 
+          link to the sponsor: {{ .Page.Params.Sponsor_link }}
+        </footer>
+        {{- end }}
+        
+        <a class="entry-link" aria-label="sponsor link to {{ .Title | plainify }}" target="_blank" rel="noopener noreferrer" href="{{ .Page.Params.Sponsor_link }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{ .Date.Format "January-2006" | lower }}"></a>
+    </article>
+    {{- end }}
+    {{- end }}
+{{- end }}

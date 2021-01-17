@@ -28,6 +28,9 @@
 
 {{- partial "home_info.html" . }}
 
+<!-- sponsor -->
+{{- partial "sponsor.html" . }}
+
 <!-- events -->
 {{- partial "events.html" (dict "homepage" true) }}
 
@@ -40,10 +43,8 @@
 
 <!---->
 {{ $default_params := .Params }}
-{{ $page_id_param := dict "page_id" .File.UniqueID }}
-<!-- {{ $params := merge $default_params $page_id_param }} -->
 <!---->
-<article class="{{ $class }}" data-analytics-blogpost= "{{ $default_params | jsonify }}" data-analytics-blogpost-id="{{ .File.UniqueID }}">
+<article class="{{ $class }}" data-analytics-blogpost= "{{ $default_params | jsonify }}" data-analytics-blogpost-id="{{ $default_params.page_id }}">
   {{- partial "cover.html" (dict "cxt" . "IsHome" true) }}
   <header class="entry-header">
     <h2>

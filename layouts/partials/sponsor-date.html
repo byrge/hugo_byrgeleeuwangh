@@ -1,0 +1,18 @@
+{{- $scratch := newScratch}}
+
+{{- with $.Page.Params.Sponsor_ISOWeek -}}
+{{- $scratch.Add "meta" (slice ($.Page.Params.Sponsor_ISOWeek)) }}
+{{- end -}}
+
+{{- if not .Date.IsZero -}}
+{{- $scratch.Add "meta" (slice (.Date.Format (default "2006" .Site.Params.DateFormat))) }}
+{{- end -}}
+
+{{ with (partial "author.html" . ) }}
+{{ if not $.Page.Params.form }}
+{{ $scratch.Add "meta" (slice .)}}
+{{end}}{{end}}
+
+{{- with ($scratch.Get "meta")}}
+{{- delimit . "&nbsp;·&nbsp;" "" }}
+{{- end }}

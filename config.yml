@@ -21,6 +21,8 @@ outputs:
 permalinks:
   posts: /:title/
 
+summaryLength: 100
+
 related:
   includeNewer: false
   indices:
@@ -145,16 +147,16 @@ params:
             - I'm **Byrge Leeuwangh** and working as a Technical Web Analyst in The Netherlands
 
     socialIcons:
-        - name: twitter
-          url: "https://twitter.com/leeuwangh"
         # - name: stackoverflow
         #   url: "#"
-        - name: codepen
-          url: "#"
         - name: linkedin
           url: "https://www.linkedin.com/in/byrgeleeuwangh/"
+        - name: twitter
+          url: "https://twitter.com/leeuwangh"
         - name: github
           url: "https://github.com/byrge/hugo_byrgeleeuwangh"
+        - name: codepen
+          url: "#"
 
 taxonomies:
     category: categories

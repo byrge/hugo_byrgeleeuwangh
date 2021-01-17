@@ -1,15 +1,3 @@
-{{- $pctx := . -}}
-{{- if .IsHome -}}{{ $pctx = .Site }}{{- end -}}
-{{- $pages := slice -}}
-{{- if or $.IsHome $.IsSection -}}
-{{- $pages = $pctx.RegularPages -}}
-{{- else -}}
-{{- $pages = $pctx.Pages -}}
-{{- end -}}
-{{- $limit := .Site.Config.Services.RSS.Limit -}}
-{{- if ge $limit 1 -}}
-{{- $pages = $pages | first $limit -}}
-{{- end -}}
 {{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -25,15 +13,56 @@
     {{- with .OutputFormats.Get "RSS" -}}
     {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{- end -}}
-    {{ range $pages }}
-    <item>
-      <title>{{ .Title }}</title>
-      <link>{{ .Permalink }}</link>
-      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
-      {{ with .Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
-      <guid>{{ .Permalink }}</guid>
-      <description>{{ .Summary | html }}</description>
-    </item>
+    {{ range where (where .Site.Pages.ByDate.Reverse ".Section" "posts") "Kind" "page" }}
+      {{ if ne .Draft true}}
+      <item>
+        <title>{{ .Title }}</title>
+        <link>{{ .Permalink }}</link>
+        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+        {{ with .Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
+        <guid>{{ .Permalink }}</guid>
+        <description>{{ .Summary | html }}</description>
+      </item>
+      {{ end }}
     {{ end }}
+
+    <!-- event -->
+    <!-- Get CSV data -->
+    {{ $url := "/data/events/events.csv" }}
+    {{ $sep := "," }}
+    {{ $events := getCSV $sep $url }}
+    {{ range $i, $r := $events }}
+            <!-- not first row because of headers -->
+        {{ if ne $i 0 }}
+            <!-- define variables -->
+            {{ $event_start_date := index $r 1 }}
+            {{ $event_start_date := (time $event_start_date) }}
+            {{ $event_end_date := index $r 2 }}
+            {{ $event_end_date := (time $event_end_date) }}
+            {{ $event_name := index $r 0 }}
+            {{ $event_location := index $r 3 }}
+            {{ $event_url := index $r 4 }}
+
+            <!-- date logic for showing events 1 month before the event -->
+            {{ $show_event := $event_start_date.After now }}
+            {{ $show_event_start := $event_start_date.AddDate 0 -1 0 }}
+            {{ $show_event_publishdate := $show_event_start.Before now }}
+
+            <!-- show on homepage -->
+            {{- if and ($show_event) ($show_event_publishdate) }}
+            <item>
+                <title>{{ $event_name }}</title>
+                {{ if in (print $event_url) "https"}}<link>{{ $event_url }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{$show_event_start.Format "January-2006" | lower }}</link>
+                {{else}}<link>{{ $event_url }}</link>{{end}}
+                <pubDate>{{ $show_event_start.Format "Mon, 02 Jan 2006" | safeHTML }}</pubDate>
+                {{ with $.Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
+                {{ if in (print $event_url) "https"}}<guid>{{ $event_url }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{$show_event_start.Format "January-2006" | lower }}</guid>
+                {{else}}<guid>{{ $event_url }}</guid>{{end}}
+                <description>{{ $event_name | html }}</description>
+            </item>
+            {{- end }}
+        {{- end }}
+    {{- end }}
+    <!-- end event -->
   </channel>
 </rss>

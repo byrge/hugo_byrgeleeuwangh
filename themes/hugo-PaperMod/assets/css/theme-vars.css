@@ -10,6 +10,8 @@
     --entry: #fff;
     --related: #eee;
     --related-text: #333;
+    --sponsor: #ccc;
+    --sponsored_text: #4fb4d7;
     --button: #ddd;
     --svg-icon: #2e2e33;
     --event-listing: #ddd;
@@ -35,6 +37,8 @@
     --entry: #2e2e33;
     --related: #333;
     --related-text: #fff;
+    --sponsor: #2E2E33;
+    --sponsored_text: tomato;
     --button: #666;
     --border-form: #666;
     --form-text: #ddd;

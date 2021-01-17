@@ -5,9 +5,8 @@ date: 2021-01-14T19:53:06+01:00
 page_id: 32dce2beb3aaccd0a783c8aaf4ab7781
 showtoc: true
 tocOpen: false
-aliases: ["/debug-your-app-analytics"]
 tags: ["seo", "gtm", "ld+json", "structured-content"]
-keywords: ["gtm","ld+json"]
+keywords: ["gtm","ld+json", "google tag manager"]
 author: "Byrge Leeuwangh"
 draft: true
 ---

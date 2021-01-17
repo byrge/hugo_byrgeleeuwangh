@@ -33,6 +33,11 @@
     {{- end}}
   </header>
   {{- partial "cover.html" (dict "cxt" . "IsHome" false) }}
+  
+  {{ .Summary }}
+  <!-- sponsor -->
+  {{- partial "sponsor.html" . }}
+
   {{- if .Params.ShowToc }}
   <div class="toc">
     <details {{if .Params.TocOpen }} open{{ end }}>
