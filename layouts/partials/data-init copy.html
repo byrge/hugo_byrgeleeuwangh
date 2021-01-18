@@ -271,11 +271,11 @@ function getViewportSize(w) {
 
     /////// blog posts
     var blogpost_array = [];
-    blogpost_array = document.querySelectorAll('[data-analytics]');
+    blogpost_array = document.querySelectorAll('[data-analytics-blogpost]');
     var analytics_blogposts = [];
 
     for (var i in blogpost_array) if (blogpost_array.hasOwnProperty(i)) {
-      var data = (blogpost_array[i].getAttribute('data-analytics'));
+      var data = (blogpost_array[i].getAttribute('data-analytics-blogpost'));
       var blogpostJSON = JSON.parse(data);
       analytics_blogposts.push(blogpostJSON);
     }
@@ -292,16 +292,17 @@ function getViewportSize(w) {
     let observer = new IntersectionObserver(function (entries, self) {
 
       entries.forEach(entry => {
+        // console.log('>>> start', analytics_blogposts);
 
-          if (entry.isIntersecting && entry.target.dataset.analytics) {
-              var analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' impression: ' + analyticsData.title, 'success')
+          if (entry.isIntersecting && entry.target.dataset.analyticsBlogpost) {
+              var blog_post = JSON.parse(entry.target.dataset.analyticsBlogpost);
+              customLog('blog_post impression: ' + blog_post.title, 'success')
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
-              "event": "impression_"+analyticsData.event,
+              "event": "blogpost_view",
               "url": window.location.href,
-              "page_id": analyticsData.page_id,
-              analyticsData
+              "page_id": "",
+              blog_post
             });
           
             self.unobserve(entry.target);

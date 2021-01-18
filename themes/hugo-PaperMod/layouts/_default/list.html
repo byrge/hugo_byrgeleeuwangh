@@ -43,8 +43,10 @@
 
 <!---->
 {{ $default_params := .Params }}
+{{ $event := dict "event" "blogpost" }}
+{{ $default_params := merge $default_params $event }}
 <!---->
-<article class="{{ $class }}" data-analytics-blogpost= "{{ $default_params | jsonify }}" data-analytics-blogpost-id="{{ $default_params.page_id }}">
+<article class="{{ $class }}" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}">
   {{- partial "cover.html" (dict "cxt" . "IsHome" true) }}
   <header class="entry-header">
     <h2>
