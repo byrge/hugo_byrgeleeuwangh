@@ -1,0 +1,48 @@
+{{- define "main" }}
+
+<!-- Get CSV data -->
+{{ $url := "/data/sponsors/sponsors.csv" }}
+{{ $sep := ";" }}
+{{ $sponsors := getCSV $sep $url }}
+    
+    <article class="sponsorship entry">
+        <table class="sponsorship">
+            <tr>
+                <td>Week</td><td>Date</td><td>Availability</td>
+            </tr>
+
+    {{ range $i, $r := $sponsors | first 18 }}
+        <!-- not first row because of headers -->
+        {{ if ne $i 0 }}
+
+        <!-- define variables -->
+        {{ $sponsor_publishDate := index $r 0 }}
+        {{ $sponsor_publishDate_time := (time $sponsor_publishDate).Format "02 Jan" }}
+        {{ $sponsor_expiryDate := index $r 1 }}
+        {{ $sponsor_expiryDate_time := ((time $sponsor_expiryDate).Add (-24 | duration "hour" )).Format "02 Jan" }}
+        <!-- if we have an *errors.errorString check the csv file (too many ;)  -->
+        {{ $sponsor_ISOWeek := index $r 2 }}
+        {{ $sponsor_availability := index $r 3 }}
+        {{ $sponsor_name := index $r 4 }}
+        {{ $sponsor_text := index $r 5 }}
+        {{ $sponsor_link := index $r 6 }}
+        {{ $sponsor_email := index $r 7 }}
+    
+        {{ $sponsor_availability_text := replace ( replace $sponsor_availability "NO" "Available" ) "YES" "Sold" }}
+
+        {{ $default_params := dict "event" "event" "name" $sponsor_name "publishDate" $sponsor_publishDate "expiryDate" $sponsor_expiryDate_time "availability" $sponsor_availability_text }}
+
+            <!-- show on homepage -->
+            {{- if (time $sponsor_publishDate).After now }}
+                <tr data-analytics= "{{ $default_params | jsonify }}">
+                    <td title="week: {{ $sponsor_ISOWeek }}" class="sponsorship row week">{{ $sponsor_ISOWeek }}</td>
+                    <td title="date: {{ $sponsor_publishDate_time }} - {{ $sponsor_expiryDate_time }}" class="sponsorship row date">{{ $sponsor_publishDate_time }} - {{ $sponsor_expiryDate_time }}</td>
+                    <td title="availability: {{ $sponsor_availability_text }}" class="sponsorship row">{{ $sponsor_availability_text }}</td>
+                </tr>
+            {{- end }}
+        {{- end }}
+    {{- end }}
+        </table>
+    </article>
+
+{{- end }}{{/* end main */}}

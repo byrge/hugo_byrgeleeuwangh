@@ -1,7 +1,7 @@
 {{ $all := (.Site.GetPage "Section" "sponsors").Pages.ByPublishDate.Reverse }}
   {{ range $all }}
 
-  <!-- check if draft is false to publish a sponsor-->
+  <!-- check if draft is false to get the available weeks from the sponsors -->
   {{ if eq .Draft false }}
 
     {{ $default_params := .Page.Params }}
@@ -9,9 +9,7 @@
     {{ $default_params := merge $default_params $event }}
       <article class="sponsor post-entry" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ .Page.Params.Page_id }}" data-analytics-sponsor-name="{{ .Title | lower }}">
           <header class="entry-header">
-              <aside class="weeknumber">
-                sponsor | {{- partial "sponsor-date.html" . -}}
-              </aside>
+
             <h2>
               {{ .Title }}
               {{- if .Draft }}<div class="entry-isdraft"><sup>&nbsp;&nbsp;[draft]</sup></div>{{- end }}

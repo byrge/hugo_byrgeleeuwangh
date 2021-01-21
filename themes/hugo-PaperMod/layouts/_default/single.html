@@ -38,7 +38,9 @@
   
   {{ .Summary }}
   <!-- sponsor -->
-  {{- partial "sponsor.html" . }}
+  {{- if and (ne $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}
+    {{- partial "sponsor.html" . }}
+  {{- end }}
 
   {{- if .Params.ShowToc }}
   <div class="toc">
