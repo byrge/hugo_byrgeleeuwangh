@@ -12,6 +12,7 @@
     --related-text: #333;
     --sponsor: #ccc;
     --sponsored_text: #4fb4d7;
+    --sponsored_form_bg: #cccccc40;
     --button: #ddd;
     --svg-icon: #2e2e33;
     --event-listing: #ddd;
@@ -39,6 +40,7 @@
     --related-text: #fff;
     --sponsor: #2E2E33;
     --sponsored_text: tomato;
+    --sponsored_form_bg: #333;
     --button: #666;
     --border-form: #666;
     --form-text: #ddd;

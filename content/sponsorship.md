@@ -12,7 +12,7 @@ Hi,
 
 You can buy a week-long sponsorship for my blog site. This is the best way to promote your related product or service to my audience of Data Geeks interested in Analytics, implementation tips, debugging and collecting quality data.
 
-What sponsors get:
+As a sponsor what do you get:
 
 * A display ad on every blog page of the site, including the homepage, all week long.
 
