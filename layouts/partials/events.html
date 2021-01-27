@@ -122,10 +122,6 @@
         {{ $event_location := index $r 3 }}
         {{ $event_url := index $r 4 }}
 
-        {{ range sort . "time $event_start_date" }}
-      {{ dateFormat "January 2, 2006" $event_start_date }}
-    {{ end }}
-
         <!-- date logic for showing past events -->
         {{ $show_event_past := $event_start_date.Before now }}
         {{- if ($show_event_past) }}
