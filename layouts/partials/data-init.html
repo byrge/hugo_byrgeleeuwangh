@@ -270,12 +270,12 @@ function getViewportSize(w) {
     }
 
     /////// blog posts
-    var blogpost_array = [];
-    blogpost_array = document.querySelectorAll('[data-analytics]');
+    var logging_arr = [];
+    logging_arr = document.querySelectorAll('[data-analytics]');
     var analytics_blogposts = [];
 
-    for (var i in blogpost_array) if (blogpost_array.hasOwnProperty(i)) {
-      var data = (blogpost_array[i].getAttribute('data-analytics'));
+    for (var i in logging_arr) if (logging_arr.hasOwnProperty(i)) {
+      var data = (logging_arr[i].getAttribute('data-analytics'));
       var blogpostJSON = JSON.parse(data);
       analytics_blogposts.push(blogpostJSON);
     }
@@ -295,21 +295,22 @@ function getViewportSize(w) {
 
           if (entry.isIntersecting && entry.target.dataset.analytics) {
               var analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' impression: ' + analyticsData.title, 'success')
+              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title, 'success')
               window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
+              var event = removeEmpty({
               "event": "impression_"+analyticsData.event,
               "url": window.location.href,
               "page_id": analyticsData.page_id,
               analyticsData
             });
+            window.dataLayer.push(event);
           
             self.unobserve(entry.target);
           }
       });
     }, config);
 
-    blogpost_array.forEach(blogpost => observer.observe(blogpost)); // watch blog posts
+    logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
     } 
   }, false);
 </script>
