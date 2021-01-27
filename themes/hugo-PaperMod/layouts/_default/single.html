@@ -37,6 +37,7 @@
   {{- partial "cover.html" (dict "cxt" . "IsHome" false) }}
   
   {{ .Summary }}
+  
   <!-- sponsor -->
   {{- if and (ne $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}
     {{- partial "sponsor.html" . }}

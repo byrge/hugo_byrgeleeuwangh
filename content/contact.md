@@ -3,7 +3,8 @@ title: "Contact"
 layout: "contact"
 url: "/contact"
 type: "form"
-summary: "Contact"
+event: "page"
+summary: "Contact me for questions or contracting"
 form: true
 date: 2021-01-16T15:11:49+01:00
 page_id: 3c4864f00d23f7ea35511ec930ce1d9c
@@ -20,5 +21,4 @@ Or contact me if you want to hire me or need help. I'm available for ~ 12 hours 
  - solving analytics issues
  - online or inhouse analytics related training
 
-### Form
-
+### Form  
