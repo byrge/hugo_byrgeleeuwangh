@@ -1,4 +1,4 @@
-const cookie = require('cookie')
+/* const cookie = require('cookie')
 
 exports.handler = async (event, context) => {
   const hour = 3600000
@@ -38,3 +38,4 @@ exports.handler = async (event, context) => {
     'body': html
   }
 }
+*/
