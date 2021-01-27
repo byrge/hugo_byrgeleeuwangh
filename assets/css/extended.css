@@ -212,12 +212,24 @@ aside.weeknumber {
 
 td.col:first-child {
   width: 10vw;
+  padding: 0.5rem 0rem 0.5rem 1.5rem;
 }
 td.col {
   width: 25vw;
 }
 tr.row:nth-child(even) {
   background-color: var(--sponsored_form_bg);
+}
+table.availability-table {
+  overflow: auto;
+  color: var(--theme);
+  font-size: initial;
+  display: inline-table;
+}
+.sponsorship.table {
+  padding-right: 0rem!important;
+  padding-left: 0rem!important;
+  background-color: var(--sponsorship_table)!important;
 }
 
 /* sponsor om top of page */
@@ -229,13 +241,13 @@ tr.row:nth-child(even) {
   overflow: hidden;
   color: #fff;
   text-decoration: none;
-  background: #eee;
+  background: var(--sponsor)!important;;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
-  padding: 0.5rem 0.5rem 0.5rem 0.1rem;
+  padding: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   border: 0px;

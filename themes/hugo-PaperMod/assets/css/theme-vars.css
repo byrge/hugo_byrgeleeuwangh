@@ -10,9 +10,10 @@
     --entry: #fff;
     --related: #eee;
     --related-text: #333;
-    --sponsor: #ccc;
+    --sponsor: #eee;
     --sponsored_text: #4fb4d7;
-    --sponsored_form_bg: #cccccc40;
+    --sponsored_form_bg: #777;
+    --sponsorship_table: #666;
     --button: #ddd;
     --svg-icon: #2e2e33;
     --event-listing: #ddd;
@@ -40,7 +41,8 @@
     --related-text: #fff;
     --sponsor: #2E2E33;
     --sponsored_text: tomato;
-    --sponsored_form_bg: #333;
+    --sponsored_form_bg: #eee;
+    --sponsorship_table: #ccc;
     --button: #666;
     --border-form: #666;
     --form-text: #ddd;

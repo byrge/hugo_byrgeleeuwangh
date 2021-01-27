@@ -12,10 +12,10 @@
 {{ $sep := ";" }}
 {{ $sponsors := getCSV $sep $url }}
     
-    <article class="sponsorship entry">
-        <table class="sponsorship">
+    <div class="sponsorship table">
+        <table class="availability-table">
             <tr class="row">
-                <td class="col">Week</td><td class="col">Date</td><td class="col">Availability</td>
+                <td class="col"><b>Week</b></td><td class="col"><b>Date</b></td><td class="col"><b>Availability</b></td>
             </tr>
 
     {{ range $i, $r := $sponsors }}
@@ -52,6 +52,6 @@
         {{- end }}
     {{- end }}
         </table>
-    </article>
+    </div>
 
 {{- end }}{{/* end main */}}

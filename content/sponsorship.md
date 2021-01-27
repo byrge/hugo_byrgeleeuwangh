@@ -23,11 +23,13 @@ As a sponsor what do you get:
 
 About my audience:
 
-* Typical weekday web page views: 80,000–100,000.
+* Typical weekday web page views: ~ 1,500.
 
-* Estimated monthly web page views: 2.5 million.
+* Estimated monthly web page views: 30k.
 
-* Estimated RSS feed subscribers: Over 200,000.
+* Estimated RSS feed subscribers: Over 1500.
+
+* Estimated reading time on my blog: ~ 5 minutes.
 
 * Sponsorship is exclusive. Only one sponsor per week.
 

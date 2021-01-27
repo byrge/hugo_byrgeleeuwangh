@@ -27,9 +27,9 @@
             <!-- show Sponsorship on page -->
             {{- if and ((time $sponsor_publishDate).Before now) ((time $sponsor_expiryDate).After now ) (eq $sponsorship_sold "YES") }}
 
-              <div class="sponsorship " data-analytics= "{{ $default_params | jsonify }}">
-                <a href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }} - {{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer" class="link">
-                  <div class="sponsorship-item left"><img class="sponsor_image" src="https://via.placeholder.com/180x120/FFFFFF/333333?Text=byrgeleeuwangh.com/"></div>
+              <div class="sponsorship entry" data-analytics= "{{ $default_params | jsonify }}">
+                <a href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer" class="link">
+                  <div class="sponsorship-item left"><img class="sponsor_image" src="https://dummyimage.com/180x120/fff/000.png"></div>
                     <div title="text: {{ $sponsor_text }}" class="sponsor_textblock right"><h2 class="sponsor_name">{{ $sponsor_name }}</h2><span class="sponsor_text">{{ $sponsor_text }}</span></div>
                     <div title="sponsored" class="right"><span class="sponsored_text">sponsored</span></div>
                 </a>
