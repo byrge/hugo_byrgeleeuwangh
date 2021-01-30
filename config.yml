@@ -116,7 +116,9 @@ params:
     env: production
     description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
     GitSourceUrl: "https://github.com/byrge/hugo_byrgeleeuwangh"
-    author: Byrge Leeuwangh
+    author: 
+        name: Byrge Leeuwangh
+        email: byrge@leeuwangh.com
     # author: ["Me", "You"] # multiple authors
     ShowReadingTime: true
     defaultTheme: auto

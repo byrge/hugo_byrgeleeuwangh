@@ -13,19 +13,50 @@
     {{- with .OutputFormats.Get "RSS" -}}
     {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{- end -}}
-    {{ range where (where .Site.Pages.ByDate.Reverse ".Section" "posts") "Kind" "page" }}
-      {{ if ne .Draft true}}
-      <item>
-        <title>{{ .Title }}</title>
-        <link>{{ .Permalink }}</link>
-        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
-        {{ with .Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
-        <guid>{{ .Permalink }}</guid>
-        <description>{{ .Summary | html }}</description>
-      </item>
-      {{ end }}
-    {{ end }}
+    <!-- sponsor of the week -->
+    <!-- Get CSV data -->
+{{ $url := "/data/sponsors/sponsors.csv" }}
+{{ $sep := ";" }}
+{{ $sponsors := getCSV $sep $url }}
+    
+    {{ range $i, $r := $sponsors | first 20 }}
+        <!-- not first row because of headers -->
+        {{ if ne $i 0 }}
 
+        <!-- define variables -->
+        {{ $sponsor_publishDate := index $r 0 }}
+        {{ $sponsor_publishDate_time := (time $sponsor_publishDate).Format "02 Jan" }}
+        {{ $sponsor_expiryDate := index $r 1 }}
+        {{ $sponsor_expiryDate_time := ((time $sponsor_expiryDate).Add (-24 | duration "hour" )).Format "02 Jan" }}
+        <!-- if we have an *errors.errorString check the csv file (too many -> ;)  -->
+        {{ $sponsor_ISOWeek := int (index $r 2) }}
+        {{ $sponsorship_sold := index $r 3 }}
+        {{ $sponsor_name := index $r 4 }}
+        {{ $sponsor_text := index $r 5 }}
+        {{ $sponsor_link := index $r 6 }}
+        {{ $sponsor_email := index $r 7 }}
+    
+        {{ $sponsor_availability_text := replace ( replace $sponsorship_sold "NO" "Available" ) "YES" "Sold" }}
+
+        {{ $default_params := dict "event" "sponsor" "name" $sponsor_name "title" $sponsor_name "publishDate" $sponsor_publishDate "expiryDate" $sponsor_expiryDate "availability" $sponsor_availability_text "ISOWeek" $sponsor_ISOWeek }}
+
+            <!-- show Sponsorship on page -->
+            {{- if and ((time $sponsor_publishDate).Before now) ((time $sponsor_expiryDate).After now ) (eq $sponsorship_sold "YES") }}
+
+            <item>
+                <title>{{ $sponsor_name }}</title>
+                {{ if in (print $sponsor_link) "https"}}<link>{{ $sponsor_link }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}</link>
+                {{else}}<link>{{ $sponsor_link }}</link>{{end}}
+                <pubDate>{{ (time $sponsor_publishDate).Format "Mon, 02 Jan 2006" | safeHTML }}</pubDate>
+                {{ with $.Site.Params.author.email }}<author>Department of Commerce -- {{.}}{{ with $.Site.Params.author.name }} ({{.}}){{end}}</author>{{end}}
+                {{ if in (print $sponsor_link) "https"}}<guid>{{ $sponsor_link }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}</guid>
+                {{else}}<guid>{{ $sponsor_link }}</guid>{{end}}
+                <description>{{ $sponsor_text | html }}</description>
+            </item>
+
+            {{- end }}
+        {{- end }}
+    {{- end }}
     <!-- event -->
     <!-- Get CSV data -->
     {{ $url := "/data/events/events.csv" }}
@@ -55,7 +86,7 @@
                 {{ if in (print $event_url) "https"}}<link>{{ $event_url }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{$show_event_start.Format "January-2006" | lower }}</link>
                 {{else}}<link>{{ $event_url }}</link>{{end}}
                 <pubDate>{{ $show_event_start.Format "Mon, 02 Jan 2006" | safeHTML }}</pubDate>
-                {{ with $.Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
+                {{ with $.Site.Params.author.email }}<author>{{.}}{{ with $.Site.Params.author.name }} ({{.}}){{end}}</author>{{end}}
                 {{ if in (print $event_url) "https"}}<guid>{{ $event_url }}?utm_source=byrgeleeuwangh&amp;utm_medium=rss&amp;utm_campaign={{$show_event_start.Format "January-2006" | lower }}</guid>
                 {{else}}<guid>{{ $event_url }}</guid>{{end}}
                 <description>{{ $event_name | html }}</description>
@@ -64,5 +95,18 @@
         {{- end }}
     {{- end }}
     <!-- end event -->
+
+    {{ range where (where .Site.Pages.ByDate.Reverse ".Section" "posts") "Kind" "page" }}
+      {{ if ne .Draft true}}
+      <item>
+        <title>{{ .Title }}</title>
+        <link>{{ .Permalink }}</link>
+        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+        {{ with $.Site.Params.author.email }}<author>{{.}}{{ with $.Site.Params.author.name }} ({{.}}){{end}}</author>{{end}}
+        <guid>{{ .Permalink }}</guid>
+        <description>{{ .Summary | html }}</description>
+      </item>
+      {{ end }}
+    {{ end }}
   </channel>
 </rss>

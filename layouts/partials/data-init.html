@@ -359,7 +359,10 @@ function customLog(message, color='black') {
           color = color
       }
 
-  console[logType](`${emoji}` + " " + `%c${message}`, `${color}`);
+  var debug_status = localStorage.getItem('debug_status');
+  if(debug_status) {
+    console[logType](`${emoji}` + " " + `%c${message}`, `${color}`);
+  }
 }
 </script>
 
