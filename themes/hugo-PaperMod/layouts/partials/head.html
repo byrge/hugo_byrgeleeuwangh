@@ -36,6 +36,10 @@
 {{- end}}
 <!-- Load 'web-vitals' using a classic script that sets the global 'webVitals' object. -->
 <script defer src="https://unpkg.com/web-vitals@1.0.1/dist/web-vitals.umd.js"></script>
+
+<!-- Netlify Functions -->
+<script defer src="https://byrgeleeuwangh.com/.netlify/functions/set_uuid_cookie"></script>
+
 <!-- Search -->
 {{- if (eq .Layout `search`) -}}
 <link rel="preload" as="fetch" href="../index.json" crossOrigin="anonymous">
