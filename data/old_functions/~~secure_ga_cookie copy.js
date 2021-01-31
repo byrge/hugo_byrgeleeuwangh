@@ -21,10 +21,11 @@ exports.handler = async (event, context) => {
     if(cookie_ga) {
       return {
         statusCode: 200,
+        multiValueHeaders : {"Set-Cookie": [`language=en; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`, `theme=theme; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`, `_ga=${cookie_ga}; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`]},
         headers: {
           "Location": "https://byrgeleeuwangh.com",
           "Access-Control-Expose-Headers": "Set-Cookie",
-          "Set-Cookie": `_ga=${cookie_ga}; Path=/; Domain=${current_domain}; Max-Age=36000; Secure; SameSite=strict`,
+          "Set-Cookie": `_ga=${cookie_ga}; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`,
           "Cache-Control": "no-cache",
           "Content-Type": "text/html",
           "Access-Control-Allow-Origin": "*",
