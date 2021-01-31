@@ -3,7 +3,7 @@ exports.handler = async (event, context) => {
    // remove port number
   const current_domain = ( host_value.match(/:/g) ) ? host_value.slice( 0, host_value.indexOf(":") ) : event.headers.host
 
-  const ip_encode = new Buffer(event.headers['client-ip']);
+  const ip_encode = new Buffer.from(event.headers['client-ip']);
   const ip_value = ip_encode.toString('base64');
 
   const secondsSinceEpoch = Math.round(Date.now() / 1000)

@@ -6,6 +6,7 @@ exports.handler = async (event, context) => {
   const current_domain = ( host_value.match(/:/g) ) ? host_value.slice( 0, host_value.indexOf(":") ) : event.headers.host
 
   console.log('current_domain ', current_domain)
+
   const get_cookies = function(event) {
     var cookies = {};
     event.headers && event.headers.cookie.split(';').forEach(function(cookie) {
