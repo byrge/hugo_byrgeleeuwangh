@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
         headers: {
           "Location": "https://byrgeleeuwangh.com",
           "Access-Control-Expose-Headers": "Set-Cookie",
-          "Set-Cookie": `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`,
+          "Set-Cookie": `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=36000; Secure; SameSite=strict`,
           "Cache-Control": "no-cache",
           "Content-Type": "text/html",
           "Access-Control-Allow-Origin": "*",

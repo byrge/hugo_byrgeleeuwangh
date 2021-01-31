@@ -5,6 +5,7 @@ exports.handler = async (event, context) => {
   // remove port number
   const current_domain = ( host_value.match(/:/g) ) ? host_value.slice( 0, host_value.indexOf(":") ) : event.headers.host
 
+  console.log('current_domain ', current_domain)
   const get_cookies = function(event) {
     var cookies = {};
     event.headers && event.headers.cookie.split(';').forEach(function(cookie) {
@@ -22,12 +23,12 @@ exports.handler = async (event, context) => {
         headers: {
           "Location": "https://byrgeleeuwangh.com",
           "Access-Control-Expose-Headers": "Set-Cookie",
-          "Set-Cookie": `_ga=${cookie_ga}; Path=/; Domain=${current_domain}; Max-Age=36000; HttpOnly; SameSite=strict`,
+          "Set-Cookie": `_ga=${cookie_ga}; Path=/; Domain=${current_domain}; Max-Age=36000; Secure; SameSite=strict`,
           "Cache-Control": "no-cache",
           "Content-Type": "text/html",
           "Access-Control-Allow-Origin": "*",
         },
-        body: `cookie _ga : ${JSON.stringify(cookie_ga)} `,
+        body: `cookie _ga : ${JSON.stringify(cookie_ga)}`,
       };
     }
   }
