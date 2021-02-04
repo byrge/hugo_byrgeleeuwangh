@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
       return obj;
     }, {});
     
-    const uuid = cookies['_uuid'] || create_uuid();;
+    const uuid = cookies['_uuid'] || create_uuid();
     const ga = cookies['_ga'];
     const sessionId = cookies['_sessionId'] || session_id();
     
@@ -108,7 +108,7 @@ exports.handler = async (event, context) => {
     // write cookies
     return {
       statusCode: 200,
-      body: `cookies set 1`,
+      body: '',
       multiValueHeaders : set_multi_value_headers,
       headers: headers,
     };
@@ -118,9 +118,10 @@ exports.handler = async (event, context) => {
   //   so write cookies [sessionId and uuid] first time
   const set_multi_value_headers = {"Set-Cookie": [`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`, `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
 
+  console.log('set_multi_value_headers ', set_multi_value_headers)
   return {
       statusCode: 200,
-      body: `cookies set 2`,
+      body: `_sessionId=${sessionId} | _uuid=${uuid}`,
       multiValueHeaders : set_multi_value_headers,
       headers: headers,
     };

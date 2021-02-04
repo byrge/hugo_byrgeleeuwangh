@@ -8,7 +8,7 @@ tocOpen: false
 tags: ["seo", "gtm", "ld+json", "structured-content"]
 keywords: ["gtm","ld+json", "google tag manager"]
 author: "Byrge Leeuwangh"
-draft: true
+draft: false
 ---
 
 ## How to implement structured data with Google Tag Manager

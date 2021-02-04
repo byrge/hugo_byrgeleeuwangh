@@ -6,6 +6,6 @@
   "author": "Netlify",
   "license": "MIT",
   "dependencies": {
-    "netlify-plugin-inline-critical-css": "1.1.3"
+    "netlify-plugin-inline-critical-css": "1.2.0"
   }
 }
