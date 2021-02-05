@@ -232,7 +232,7 @@
 }
 
 .toc {
-    margin-bottom: 40px;
+    margin: 4vh 0vh;
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: .5em

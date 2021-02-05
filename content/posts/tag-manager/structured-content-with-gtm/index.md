@@ -1,6 +1,5 @@
 ---
 title: "Structured Content With Google Tag Manager"
-summary: "Adding structured data can be done in many different ways. One of them is by using Google Tag Manager. The advantage of structured data is to enrich your SERP Results. This article is about how to implement structured data, **ld+json**, using the Tag Manager and how to test your structured data."
 date: 2021-01-14T19:53:06+01:00
 page_id: 32dce2beb3aaccd0a783c8aaf4ab7781
 showtoc: true
@@ -9,6 +8,7 @@ tags: ["seo", "gtm", "ld+json", "structured-content"]
 keywords: ["gtm","ld+json", "google tag manager"]
 author: "Byrge Leeuwangh"
 draft: false
+summary: "Adding structured data can be done in many different ways. One of them is by using Google Tag Manager. The advantage of structured data is to enrich your SERP Results. This article is about how to implement structured data, ld+json, using the Tag Manager and how to test your structured data."
 ---
 
 ## How to implement structured data with Google Tag Manager
