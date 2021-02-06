@@ -65,11 +65,13 @@ exports.handler = async (event, context) => {
     
     const uuid = cookies['_uuid'] || create_uuid();
     const ga = cookies['_ga'];
+    const ga_TSKQWXB2BC = cookies['_ga_TSKQWXB2BC'];
     const sessionId = cookies['_sessionId'] || session_id();
     
     let cookie_list = Object.keys(cookies).map((key) => [{'name':(key), 'value':cookies[key]}]);
 
     let _ga = cookie_list.filter(f => f[0].name === '_ga');
+    let _ga_TSKQWXB2BC = cookie_list.filter(f => f[0].name === '_ga_TSKQWXB2BC');
     let _ga_uuid = cookie_list.filter(f => f[0].name === '_uuid');
     let _ga_sessionId = cookie_list.filter(f => f[0].name === '_sessionId');
     
@@ -97,11 +99,11 @@ exports.handler = async (event, context) => {
     let set_multi_value_headers
     
     if(supercount > 60) {
-      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
+      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`__ga_TSKQWXB2BC=${ga_TSKQWXB2BC}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
     } else if (supercount > 50) {
-      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
+      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_ga_TSKQWXB2BC=${ga_TSKQWXB2BC}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
     } else if (supercount > 40) {
-      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};
+      set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_ga_TSKQWXB2BC=${ga_TSKQWXB2BC}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};
     } else if (supercount > 30) {
       set_multi_value_headers = {"Set-Cookie": [`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};
     } else if (supercount > 20) {
@@ -111,7 +113,7 @@ exports.handler = async (event, context) => {
     } else {
       set_multi_value_headers = {"Set-Cookie": [`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};
     }
-
+    console.log('set_multi_value_headers',set_multi_value_headers)
     // write cookies
     return {
       statusCode: 200,
@@ -125,7 +127,6 @@ exports.handler = async (event, context) => {
   //   so write cookies [sessionId and uuid] first time
   const set_multi_value_headers = {"Set-Cookie": [`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`, `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
 
-  console.log('set_multi_value_headers ', set_multi_value_headers)
   return {
       statusCode: 200,
       body: '',
