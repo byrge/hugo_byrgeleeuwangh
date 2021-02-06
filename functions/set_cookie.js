@@ -34,7 +34,14 @@ exports.handler = async (event, context) => {
   const maxAge = 24*60*60*365;
 
   // set Secure Flag
-  const secure = `Secure`;
+  let hostname = event.headers.host;
+  let secure;
+  let local_host = hostname.indexOf('localhost');
+  if(local_host === 0) {
+    secure = ``;
+  } else {
+    secure = `Secure`;
+  }
 
   // set headers
   const headers = {
@@ -121,7 +128,7 @@ exports.handler = async (event, context) => {
   console.log('set_multi_value_headers ', set_multi_value_headers)
   return {
       statusCode: 200,
-      body: `_sessionId=${sessionId} | _uuid=${uuid}`,
+      body: '',
       multiValueHeaders : set_multi_value_headers,
       headers: headers,
     };

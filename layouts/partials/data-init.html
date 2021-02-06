@@ -15,23 +15,23 @@
   };
   {{- end }}  
 
-  // create session id
-  var session_id = function () {  
-    var d = new Date().getTime();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
-        d += performance.now();
-    }
-    return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-  }
+  // // create session id
+  // var session_id = function () {  
+  //   var d = new Date().getTime();
+  //   if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+  //       d += performance.now();
+  //   }
+  //   return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  //       var r = (d + Math.random() * 16) % 16 | 0;
+  //       d = Math.floor(d / 16);
+  //       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  //   });
+  // }
   // create client_id
-  var array = new Uint32Array(3);
-  window.crypto.getRandomValues(array);
-  function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
+  // var array = new Uint32Array(3);
+  // window.crypto.getRandomValues(array);
   // date
+  function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
   var options_weekday = { weekday: 'long' };
   var options_day = { day: '2-digit' };
   var options_month = { month: 'long' };
@@ -42,35 +42,14 @@
   var seconds = dateobj.getSeconds();
   var minutes = dateobj.getMinutes();
   var hour = dateobj.getHours();
-  //
-  var client_id = array[0] + "-" + year + "-" + month + "-" + array[1] + "-e-" + seconds_since_epoch() + "-" + array[2];
-  //
-  var session_id_st = window.sessionStorage.getItem('session_id');
-
-  var objSession_id = eval("(function(){return " + session_id_st + ";})()");
-  if(objSession_id && typeof objSession_id === 'object' && objSession_id !== null) {
-    session_id = objSession_id;
-    } else {
-      var objSession_id = {
-        'session_id': session_id(),
-    }
-      window.sessionStorage.setItem('user', JSON.stringify(objSession_id));
-      session_id = objSession_id;
-  }
-  // local storage user
-  var user = window.localStorage.getItem('user');
-  var objUser = eval("(function(){return " + user + ";})()");
-  if(objUser && typeof objUser === 'object' && objUser !== null) {
-      user = objUser;
-    } else {
-      var objUser = {
-        'client_id': client_id,
-    }
-    window.localStorage.setItem('user', JSON.stringify(objUser));
-    user = objUser;
-  }
-  //// user properties combined for session and local storage
-  user = Object.assign(user, session_id);
+ 
+  // Cookies
+  const read_cookies = document.cookie;
+  const cookies = read_cookies.split(";").map((s) => s.split("=").map((s) => s.trim())).reduce((m, [k, v]) => (m.set(k, v), m), new Map());
+  let uuid = cookies.get("_uuid"); 
+  let sessionId = cookies.get("_sessionId");
+  let ga_cookie = cookies.get("_ga"); 
+  // user = Object.assign(user, session_id);
 
 
   //// ISOWeek
@@ -98,8 +77,8 @@
     });
     return newObj;
   };
-  var dataCollection = [];
-  dataCollection = removeEmpty({
+  var _dataCollection = [];
+  _dataCollection = removeEmpty({
     "event": "init",
     "general": {
       "git": git_info,
@@ -120,7 +99,11 @@
       "minutes": minutes,
       "seconds": seconds
     },
-    "user": user,
+    "user": {
+      "uuid": uuid,
+      "session_id": sessionId,
+      "ga_cookie": ga_cookie
+    },
     "page": {
       {{ with $.Kind }}"page_type": {{$.Kind}},{{end}}
       {{ with $author }}"author": {{$author}},{{end}}
@@ -145,7 +128,7 @@
   });
 
   window.dataLayer = window.dataLayer || [];
-  dataLayer.push(dataCollection);
+  dataLayer.push(_dataCollection);
 </script>
 
 <!-- /////////////////////////// -->
