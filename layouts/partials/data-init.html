@@ -338,9 +338,11 @@ function getViewportSize(w) {
               analyticsData = JSON.parse(entry.target.dataset.analytics);
               customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title + "event name : " + entry.target.dataset.analyticsEventname, 'success')
               // get offset from top 
-              var article = document.getElementById('promotion');
-              var rect = article.getBoundingClientRect();
-              offsetTop = window.pageYOffset + rect.top - rect.height;
+              var article = document.getElementById('promotion') || undefined;
+              if (article) {
+                var rect = article.getBoundingClientRect();
+                offsetTop = window.pageYOffset + rect.top - rect.height;
+              }
               //
               eventName = entry.target.dataset.analyticsEventname;
               index = entry.target.dataset.analyticsListindex;
