@@ -269,7 +269,7 @@ function getViewportSize(w) {
     function analyticsEvent(analyticsData, eventName, index){
       var ecommerce_items = {};
       var items = [];
-      if(eventName === 'view_item_list' || eventName === 'view_item') {
+      if(eventName === 'view_item_list' || eventName === 'select_item' || eventName === 'view_item') {
         ecommerce_items = removeEmpty({
             'item_id': analyticsData.page_id,
             'item_name': analyticsData.title,
@@ -282,8 +282,7 @@ function getViewportSize(w) {
             'item_list_name': window.location.pathname,
             'item_list_id': 'SR123',
             'price': analyticsData.words,
-            'index': index || undefined,
-            'event': eventName
+            'index': index || undefined
           });
       }
       if(eventName === 'view_promotion') {
@@ -302,7 +301,6 @@ function getViewportSize(w) {
 
     // Click Listener
     document.addEventListener('click', function (event) {
-      console.log(event.eventPhase + " : " + JSON.stringify(event.target) + " : bubbling");
       if (event.target.hasAttribute('data-analytics')) {
           analyticsData = JSON.parse(event.target.dataset.analytics);
           customLog(analyticsData.event + ' click \n' + "title : " + analyticsData.title, 'success')
@@ -321,7 +319,6 @@ function getViewportSize(w) {
           },
           analyticsData
         });
-        console.log('send_event >><< ', send_event)
         window.dataLayer.push(send_event);
       }
     }, true);
