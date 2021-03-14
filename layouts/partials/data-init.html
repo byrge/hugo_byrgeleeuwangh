@@ -79,7 +79,7 @@
   };
   var _dataCollection = [];
   _dataCollection = removeEmpty({
-    "event": "init",
+    "event": "page_view init",
     "general": {
       "git": git_info,
       {{ if eq hugo.IsProduction false }}"environment": "staging",{{else}}"environment": "production",{{end}}
@@ -265,6 +265,68 @@ function getViewportSize(w) {
     ///////
     // Observer for blog post impressions
     ///////
+    var analyticsData, eventName, index, offsetTop
+    function analyticsEvent(analyticsData, eventName, index){
+      var ecommerce_items = {};
+      var items = [];
+      if(eventName === 'view_item_list' || eventName === 'view_item') {
+        ecommerce_items = removeEmpty({
+            'item_id': analyticsData.page_id,
+            'item_name': analyticsData.title,
+            'item_category': analyticsData.tags[0] || undefined,
+            'item_category2': analyticsData.tags[1] || undefined,
+            'item_category3': analyticsData.tags[2] || undefined,
+            'item_category4': analyticsData.tags[3] || undefined,
+            'item_variant': themeColor || 'auto',
+            'item_brand': analyticsData.author,
+            'item_list_name': window.location.pathname,
+            'item_list_id': 'SR123',
+            'price': analyticsData.words,
+            'index': index || undefined,
+            'event': eventName
+          });
+      }
+      if(eventName === 'view_promotion') {
+        ecommerce_items = removeEmpty({
+          'promotion_id': analyticsData.ISOWeek,
+          'promotion_name': analyticsData.name,
+          'creative_name': analyticsData.publishDate + '|' + analyticsData.expiryDate,
+          'creative_slot': 'top - '+offsetTop,
+          'location_id': window.location.pathname,
+          'index': index
+        });
+      }
+      items.push(ecommerce_items)
+      return items
+    }
+
+    // Click Listener
+    document.addEventListener('click', function (event) {
+      console.log(event.eventPhase + " : " + JSON.stringify(event.target) + " : bubbling");
+      if (event.target.hasAttribute('data-analytics')) {
+          analyticsData = JSON.parse(event.target.dataset.analytics);
+          customLog(analyticsData.event + ' click \n' + "title : " + analyticsData.title, 'success')
+          index = event.target.dataset.analyticsListindex;
+          eventName = event.target.dataset.analyticsEventname;
+          eventAction = event.target.dataset.analyticsAction;
+          items = analyticsEvent(analyticsData, eventName, index);
+          window.dataLayer = window.dataLayer || [];
+          var send_event = ({
+          "event": eventAction,
+          "url": window.location.href,
+          "page_id": analyticsData.page_id,
+          items,
+          'ecommerce': {
+            items
+          },
+          analyticsData
+        });
+        console.log('send_event >><< ', send_event)
+        window.dataLayer.push(send_event);
+      }
+    }, true);
+
+    // IntersectionObserver
     if ('IntersectionObserver' in window) {
     let config = {
       root: null,
@@ -275,18 +337,30 @@ function getViewportSize(w) {
     let observer = new IntersectionObserver(function (entries, self) {
 
       entries.forEach(entry => {
-
           if (entry.isIntersecting && entry.target.dataset.analytics) {
-              var analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title, 'success')
+              analyticsData = JSON.parse(entry.target.dataset.analytics);
+              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title + "event name : " + entry.target.dataset.analyticsEventname, 'success')
+              // get offset from top 
+              var article = document.getElementById('promotion');
+              var rect = article.getBoundingClientRect();
+              offsetTop = window.pageYOffset + rect.top - rect.height;
+              //
+              eventName = entry.target.dataset.analyticsEventname;
+              index = entry.target.dataset.analyticsListindex;
+              items = analyticsEvent(analyticsData, eventName, index, offsetTop);
               window.dataLayer = window.dataLayer || [];
-              var event = removeEmpty({
-              "event": "impression_"+analyticsData.event,
-              "url": window.location.href,
-              "page_id": analyticsData.page_id,
+              var send_event = ({
+                "event": entry.target.dataset.analyticsEventname,
+                "event_name": "impression_"+analyticsData.event,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                items,
+                'ecommerce': {
+                  items
+                },
               analyticsData
             });
-            window.dataLayer.push(event);
+            window.dataLayer.push(send_event);
           
             self.unobserve(entry.target);
           }

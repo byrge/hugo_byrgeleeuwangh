@@ -1,0 +1,18 @@
+item  :
+  - name        : Superweek1
+    location    : Hungary
+    url         : https://www.superweek1.hu
+    startdate   : 2020-01-22
+    enddate     : 2020-02-02
+
+  - name        : Superweek2
+    location    : Hungary
+    url         : https://www.superweek2.hu
+    startdate   : 2021-02-06
+    enddate     : 2021-02-08
+
+  - name        : Superweek3
+    location    : Hungary
+    url         : https://www.superweek3.hu
+    startdate   : 2022-02-06
+    enddate     : 2022-02-08

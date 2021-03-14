@@ -26,14 +26,21 @@
 
             <!-- show Sponsorship on page -->
             {{- if and ((time $sponsor_publishDate).Before now) ((time $sponsor_expiryDate).After now ) (eq $sponsorship_sold "YES") }}
-
-              <div class="sponsorship entry" data-analytics="{{ $default_params | jsonify }}">
-                <a href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer" class="link">
+              <article id="promotion" class="sponsorship entry">
+                <header class="entry-header">
                   <div class="sponsorship-item left"><img alt="sponsor of the week: {{$sponsor_name}}" class="sponsor_image" src="https://dummyimage.com/180x120/fff/000.png" width="180" height="120"></div>
-                    <div title="text: {{ $sponsor_text }}" class="sponsor_textblock right"><h2 class="sponsor_name">{{ $sponsor_name }}</h2><span class="sponsor_text">{{ $sponsor_text }}</span></div>
-                    <div title="sponsored" class="right"><span class="sponsored_text">sponsored</span></div>
-                </a>
-              </div>
+                  <h2>
+                    {{ $sponsor_name }}
+                  </h2>
+                </header>
+                <section title="text: {{ $sponsor_text }}" class="entry-content sponsor_textblock right">
+                  <p>{{ $sponsor_text }}</p>
+                </section>
+                <footer class="entry-footer">
+                  <span class="sponsored_text">sponsored</span>
+                </footer>
+                <a class="entry-link" data-analytics="{{ $default_params | jsonify }}" data-analytics-eventname="view_promotion" data-analytics-action="select_promotion" data-analytics-listindex="{{$i}}" href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer"></a>
+              </article>
             {{- end }}
         {{- end }}
     {{- end }}

@@ -17,13 +17,16 @@
         {{ $event_url := index $r 4 }}
 
         <!-- date logic for showing events 1 month before the event -->
-        {{ $show_event := $event_start_date.After now }}
-        {{ $show_event_start := $event_start_date.AddDate 0 -1 0 }}
+        {{ $show_event_start := $event_start_date.AddDate 0 0 0 }}
+        {{ $show_event := $show_event_start.After now }}
         {{ $show_event_publishdate := $show_event_start.Before now }}
 
+        {{ printf "%#v" (time $event_start_date) ($event_start_date.After now) }}
+        
+    
         <!-- show on homepage -->
         {{- if and ($show_event) ($show_event_publishdate) ($.homepage) }}
-   
+
         {{ $default_params := dict "event" "event" "title" $event_name "start_date" $event_start_date "end_date" $event_end_date "location" $event_location "url" $event_url }}
         
         <article class="event entry" data-analytics= "{{ $default_params | jsonify }}">
@@ -34,42 +37,8 @@
             </table>
         </article>
         {{- end }}
-
     {{- end }}
 {{- end }}
-<!--NEW-->
-<!-- Get CSV data -->
-{{ $url := "/data/events/events.csv" }}
-{{ $sep := "," }}
-{{ $events := getCSV $sep $url }}
-{{ range $i, $r := $events }}
-
-        <!-- not first row because of headers -->
-    {{ if ne $i 0 }}
-        <!-- define variables -->
-        {{ $event_start_date_time := index $r 1 }}
-        {{ $event_end_date_time := index $r 2 }}
-        {{ $event_start_date := index $r 1 }}
-        {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
-        {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
-<!-- 2 weeks ahead by setting AddDate 14 -->
-{{- if and ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_end_date_time).After now) ($.homepage) }}
-{{ printf "%#v" . ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_start_date_time).After (now.AddDate 0 0 -1)) }}
-
-<table class="eventhome">
-    <tr>
-        <td title="upcoming event: {{ $event_name }}" class="event homepage"><span class="mirror">{{ $icon_loudspeaker | emojify }}</span> <a href="/events">YESSSSS {{ $event_start_date.Month }} {{ $event_start_date.Day }}, {{ $event_start_date.Year }}: {{ $event_name }}, {{ $event_location }}</a></td>
-    </tr>
-</table>
-
-{{- end }}
-{{- end }}
-{{- end }}
-<!---->
 
 <!-- show upcoming event -->
 {{ range $i, $r := $events }}

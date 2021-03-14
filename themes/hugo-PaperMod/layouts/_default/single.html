@@ -6,7 +6,7 @@
 {{ $default_params := merge $default_params $event }}
 <!---->
 
-<article class="post-single" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}">
+<article class="post-single" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item">
   <header class="post-header">
     <h1 class="post-title">
       {{ .Title }}

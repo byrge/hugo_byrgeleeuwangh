@@ -14,6 +14,7 @@ exports.handler = async (event, context) => {
     return ip_value + '-' + seconds_since_epoch;
   }
   const uuid = create_uuid();
+  console.log('uuid: ',uuid)
 
   // create session id
   var session_id = function () {  
@@ -30,7 +31,7 @@ exports.handler = async (event, context) => {
   const sessionId = session_id();
 
   ///// cookie header variables
-  // set Max-Age
+  // set Max-Age to one year
   const maxAge = 24*60*60*365;
 
   // set Secure Flag
@@ -113,7 +114,6 @@ exports.handler = async (event, context) => {
     } else {
       set_multi_value_headers = {"Set-Cookie": [`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};
     }
-    console.log('set_multi_value_headers',set_multi_value_headers)
     // write cookies
     return {
       statusCode: 200,
