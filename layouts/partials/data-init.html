@@ -262,6 +262,7 @@ function getViewportSize(w) {
       var blogpostJSON = JSON.parse(data);
       analytics_blogposts.push(blogpostJSON);
     }
+
     ///////
     // Observer for blog post impressions
     ///////
@@ -269,22 +270,6 @@ function getViewportSize(w) {
     function analyticsEvent(analyticsData, eventName, index){
       var ecommerce_items = {};
       var items = [];
-      if(eventName === 'view_item_list' || eventName === 'select_item' || eventName === 'view_item') {
-        ecommerce_items = removeEmpty({
-            'item_id': analyticsData.page_id,
-            'item_name': analyticsData.title,
-            'item_category': analyticsData.tags[0] || undefined,
-            'item_category2': analyticsData.tags[1] || undefined,
-            'item_category3': analyticsData.tags[2] || undefined,
-            'item_category4': analyticsData.tags[3] || undefined,
-            'item_variant': themeColor || 'auto',
-            'item_brand': analyticsData.author,
-            'item_list_name': window.location.pathname,
-            'item_list_id': 'SR123',
-            'price': analyticsData.words,
-            'index': index || undefined
-          });
-      }
       if(eventName === 'view_promotion') {
         ecommerce_items = removeEmpty({
           'promotion_id': analyticsData.ISOWeek,
@@ -295,6 +280,36 @@ function getViewportSize(w) {
           'index': index
         });
       }
+      if(eventName === 'view_item_list' || eventName === 'select_item') {
+        ecommerce_items = removeEmpty({
+            'item_id': analyticsData.page_id,
+            'item_name': analyticsData.title,
+            'item_category': analyticsData.tags[0] || undefined,
+            'item_category2': analyticsData.tags[1] || undefined,
+            'item_category3': analyticsData.tags[2] || undefined,
+            'item_category4': analyticsData.tags[3] || undefined,
+            'item_variant': themeColor || 'auto',
+            'item_brand': analyticsData.author,
+            'item_list_name': window.location.pathname,
+            'item_list_id': {{ with $.Kind }}{{$.Kind}},{{end}}
+            'price': analyticsData.words,
+            'index': index || undefined
+          });
+      }
+      if(eventName === 'view_item') {
+        ecommerce_items = removeEmpty({
+            'item_id': analyticsData.page_id,
+            'item_name': analyticsData.title,
+            'item_category': analyticsData.tags[0] || undefined,
+            'item_category2': analyticsData.tags[1] || undefined,
+            'item_category3': analyticsData.tags[2] || undefined,
+            'item_category4': analyticsData.tags[3] || undefined,
+            'item_variant': themeColor || 'auto',
+            'item_brand': analyticsData.author,
+            'price': analyticsData.words,
+            'quantity': '1'
+          });
+      }
       items.push(ecommerce_items)
       return items
     }
@@ -303,11 +318,11 @@ function getViewportSize(w) {
     document.addEventListener('click', function (event) {
       if (event.target.hasAttribute('data-analytics')) {
           analyticsData = JSON.parse(event.target.dataset.analytics);
-          customLog(analyticsData.event + ' click \n' + "title : " + analyticsData.title, 'success')
           index = event.target.dataset.analyticsListindex;
           eventName = event.target.dataset.analyticsEventname;
           eventAction = event.target.dataset.analyticsAction;
           items = analyticsEvent(analyticsData, eventName, index);
+          customLog(analyticsData.event + ' click \n' + "title : " + analyticsData.title + " \nevent name : " + eventAction, 'success')
           window.dataLayer = window.dataLayer || [];
           var send_event = ({
           "event": eventAction,
@@ -325,18 +340,18 @@ function getViewportSize(w) {
 
     // IntersectionObserver
     if ('IntersectionObserver' in window) {
-    let config = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5
-    };
+    // let config = {
+    //   root: null,
+    //   rootMargin: '0px',
+    //   threshold: 0.5
+    // };
 
     let observer = new IntersectionObserver(function (entries, self) {
 
       entries.forEach(entry => {
           if (entry.isIntersecting && entry.target.dataset.analytics) {
               analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title + "event name : " + entry.target.dataset.analyticsEventname, 'success')
+              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title + " \nevent name : " + entry.target.dataset.analyticsEventname, 'success')
               // get offset from top 
               var article = document.getElementById('promotion') || undefined;
               if (article) {
@@ -364,7 +379,7 @@ function getViewportSize(w) {
             self.unobserve(entry.target);
           }
       });
-    }, config);
+    }, );
 
     logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
     } 
