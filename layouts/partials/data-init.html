@@ -296,7 +296,7 @@ function getViewportSize(w) {
             'index': index || undefined
           });
       }
-      if(eventName === 'view_item') {
+      if(eventName === 'view_item' || eventName === 'add_to_cart') {
         ecommerce_items = removeEmpty({
             'item_id': analyticsData.page_id,
             'item_name': analyticsData.title,
@@ -316,27 +316,43 @@ function getViewportSize(w) {
 
     // Click Listener
     document.addEventListener('click', function (event) {
-      if (event.target.hasAttribute('data-analytics')) {
-          analyticsData = JSON.parse(event.target.dataset.analytics);
+      if (event.target.hasAttribute('data-analytics-action')) {
+          var dataset = document.getElementById('analytics');
+          var analyticsData = dataset.getAttribute('data-analytics');
+          analyticsData = JSON.parse(analyticsData);
+
           index = event.target.dataset.analyticsListindex;
           eventName = event.target.dataset.analyticsEventname;
           eventAction = event.target.dataset.analyticsAction;
           items = analyticsEvent(analyticsData, eventName, index);
-          customLog(analyticsData.event + ' click \n' + "title : " + analyticsData.title + " \nevent name : " + eventAction, 'success')
-          window.dataLayer = window.dataLayer || [];
-          var send_event = ({
-          "event": eventAction,
-          "url": window.location.href,
-          "page_id": analyticsData.page_id,
-          items,
-          'ecommerce': {
-            items
-          },
-          analyticsData
-        });
+          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')
+
+          switch (eventAction) {
+            case 'open_toc':
+              var send_event = ({
+                "event": eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                "page_title": analyticsData.title
+              });
+              break;
+            default:
+              var send_event = ({
+                "event": eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                items,
+                'ecommerce': {
+                  items
+              },
+              analyticsData
+            });
+          }
+
+        window.dataLayer = window.dataLayer || [];
         window.dataLayer.push(send_event);
       }
-    }, true);
+    });
 
     // IntersectionObserver
     if ('IntersectionObserver' in window) {
@@ -351,7 +367,7 @@ function getViewportSize(w) {
       entries.forEach(entry => {
           if (entry.isIntersecting && entry.target.dataset.analytics) {
               analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' impression \n' + "title : " + analyticsData.title + " \nevent name : " + entry.target.dataset.analyticsEventname, 'success')
+              customLog(analyticsData.event + ' – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
               // get offset from top 
               var article = document.getElementById('promotion') || undefined;
               if (article) {

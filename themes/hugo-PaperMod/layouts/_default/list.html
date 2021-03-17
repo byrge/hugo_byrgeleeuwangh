@@ -62,7 +62,7 @@
   <footer class="entry-footer">
     {{- partial "post_meta.html" . -}}
   </footer>
-  <a data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" data-analytics-listindex="{{$index}}" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+  <a id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" data-analytics-listindex="{{$index}}" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
 </article>
 {{- end }}
 
