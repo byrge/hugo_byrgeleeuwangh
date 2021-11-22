@@ -41,15 +41,18 @@ languages:
         weight: 1
         menu:
             main:
-                - name: Tags
-                  url: tags/
+                - name: About me
+                  url: about-me/
                   weight: 5
+                - name: Hire me
+                  url: hire-me/
+                  weight: 7
                 - name: Search
                   url: search/
                   weight: 10
-                - name: About me
-                  url: about-me/
-                  weight: 15
+                - name: Tags
+                  url: tags/
+                  weight: 15                
                 - name: Archive
                   url: archives
                   weight: 20
