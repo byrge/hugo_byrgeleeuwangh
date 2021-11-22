@@ -240,7 +240,8 @@
 
 .toc details summary {
     cursor: zoom-in;
-    margin-inline-start: 20px
+    margin-inline-start: 20px;
+    width: 80vw
 }
 
 .toc details[open] summary {

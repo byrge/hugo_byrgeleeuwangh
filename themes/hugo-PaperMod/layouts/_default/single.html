@@ -6,7 +6,7 @@
 {{ $default_params := merge $default_params $event }}
 <!---->
 
-<article class="post-single" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item">
+<article id='analytics' class="post-single" data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item">
   <header class="post-header">
     <h1 class="post-title">
       {{ .Title }}
@@ -45,9 +45,9 @@
 
   {{- if .Params.ShowToc }}
   <div class="toc">
-    <details {{if .Params.TocOpen }} open{{ end }}>
-      <summary accesskey="c" title="(Alt + C)">
-        <div class="details">{{- i18n "toc" | default "Table of Contents" }}</div>
+    <details class="details" {{if .Params.TocOpen }} open{{ end }}>
+      <summary accesskey="c" title="(Alt + C)" data-analytics-action="open_toc">
+        {{- i18n "toc" | default "Table of Contents" }}
       </summary>
       <blockquote>
         {{- partial "toc.html" . }}
@@ -88,6 +88,7 @@
     target="_blank">Validate @ W3C</a>
   {{ end }}
 </div>
+<div data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="add_to_cart"></div>
 
 {{- end  }}{{/* end main */}}
 
