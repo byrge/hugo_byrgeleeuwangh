@@ -3,7 +3,7 @@ title: "About me"
 url: "/about-me"
 date: 2021-01-19T21:46:59+01:00
 page_id: 8561cb16f6d16fe87bf8d03a5f7696d3
-summary: "More about my work experience and my interest at analytics"
+summary: "More about my work experience and my interest in analytics"
 type: "page"
 draft: false
 ---

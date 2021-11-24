@@ -41,6 +41,9 @@ languages:
         weight: 1
         menu:
             main:
+                - name: Blog
+                  url: /
+                  weight: 1
                 - name: About me
                   url: about-me/
                   weight: 5

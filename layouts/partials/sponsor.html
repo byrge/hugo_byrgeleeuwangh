@@ -39,7 +39,7 @@
                 <footer class="entry-footer">
                   <span class="sponsored_text">sponsored</span>
                 </footer>
-                <a class="entry-link" data-analytics="{{ $default_params | jsonify }}" data-analytics-eventname="view_promotion" data-analytics-action="select_promotion" data-analytics-listindex="{{$i}}" href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer"></a>
+                <a id="analytics" class="entry-link" data-analytics="{{ $default_params | jsonify }}" data-analytics-eventname="view_promotion" data-analytics-action="select_promotion" data-analytics-listindex="{{$i}}" href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer"></a>
               </article>
             {{- end }}
         {{- end }}

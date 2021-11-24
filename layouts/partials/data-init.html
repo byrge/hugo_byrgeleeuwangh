@@ -5,6 +5,10 @@
 <!-- blog_posts -->
 <script>
   var git_info = undefined;
+
+  // Set the version of the Middleware Analytics script
+  var version_middleware = 0.6;
+
   {{- with $.GitInfo }}
   {{ $git := . }}
   var git_info = {
@@ -84,6 +88,7 @@
       "git": git_info,
       {{ if eq hugo.IsProduction false }}"environment": "staging",{{else}}"environment": "production",{{end}}
       "version_hugo": {{ hugo.Version }},
+      "version_middleware": version_middleware,
       "theme_color": {{$.Site.Params.defaultTheme}},
       "epoch": seconds_since_epoch(),
       "date_full": dateobj.toString(),
@@ -129,13 +134,13 @@
 
   window.dataLayer = window.dataLayer || [];
   dataLayer.push(_dataCollection);
-</script>
+  customLog(' [ Started Debug View ] ' + 'v' + version_middleware , 'start')
+
 
 <!-- /////////////////////////// -->
 <!-- Analytics script -->
 <!-- /////////////////////////// -->
 
-<script>
   /// Cookies
   var cookieObj = {};
 
@@ -183,9 +188,8 @@ function getViewportSize(w) {
   // For browsers in Quirks mode
   return { viewportWidth: d.body.clientWidth, viewportHeigth: d.body.clientHeight };
 }
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
+
+document.addEventListener("DOMContentLoaded", function() {
     
     // theme color
     var themeColor = localStorage.getItem("pref-theme") || undefined;
@@ -270,7 +274,7 @@ function getViewportSize(w) {
     function analyticsEvent(analyticsData, eventName, index){
       var ecommerce_items = {};
       var items = [];
-      if(eventName === 'view_promotion') {
+      if(eventName === 'view_promotion' || eventName === 'select_promotion') {
         ecommerce_items = removeEmpty({
           'promotion_id': analyticsData.ISOWeek,
           'promotion_name': analyticsData.name,
@@ -350,7 +354,7 @@ function getViewportSize(w) {
           }
 
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(send_event);
+        window.dataLayer.push(removeEmpty(send_event));
       }
     });
 
@@ -367,7 +371,8 @@ function getViewportSize(w) {
       entries.forEach(entry => {
           if (entry.isIntersecting && entry.target.dataset.analytics) {
               analyticsData = JSON.parse(entry.target.dataset.analytics);
-              customLog(analyticsData.event + ' – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
+              
+              customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
               // get offset from top 
               var article = document.getElementById('promotion') || undefined;
               if (article) {
@@ -400,14 +405,10 @@ function getViewportSize(w) {
     logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
     } 
   }, false);
-</script>
 
-
-<script>
 ////
 // Custom Logging
-////
-//var emoji_success = String.fromCodePoint(0x1F44D) 
+//// emoji https://emojipedia.org/emoji/
 function customLog(message, color='black') {
   var logType = 'log';
   switch (color) {
@@ -439,6 +440,11 @@ function customLog(message, color='black') {
           break;
       case 'productinfo':  
           color = 'background: #ffa600; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'start':  
+          color = 'background: #ffa600; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x1F44C);
           logType = 'info';
           break;
           
