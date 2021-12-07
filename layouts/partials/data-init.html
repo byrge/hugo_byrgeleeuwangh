@@ -110,7 +110,7 @@
       "ga_cookie": ga_cookie
     },
     "page": {
-      {{ with $.Kind }}"page_type": {{$.Kind}},{{end}}
+      {{ with $.Type }}"page_type": {{$.Kind}}+"_"+{{$.Type}},{{end}}
       {{ with $author }}"author": {{$author}},{{end}}
       {{ with $.Params.tags }}"tags": {{$.Params.tags}},{{end}}
       {{ with $.Params.title }}"title": {{$.Params.title}},{{end}}
@@ -267,6 +267,59 @@ document.addEventListener("DOMContentLoaded", function() {
       analytics_blogposts.push(blogpostJSON);
     }
 
+    ////////
+    // function to translate GA4 to Google Universal Analytics
+    var ecommerce_translation = [];
+    var ecommerce = [];
+    function toUniversalAnalytics(items, eventName, price) {
+      products = items.map(items => {
+          return {
+              name: items.item_name,
+              brand: items.item_brand,
+              id: items.item_id,
+              price: items.price,
+              category: items.item_category,
+              variant: items.item_category2,
+              position: items.index,
+              quantity: 1
+          };
+      });
+
+      if(eventName == 'view_item_list') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'currencyCode': 'EUR',
+          'impressions': {'products': products},
+          'items': items
+        };
+      }
+      if(eventName == 'view_item') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'actionField': {},
+          'detail': {'products': products},
+          'items': items
+        };
+      }
+      if(eventName == 'select_item') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'actionField': {},
+          'click': {'products': products},
+          'items': items
+        };
+      }
+      if(eventName === 'add_to_cart') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'currencyCode': 'EUR',
+          'add': {'products': products},
+          'items': items
+        };
+      }
+    }
+
+
     ///////
     // Observer for blog post impressions
     ///////
@@ -274,6 +327,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function analyticsEvent(analyticsData, eventName, index){
       var ecommerce_items = {};
       var items = [];
+      var promotions = [];
+      var impressions = [];
+      // var products = [];
+      var promotion_data
+      // var impression_data
+      // var product_data
       if(eventName === 'view_promotion' || eventName === 'select_promotion') {
         ecommerce_items = removeEmpty({
           'promotion_id': analyticsData.ISOWeek,
@@ -283,39 +342,64 @@ document.addEventListener("DOMContentLoaded", function() {
           'location_id': window.location.pathname,
           'index': index
         });
+        promotion_data = removeEmpty({
+          'name': analyticsData.name,
+          'creative': window.location.pathname,
+          'position': 'top - '+offsetTop,
+          'id': analyticsData.ISOWeek
+        })
       }
       if(eventName === 'view_item_list' || eventName === 'select_item') {
+        var price = parseInt(words);
+        if(analyticsData && analyticsData.tags) {
+          var item_category = analyticsData.tags[0]
+          var item_category2 = analyticsData.tags[1]
+          var item_category3 = analyticsData.tags[2]
+          var item_category4 = analyticsData.tags[3] 
+        }
         ecommerce_items = removeEmpty({
             'item_id': analyticsData.page_id,
             'item_name': analyticsData.title,
-            'item_category': analyticsData.tags[0] || undefined,
-            'item_category2': analyticsData.tags[1] || undefined,
-            'item_category3': analyticsData.tags[2] || undefined,
-            'item_category4': analyticsData.tags[3] || undefined,
+            item_category,
+            item_category2,
+            item_category3,
+            item_category4,
             'item_variant': themeColor || 'auto',
             'item_brand': analyticsData.author,
             'item_list_name': window.location.pathname,
-            'item_list_id': {{ with $.Kind }}{{$.Kind}},{{end}}
-            'price': analyticsData.words,
+            'item_list_id': {{ with $.Kind }}{{$.Kind}}+{{$.Type}},{{end}}
+            price,
             'index': index || undefined
           });
       }
       if(eventName === 'view_item' || eventName === 'add_to_cart') {
+        var price = parseInt(words);
+        if(analyticsData && analyticsData.tags) {
+          var item_category = analyticsData.tags[0]
+          var item_category2 = analyticsData.tags[1]
+          var item_category3 = analyticsData.tags[2]
+          var item_category4 = analyticsData.tags[3] 
+        }
         ecommerce_items = removeEmpty({
             'item_id': analyticsData.page_id,
             'item_name': analyticsData.title,
-            'item_category': analyticsData.tags[0] || undefined,
-            'item_category2': analyticsData.tags[1] || undefined,
-            'item_category3': analyticsData.tags[2] || undefined,
-            'item_category4': analyticsData.tags[3] || undefined,
+            'item_category': item_category,
+            'item_category2': item_category2,
+            'item_category3': item_category3,
+            'item_category4': item_category4,
             'item_variant': themeColor || 'auto',
             'item_brand': analyticsData.author,
-            'price': analyticsData.words,
-            'quantity': '1'
+            price,
+            'quantity': 1
           });
       }
-      items.push(ecommerce_items)
-      return items
+      items.push(ecommerce_items);
+      promotions.push(promotion_data);
+      // impressions.push(impression_data);
+      // products.push(product_data);
+      return {
+        items
+      }
     }
 
     // Click Listener
@@ -325,12 +409,17 @@ document.addEventListener("DOMContentLoaded", function() {
           var analyticsData = dataset.getAttribute('data-analytics');
           analyticsData = JSON.parse(analyticsData);
 
-          index = event.target.dataset.analyticsListindex;
+          index = parseInt(event.target.dataset.analyticsListindex) +1;
+          words = event.target.dataset.analyticsWords;
           eventName = event.target.dataset.analyticsEventname;
           eventAction = event.target.dataset.analyticsAction;
           items = analyticsEvent(analyticsData, eventName, index);
           customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')
 
+          ecommerce_translation = items.items
+          eventName = 'select_item';
+          toUniversalAnalytics(ecommerce_translation, eventName, words)
+          
           switch (eventAction) {
             case 'open_toc':
               var send_event = ({
@@ -345,11 +434,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 "event": eventAction,
                 "url": window.location.href,
                 "page_id": analyticsData.page_id,
-                items,
-                'ecommerce': {
-                  items
-              },
-              analyticsData
+                ecommerce,
+                analyticsData
             });
           }
 
@@ -381,20 +467,22 @@ document.addEventListener("DOMContentLoaded", function() {
               }
               //
               eventName = entry.target.dataset.analyticsEventname;
-              index = entry.target.dataset.analyticsListindex;
+              words = entry.target.dataset.analyticsWords;
+              index = parseInt(entry.target.dataset.analyticsListindex) +1;
               items = analyticsEvent(analyticsData, eventName, index, offsetTop);
+              impressions = analyticsEvent(analyticsData, eventName, index, offsetTop);
+
+              ecommerce_translation = items.items
+              toUniversalAnalytics(ecommerce_translation, eventName, words)
               window.dataLayer = window.dataLayer || [];
-              var send_event = ({
+              var send_event = removeEmpty({
                 "event": entry.target.dataset.analyticsEventname,
                 "event_name": "impression_"+analyticsData.event,
                 "url": window.location.href,
                 "page_id": analyticsData.page_id,
-                items,
-                'ecommerce': {
-                  items
-                },
-              analyticsData
-            });
+                ecommerce,
+                analyticsData
+              });
             window.dataLayer.push(send_event);
           
             self.unobserve(entry.target);

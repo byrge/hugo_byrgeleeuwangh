@@ -46,6 +46,14 @@
 {{ $event := dict "event" "blogpost" }}
 {{ $default_params := merge $default_params $event }}
 <!---->
+
+<!--- Word count for each blogpost -->
+{{ $scratch := newScratch }}
+{{ range (where .Site.RegularPages "Type" "in" ) }}
+{{ $scratch.Add "wordcount" .WordCount }}
+{{ end }}
+<!---->
+
 <article class="{{ $class }}">
   {{- partial "cover.html" (dict "cxt" . "IsHome" true) }}
   <header class="entry-header">
@@ -62,7 +70,8 @@
   <footer class="entry-footer">
     {{- partial "post_meta.html" . -}}
   </footer>
-  <a id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" data-analytics-listindex="{{$index}}" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+
+  <a id='analytics' data-analytics="{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" data-analytics-words="{{ .WordCount }}" data-analytics-listindex="{{$index}}" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
 </article>
 {{- end }}
 

@@ -3,7 +3,7 @@
     <!-- {{ . | jsonify }} --><script>var __data_git = {{ . }}</script>
     {{ with $.Site.Params }}
         This page was created/modified in commit <a href="{{ .GitSourceUrl }}/commit/{{- $.GitInfo.Hash -}}">
-        {{- $.GitInfo.AbbreviatedHash -}}</a> "{{ $.GitInfo.Subject }}" on <b>{{ dateFormat "2 - 01 - 2006" $.GitInfo.AuthorDate }}</b>.
+        {{- $.GitInfo.AbbreviatedHash -}}</a> <!--"{{ $.GitInfo.Subject }}"--> on {{ dateFormat "2 - 01 - 2006" $.GitInfo.AuthorDate }}.
     {{ end }}
     {{ end }}
   </div>

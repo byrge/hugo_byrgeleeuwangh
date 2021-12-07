@@ -3,7 +3,7 @@ title: "Sponsorship"
 date: 2021-01-19T21:44:47+01:00
 page_id: 39d453a85379d2745a88d7d36fc12fa0
 summary: "Sponsorship"
-type: "page"
+type: "normal"
 layout: "sponsorship"
 draft: true
 ---
@@ -12,7 +12,7 @@ Hi,
 
 You can buy a week-long sponsorship for my blog site. This is the best way to promote your related product or service to my audience of Data Geeks interested in Analytics, implementation tips, debugging and collecting quality data.
 
-### For whom is it interesting:
+### For whom is sponsoring interesting:
 
 * For companies to promote their open vacancies interesting for my audience
 

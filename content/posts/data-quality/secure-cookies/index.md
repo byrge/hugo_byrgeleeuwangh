@@ -8,7 +8,7 @@ tocOpen: false
 tags: ["netlify-function"]
 keywords: ["data-quality","cookies"]
 author: "Byrge Leeuwangh"
-draft: true
+draft: false
 ---
 
 # How to secure your cookies?
