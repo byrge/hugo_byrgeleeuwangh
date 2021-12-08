@@ -83,7 +83,7 @@
   };
   var _dataCollection = [];
   _dataCollection = removeEmpty({
-    "event": "page_view init",
+    "event": "dataLayer_initialization",
     "general": {
       "git": git_info,
       {{ if eq hugo.IsProduction false }}"environment": "staging",{{else}}"environment": "production",{{end}}
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var ecommerce_translation = [];
     var ecommerce = [];
     function toUniversalAnalytics(items, eventName, price) {
-      products = items.map(items => {
+      impressions = items.map(items => {
           return {
               name: items.item_name,
               brand: items.item_brand,
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return ecommerce = {
           'value': parseInt(price),
           'currencyCode': 'EUR',
-          'impressions': {'products': products},
+          impressions,
           'items': items
         };
       }
@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return ecommerce = {
           'value': parseInt(price),
           'actionField': {},
-          'detail': {'products': products},
+          'detail': {'products': impressions},
           'items': items
         };
       }
@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return ecommerce = {
           'value': parseInt(price),
           'actionField': {},
-          'click': {'products': products},
+          'click': {'products': impressions},
           'items': items
         };
       }
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return ecommerce = {
           'value': parseInt(price),
           'currencyCode': 'EUR',
-          'add': {'products': products},
+          'add': {'products': impressions},
           'items': items
         };
       }
@@ -323,10 +323,11 @@ document.addEventListener("DOMContentLoaded", function() {
     ///////
     // Observer for blog post impressions
     ///////
+    var items = [];
     var analyticsData, eventName, index, offsetTop
     function analyticsEvent(analyticsData, eventName, index){
-      var ecommerce_items = {};
-      var items = [];
+      var ecommerce_items = [];
+      items = [];
       var promotions = [];
       var impressions = [];
       // var products = [];
@@ -395,11 +396,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       items.push(ecommerce_items);
       promotions.push(promotion_data);
-      // impressions.push(impression_data);
-      // products.push(product_data);
-      return {
-        items
-      }
+      return items     
     }
 
     // Click Listener
@@ -469,20 +466,24 @@ document.addEventListener("DOMContentLoaded", function() {
               eventName = entry.target.dataset.analyticsEventname;
               words = entry.target.dataset.analyticsWords;
               index = parseInt(entry.target.dataset.analyticsListindex) +1;
-              items = analyticsEvent(analyticsData, eventName, index, offsetTop);
-              impressions = analyticsEvent(analyticsData, eventName, index, offsetTop);
+              
+              analyticsEvent(analyticsData, eventName, index, offsetTop);
 
-              ecommerce_translation = items.items
+              ecommerce_translation = items
               toUniversalAnalytics(ecommerce_translation, eventName, words)
+
               window.dataLayer = window.dataLayer || [];
-              var send_event = removeEmpty({
+              var send_event = {
                 "event": entry.target.dataset.analyticsEventname,
                 "event_name": "impression_"+analyticsData.event,
                 "url": window.location.href,
                 "page_id": analyticsData.page_id,
+                items,
                 ecommerce,
+                "test": 2,
+                //ecommerce,
                 analyticsData
-              });
+              };
             window.dataLayer.push(send_event);
           
             self.unobserve(entry.target);
