@@ -413,9 +413,8 @@ document.addEventListener("DOMContentLoaded", function() {
           items = analyticsEvent(analyticsData, eventName, index);
           customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')
 
-          ecommerce_translation = items.items
           eventName = 'select_item';
-          toUniversalAnalytics(ecommerce_translation, eventName, words)
+          toUniversalAnalytics(items, eventName, words)
           
           switch (eventAction) {
             case 'open_toc':
