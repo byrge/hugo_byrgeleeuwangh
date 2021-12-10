@@ -1,6 +1,21 @@
 {{ with $.Page.Params }}
 
 {{- $author := ($.Params.author | default $.Site.Params.author)}}
+{{- $environment := cond (eq $.Site.Params.env "development") "dev" "prod" }}
+<!-- {{ printf "%#v" $environment }} -->
+
+<script>
+  // Set the version of the Middleware Analytics script
+  var version_middleware = "0.7";
+
+  // Avo
+  !function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
+  inspector.__API_KEY__ = "bSxiHkugGILERgAKD5vv";
+  inspector.__ENV__ = "{{ $environment }}"; // or "prod"
+  inspector.__VERSION__ = version_middleware;
+  inspector.__APP_NAME__ = "byrgeleeuwangh"; 
+  inspector.load();
+</script>
 
 <!-- blog_posts -->
 <script>
@@ -86,7 +101,7 @@
     "event": "dataLayer_initialization",
     "general": {
       "git": git_info,
-      {{ if eq hugo.IsProduction false }}"environment": "staging",{{else}}"environment": "production",{{end}}
+      "environment": {{ $environment }},
       "version_hugo": {{ hugo.Version }},
       "version_middleware": version_middleware,
       "theme_color": {{$.Site.Params.defaultTheme}},
@@ -432,7 +447,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 "page_id": analyticsData.page_id,
                 ecommerce,
                 analyticsData
-            });
+              });
+            // Avo trackSchemaFromEvent
+              inspector.trackSchemaFromEvent(eventAction, {
+                'event': eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                "ecommerce": items
+              });
           }
 
         window.dataLayer = window.dataLayer || [];
@@ -442,51 +464,59 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // IntersectionObserver
     if ('IntersectionObserver' in window) {
-    // let config = {
-    //   root: null,
-    //   rootMargin: '0px',
-    //   threshold: 0.5
-    // };
+      let config = {
+        //root: null,
+        rootMargin: '10px',
+        threshold: 0.8
+      };
 
     let observer = new IntersectionObserver(function (entries, self) {
-
       entries.forEach(entry => {
-          if (entry.isIntersecting && entry.target.dataset.analytics) {
-              analyticsData = JSON.parse(entry.target.dataset.analytics);
-              
-              customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
-              // get offset from top 
-              var article = document.getElementById('promotion') || undefined;
-              if (article) {
-                var rect = article.getBoundingClientRect();
-                offsetTop = window.pageYOffset + rect.top - rect.height;
-              }
-              //
-              eventName = entry.target.dataset.analyticsEventname;
-              words = entry.target.dataset.analyticsWords;
-              index = parseInt(entry.target.dataset.analyticsListindex) +1;
-              
-              analyticsEvent(analyticsData, eventName, index, offsetTop);
+        if (entry.isIntersecting && entry.target.dataset.analytics) {
+          console.log('2 entry IntersectionObserver <><> ', entry)
 
-              ecommerce_translation = items
-              toUniversalAnalytics(ecommerce_translation, eventName, words)
+            analyticsData = JSON.parse(entry.target.dataset.analytics);
+            
+            customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
+            // get offset from top 
+            var article = document.getElementById('promotion') || undefined;
+            if (article) {
+              var rect = article.getBoundingClientRect();
+              offsetTop = window.pageYOffset + rect.top - rect.height;
+            }
+            //
+            eventName = entry.target.dataset.analyticsEventname;
+            words = entry.target.dataset.analyticsWords;
+            index = parseInt(entry.target.dataset.analyticsListindex) +1;
+            
+            analyticsEvent(analyticsData, eventName, index, offsetTop);
 
-              window.dataLayer = window.dataLayer || [];
-              var send_event = {
-                "event": entry.target.dataset.analyticsEventname,
-                "event_name": "impression_"+analyticsData.event,
-                "url": window.location.href,
-                "page_id": analyticsData.page_id,
-                items,
-                ecommerce,
-                analyticsData
-              };
-            window.dataLayer.push(send_event);
-          
-            self.unobserve(entry.target);
-          }
+            ecommerce_translation = items;
+            toUniversalAnalytics(items, eventName, words)
+
+            window.dataLayer = window.dataLayer || [];
+            var send_event = {
+              "event": entry.target.dataset.analyticsEventname,
+              "event_name": "impression_"+analyticsData.event,
+              "url": window.location.href,
+              "page_id": analyticsData.page_id,
+              ecommerce,
+              analyticsData
+            };
+          window.dataLayer.push(send_event);
+
+          // Avo trackSchemaFromEvent
+          inspector.trackSchemaFromEvent(eventName, {
+            "event": eventName,
+            "url": window.location.href,
+            "page_id": analyticsData.page_id,
+            "ecommerce": items
+          });
+        
+          self.unobserve(entry.target);
+        }
       });
-    }, );
+    }, config);
 
     logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
     } 
