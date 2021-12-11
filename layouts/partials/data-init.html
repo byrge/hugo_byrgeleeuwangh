@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
           };
       });
 
-      if(eventName == 'view_item_list') {
+      if(eventName === 'view_item_list') {
         return ecommerce = {
           'value': parseInt(price),
           'currencyCode': 'EUR',
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function() {
           'items': items
         };
       }
-      if(eventName == 'view_item') {
+      if(eventName === 'view_item') {
         return ecommerce = {
           'value': parseInt(price),
           'actionField': {},
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function() {
           'items': items
         };
       }
-      if(eventName == 'select_item') {
+      if(eventName === 'select_item') {
         return ecommerce = {
           'value': parseInt(price),
           'actionField': {},
@@ -417,20 +417,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // Click Listener
     document.addEventListener('click', function (event) {
       if (event.target.hasAttribute('data-analytics-action')) {
-          var dataset = document.getElementById('analytics');
-          var analyticsData = dataset.getAttribute('data-analytics');
+          var dataset = event.target.dataset;
+          var analyticsData = event.target.dataset.analytics;
           analyticsData = JSON.parse(analyticsData);
-
           index = parseInt(event.target.dataset.analyticsListindex) +1;
           words = event.target.dataset.analyticsWords;
           eventName = event.target.dataset.analyticsEventname;
           eventAction = event.target.dataset.analyticsAction;
-          items = analyticsEvent(analyticsData, eventName, index);
-          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')
-
           eventName = 'select_item';
+
+          analyticsEvent(analyticsData, eventName, index);
+          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')      
           toUniversalAnalytics(items, eventName, words)
-          
+
           switch (eventAction) {
             case 'open_toc':
               var send_event = ({
@@ -445,6 +444,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "event": eventAction,
                 "url": window.location.href,
                 "page_id": analyticsData.page_id,
+                "test": "test",
                 ecommerce,
                 analyticsData
               });
@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", function() {
           }
 
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(removeEmpty(send_event));
+        window.dataLayer.push(send_event);
       }
     });
 
@@ -473,8 +473,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let observer = new IntersectionObserver(function (entries, self) {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.target.dataset.analytics) {
-          console.log('2 entry IntersectionObserver <><> ', entry)
-
             analyticsData = JSON.parse(entry.target.dataset.analytics);
             
             customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
@@ -490,8 +488,6 @@ document.addEventListener("DOMContentLoaded", function() {
             index = parseInt(entry.target.dataset.analyticsListindex) +1;
             
             analyticsEvent(analyticsData, eventName, index, offsetTop);
-
-            ecommerce_translation = items;
             toUniversalAnalytics(items, eventName, words)
 
             window.dataLayer = window.dataLayer || [];
