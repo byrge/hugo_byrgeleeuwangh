@@ -6,6 +6,7 @@ layout: "events"
 url: "/events"
 type: "events"
 summary: "upcoming events"
+pagetype: "events"
 draft: false
 ---
 

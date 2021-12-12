@@ -7,6 +7,7 @@ summary: "More about my work experience and my interest in analytics"
 type: "normal"
 tags: ["about me", "contact", "help", "free-lance"]
 keywords: ["about me","hire", "help"]
+pagetype: "about-me"
 draft: false
 ---
 

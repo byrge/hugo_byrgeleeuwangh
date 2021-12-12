@@ -5,6 +5,7 @@ date: 2021-02-02T21:04:03+01:00
 page_id: 3836ac895497006db5935db3dfb6ed4b
 showtoc: true
 tocOpen: false
+pagetype: "blogpost"
 tags: ["netlify-function"]
 keywords: ["data-quality","cookies"]
 author: "Byrge Leeuwangh"

@@ -2,8 +2,8 @@
 
 {{- $author := ($.Params.author | default $.Site.Params.author)}}
 {{- $environment := cond (eq $.Site.Params.env "development") "dev" "prod" }}
-<!-- {{ printf "%#v" $environment }} -->
-
+{{- $scope := $.Scratch.Get "scope" }}
+<!-- {{ printf "%#v" $.Kind }} -->
 <script>
   // Set the version of the Middleware Analytics script
   var version_middleware = "0.7";
@@ -125,7 +125,8 @@
       "ga_cookie": ga_cookie
     },
     "page": {
-      {{ with $.Type }}"page_type": {{$.Kind}}+"_"+{{$.Type}},{{end}}
+      "scope": "{{ $scope }}",
+      "page-type": "{{ $.Page.Params.pagetype }}",
       {{ with $author }}"author": {{$author}},{{end}}
       {{ with $.Params.tags }}"tags": {{$.Params.tags}},{{end}}
       {{ with $.Params.title }}"title": {{$.Params.title}},{{end}}
@@ -266,7 +267,8 @@ document.addEventListener("DOMContentLoaded", function() {
       dataLayer.push({
         event: 'upcoming event',
         page_path: window.location.pathname,
-        {{ with $.Kind }}page_type: {{$.Kind}},{{end}}
+        scope: "{{ $scope }}",
+        page_type: "{{ $.Page.Params.pagetype }}",
         events
       });
     }
@@ -288,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var ecommerce = [];
     function toUniversalAnalytics(items, eventName, price) {
       impressions = items.map(items => {
-          return {
+          return removeEmpty({
               name: items.item_name,
               brand: items.item_brand,
               id: items.item_id,
@@ -296,10 +298,10 @@ document.addEventListener("DOMContentLoaded", function() {
               category: items.item_category,
               variant: items.item_category2,
               position: items.index,
+              list: items.item_list_name,
               quantity: 1
-          };
+          });
       });
-
       if(eventName === 'view_item_list') {
         return ecommerce = {
           'value': parseInt(price),

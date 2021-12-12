@@ -4,6 +4,7 @@ date: 2021-01-19T21:44:47+01:00
 page_id: 39d453a85379d2745a88d7d36fc12fa0
 summary: "Sponsorship"
 type: "normal"
+pagetype: "sponsor"
 layout: "sponsorship"
 draft: true
 ---

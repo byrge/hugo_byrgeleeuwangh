@@ -4,6 +4,7 @@ date: 2021-01-10T21:05:59+01:00
 page_id: 58272c88b063be4ea0bef5fa4df767f4
 showtoc: true
 tocOpen: false
+pagetype: "blogpost" 
 aliases: ["/debug-your-app-analytics"]
 tags: ["app", "analytics", "proxy"]
 keywords: ["app","proxy","debug"]

@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
 
+{{- if (eq .Layout `search`) -}}
+{{ .Scratch.Add "scope" "search" }}
+{{- else if (eq .Layout `archives`) -}}
+{{ .Scratch.Add "scope" "archive" }}
+{{- else if (eq .Kind `page`) -}}
+{{ .Scratch.Add "scope" "page" }}
+{{- else if (eq .Kind `taxonomy`) -}}
+{{ $.Scratch.Add "scope" "tags" }}
+{{- else if (ne .Kind `page`) -}}
+{{ .Scratch.Add "scope" "blogpost listing" }}
+{{- end -}}
+
 <head>
     {{- partial "data-init.html" . }}
     {{- partial "head.html" . }}
@@ -16,7 +28,9 @@
 {{- if eq $.Site.Params.defaultTheme `dark` -}}
 {{- print " dark" }}
 {{- end -}}
-">
+"
+data-analytics-scope="{{ .Scratch.Get "scope" }}"
+>
     {{- partialCached "header.html" . .Page}}
     <main class="main">
         {{- block "main" . }}

@@ -6,6 +6,7 @@ page_id: 82e810741bcbf10a1163d3741948d414
 draft: false
 summary: "Hire me when you need analytics help"
 type: "normal"
+pagetype: "hire-me"
 tags: ["netlify-function"]
 keywords: ["data-quality","cookies"]
 ---

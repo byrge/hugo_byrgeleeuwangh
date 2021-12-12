@@ -5,6 +5,7 @@
 {{ $event := dict "event" "blogpost" }}
 {{ $default_params := merge $default_params $event }}
 <!---->
+
 <!--- Word count for each blogpost -->
 {{ $scratch := newScratch }}
 {{ range (where .Site.RegularPages "Type" "in" ) }}
@@ -52,7 +53,8 @@
   {{- if .Params.ShowToc }}
   <div class="toc"><div id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .WordCount }}" data-analytics-eventname="view_item"></div>
     <details class="details" {{if .Params.TocOpen }} open{{ end }}>
-      <summary accesskey="c" title="(Alt + C)" data-analytics-action="open_toc">
+      <summary accesskey="c" title="(Alt + C)" data-analytics-clickEvent="open_toc"> 
+        <!-- to do clickEvent -->
         {{- i18n "toc" | default "Table of Contents" }}
       </summary>
       <blockquote>
