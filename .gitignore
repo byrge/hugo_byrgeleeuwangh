@@ -2,3 +2,4 @@ node_modules/
 public/
 resources/*
 data/old_functions/
+layouts/partials/data-init copy.html
