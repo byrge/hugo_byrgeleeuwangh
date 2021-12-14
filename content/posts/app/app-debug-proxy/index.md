@@ -9,6 +9,7 @@ aliases: ["/debug-your-app-analytics"]
 tags: ["app", "analytics", "proxy"]
 keywords: ["app","proxy","debug"]
 author: "Byrge Leeuwangh"
+author_email: "byrge@leeuwangh.com"
 draft: false
 ---
 

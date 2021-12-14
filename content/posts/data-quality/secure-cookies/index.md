@@ -9,6 +9,7 @@ pagetype: "blogpost"
 tags: ["netlify-function"]
 keywords: ["data-quality","cookies"]
 author: "Byrge Leeuwangh"
+author_email: "byrge@leeuwangh.com"
 draft: false
 ---
 

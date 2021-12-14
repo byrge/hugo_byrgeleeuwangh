@@ -34,6 +34,10 @@
 {{- else}}
 <link href="{{ $stylesheet.Permalink }}" rel="preload stylesheet" as="style">
 {{- end}}
+<!-- middleware -->
+{{- $middleware := resources.Get "js/middleware.js" | minify | fingerprint }}
+<script defer src="{{ $middleware.Permalink }}" rel="preload" as="script" integrity="{{ $middleware.Data.Integrity }}"></script>
+
 <!-- Load 'web-vitals' using a classic script that sets the global 'webVitals' object. -->
 <script defer src="https://unpkg.com/web-vitals@1.0.1/dist/web-vitals.umd.js"></script>
 
