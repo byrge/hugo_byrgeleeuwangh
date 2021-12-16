@@ -1,3 +1,16 @@
+// Set the version of the Middleware Analytics script
+ var version_middleware = window.version_middleware;
+// Set the environment
+var environment = (document.location.hostname === "localhost") ? "dev" : "prod";
+
+// Avo
+!function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
+inspector.__API_KEY__ = "bSxiHkugGILERgAKD5vv";
+inspector.__ENV__ = environment;
+inspector.__VERSION__ = version_middleware;
+inspector.__APP_NAME__ = "byrgeleeuwangh"; 
+inspector.load();
+
 document.addEventListener("DOMContentLoaded", function() {
     
     // theme color
@@ -301,7 +314,6 @@ document.addEventListener("DOMContentLoaded", function() {
             "page_id": analyticsData.page_id,
             "ecommerce": items
           });
-        
           self.unobserve(entry.target);
         }
       });
