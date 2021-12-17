@@ -51,6 +51,7 @@
     
 <!-- Netlify Functions -->
 <script defer src="/.netlify/functions/set_cookie"></script>
+<!-- <script defer src="/.netlify/functions/hello"></script> -->
 
 <!-- Search -->
 {{- if (eq .Layout `search`) -}}
@@ -81,6 +82,7 @@
 <meta name="msapplication-TileColor" content="#2e2e33">
 <!-- Generator -->
 {{- hugo.Generator }}
+
 <!-- RSS -->
 {{- range .AlternativeOutputFormats -}}
 <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}">

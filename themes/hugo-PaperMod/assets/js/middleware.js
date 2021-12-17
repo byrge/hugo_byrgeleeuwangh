@@ -2,6 +2,12 @@
  var version_middleware = window.version_middleware;
 // Set the environment
 var environment = (document.location.hostname === "localhost") ? "dev" : "prod";
+// Set the listname
+var list = _list_name;
+var loc = window.location.pathname;
+var second_part_listname = loc.replace(/\//g, "#");
+var list_name = list + second_part_listname
+var list_id = _list_id;
 
 // Avo
 !function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
@@ -17,13 +23,17 @@ document.addEventListener("DOMContentLoaded", function() {
     var themeColor = localStorage.getItem("pref-theme") || undefined;
     
     // performance
-    if (window.performance) {
-      if (performance.navigation.type == 1) {
-        var pageReload = 'yes'; // reloaded
-      } else {
-        var pageReload = 'no'; // not reloaded
+    function nav_timing_data() {
+      // Use getEntriesByType() to just get the "navigation" events
+      var perfEntries = performance.getEntriesByType("navigation");
+    
+      for (var i=0; i < perfEntries.length; i++) {
+        var p = perfEntries[i];
+        navigation_type = p.type;
+        redirectCount = p.redirectCount;
       }
     }
+    nav_timing_data()
 
     // Git info
     if (window.__data_git) {
@@ -38,11 +48,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // push to datalayer
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-    "event": "init",
-      'event': 'dom page',
+      'event': 'nav_timing_data',
       'theme_color_user': themeColor || 'auto',
       'page': {
-        'page_reload': pageReload,
+        'navigation_type': navigation_type,
+        'redirectCount': redirectCount,
         'cookies': cookieObj,
         'viewport': getViewportSize(),
         'git': git_info
@@ -188,8 +198,8 @@ document.addEventListener("DOMContentLoaded", function() {
             item_category4,
             'item_variant': themeColor || 'auto',
             'item_brand': analyticsData.author,
-            'item_list_name': window.location.pathname,
-            'item_list_id': '/',
+            'item_list_name': list_name,
+            'item_list_id': list_id,
             price,
             'index': index || undefined
           });

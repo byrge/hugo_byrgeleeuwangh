@@ -3,10 +3,14 @@
 {{- $author := ($.Params.author | default $.Site.Params.author)}}
 {{- $author_email := ($.Params.author_email | default $.Site.Params.author)}}
 {{- $environment := cond (eq $.Site.Params.env "development") "dev" "prod" }}
-{{- $scope := $.Scratch.Get "scope" }}
+<!-- {{- $scope := $.Scratch.Get "scope" }} -->
 <!-- {{ printf "%#v" $.Kind }} -->
+
 <script>
+    // settings
     var version_middleware = "0.7";
+    var _list_name = {{ $.Kind }};
+    var _list_id = {{ sha1 $.Kind }}
 </script>
 <script>
     const removeEmpty = (obj) => {
@@ -229,8 +233,7 @@
       "ga_cookie": ga_cookie
     },
     "page": {
-      "scope": "{{ $scope }}",
-      "page-type": "{{ $.Page.Params.pagetype }}",
+      "page_type": "{{ $.Kind }}",
       "author_email_hashed": author_email_hash || undefined,
       "author_name": author_name || undefined,
       {{ with $.Params.tags }}"tags": {{$.Params.tags}},{{end}}

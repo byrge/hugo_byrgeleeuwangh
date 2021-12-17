@@ -21,13 +21,23 @@ Secure cookies are a type of HTTP cookie that have Secure attribute set, which l
 [Secure Cookies Explained](https://en.wikipedia.org/wiki/Secure_cookie "Secure Cookies WikiPedia")
 ## Netlify
 I use functions on Netlify to read the _ga cookie, set by the Google Analytics library with document.cookie, and rewrite them to set the cookie (Netlify Function) in the HTTP response. 
+### Connect your functions to Netlify
+My site is hosted with Netlify. To do so, you need to configure or create your `netlify.toml` config file. In here you need to reference your functions directory. My functions are in the root, so this is my config:
+
+```
+[build]
+publish = "public"
+functions = "./functions"
+```
+
+And in the `head.html` template you have to add the script `<script defer src="/.netlify/functions/hello"></script>` to load the function.
 
 ### Functions
 - [Functions Overview](https://docs.netlify.com/functions/overview/)
 - [Functions Playground](https://functions.netlify.com/playground/)
 
 ## Hugo & Netlify Functions
-First step is to create a new directoy "functions" in your root of your hugo setup. Here you can write your first functions. I used Javascript to writ emy function, but you are also able to use other languages as Go or Typescript.
+First step is to create a new directoy "functions" in your root of your hugo setup. Here you can write your first functions. I used Javascript to write my function, but you are also able to use other languages as `Go` or `Typescript`.
 
 ```
 exports.handler = async (event, context) => {
