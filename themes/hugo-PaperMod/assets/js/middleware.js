@@ -7,7 +7,7 @@ var list = _list_name;
 var loc = window.location.pathname;
 var second_part_listname = loc.replace(/\//g, "#");
 var list_name = list + second_part_listname
-var list_id = _list_id;
+var list_id = _current_week_number || _list_id;
 
 // Avo
 !function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
@@ -127,16 +127,20 @@ document.addEventListener("DOMContentLoaded", function() {
       if(eventName === 'view_item') {
         return ecommerce = {
           'value': parseInt(price),
-          'actionField': {},
-          'detail': {'products': impressions},
+          'detail': {
+            'products': impressions,
+            'actionField': {}
+          },
           'items': items
         };
       }
       if(eventName === 'select_item') {
         return ecommerce = {
           'value': parseInt(price),
-          'actionField': {},
-          'click': {'products': impressions},
+          'click': {
+            'products': impressions,
+            'actionField': {'list': list_name}
+          },
           'items': items
         };
       }
@@ -235,6 +239,12 @@ document.addEventListener("DOMContentLoaded", function() {
       if (event.target.hasAttribute('data-analytics-action')) {
           var dataset = event.target.dataset;
           var analyticsData = event.target.dataset.analytics;
+
+          if(!analyticsData) {
+            var elem = document.getElementById('analytics');
+            analyticsData = elem.getAttribute('data-analytics');
+          }
+
           analyticsData = JSON.parse(analyticsData);
           index = parseInt(event.target.dataset.analyticsListindex) +1;
           words = event.target.dataset.analyticsWords;

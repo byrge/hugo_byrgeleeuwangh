@@ -36,7 +36,7 @@
   </header>
   {{- partial "cover.html" (dict "cxt" . "IsHome" false) }}
   
-  {{ .Summary }}
+  <div id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .Page.Content | countwords }}" data-analytics-eventname="view_item">{{ .Summary }}</div>
   
   <!-- sponsor -->
   {{- if and (ne $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}
@@ -44,10 +44,9 @@
   {{- end }}
 
   {{- if .Params.ShowToc }}
-  <div class="toc"><div id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .Page.Content | countwords }}" data-analytics-eventname="view_item"></div>
+  <div class="toc"><div></div>
     <details class="details" {{if .Params.TocOpen }} open{{ end }}>
-      <summary accesskey="c" title="(Alt + C)" data-analytics-clickEvent="open_toc"> 
-        <!-- to do clickEvent -->
+      <summary accesskey="c" title="(Alt + C)" data-analytics-action="open_toc"> 
         {{- i18n "toc" | default "Table of Contents" }}
       </summary>
       <blockquote>
