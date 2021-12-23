@@ -3,7 +3,9 @@
 <!---->
 {{ $default_params := .Params }}
 {{ $event := dict "event" "blogpost" }}
-{{ $default_params := merge $default_params $event }}
+{{ $word_count := dict "word_count" .WordCount }}
+{{ $event_name := dict "event_name" "view_item" }}
+{{ $default_params := merge $default_params $event $word_count $event_name }}
 <!---->
 <!-- {{ printf "%#v" .Page.Params.tags }} -->
 <article class="post-single">
@@ -36,7 +38,7 @@
   </header>
   {{- partial "cover.html" (dict "cxt" . "IsHome" false) }}
   
-  <div id='analytics' data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .Page.Content | countwords }}" data-analytics-eventname="view_item">{{ .Summary }}</div>
+  <div id='analytics' data-analytics= "{{ $default_params | jsonify }}">{{ .Summary }}</div>
   
   <!-- sponsor -->
   {{- if and (ne $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}

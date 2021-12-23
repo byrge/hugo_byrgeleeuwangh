@@ -47,7 +47,11 @@
 <!---->
 {{ $default_params := .Params }}
 {{ $event := dict "event" "blogpost" }}
-{{ $default_params := merge $default_params $event }}
+{{ $list_position := dict "index" (add $index 1) }}
+{{ $word_count := dict "word_count" .WordCount }}
+{{ $event_name := dict "event_name" "view_item_list" }}
+{{ $event_action := dict "event_action" "select_item" }}
+{{ $default_params := merge $default_params $event $list_position $word_count $event_name $event_action }}
 <!---->
 
 <!--- Word count for each blogpost -->
@@ -74,7 +78,7 @@
     {{- partial "post_meta.html" . -}}
   </footer>
 
-  <a id='analytics' data-analytics="{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" data-analytics-words="{{ .WordCount }}" data-analytics-listindex="{{$index}}" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+  <a id='analytics' data-analytics="{{ $default_params | jsonify }}" data-analytics-eventname="view_item_list" data-analytics-action="select_item" class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
 </article>
 {{- end }}
 

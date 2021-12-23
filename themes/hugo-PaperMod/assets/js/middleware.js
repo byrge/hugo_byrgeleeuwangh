@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // function to translate GA4 to Google Universal Analytics
     var ecommerce_translation = [];
     var ecommerce = [];
-    function toUniversalAnalytics(items, eventName, price) {
+    function toUniversalAnalytics(items, eventName) {
       impressions = items.map(items => {
           return removeEmpty({
               name: items.item_name,
@@ -116,27 +116,18 @@ document.addEventListener("DOMContentLoaded", function() {
               quantity: 1
           });
       });
+
       if(eventName === 'view_item_list') {
         return ecommerce = {
-          'value': parseInt(price),
+          'value': parseInt(analyticsData.word_count),
           'currencyCode': 'EUR',
           impressions,
           'items': items
         };
       }
-      if(eventName === 'view_item') {
-        return ecommerce = {
-          'value': parseInt(price),
-          'detail': {
-            'products': impressions,
-            'actionField': {}
-          },
-          'items': items
-        };
-      }
       if(eventName === 'select_item') {
         return ecommerce = {
-          'value': parseInt(price),
+          'value': parseInt(analyticsData.word_count),
           'click': {
             'products': impressions,
             'actionField': {'list': list_name}
@@ -144,14 +135,22 @@ document.addEventListener("DOMContentLoaded", function() {
           'items': items
         };
       }
+      if(eventName === 'view_item') {
+        return ecommerce = {
+          'value': parseInt(analyticsData.word_count),
+          'detail': {'products': impressions},
+          'items': items
+        };
+      }
       if(eventName === 'add_to_cart') {
         return ecommerce = {
-          'value': parseInt(price),
+          'value': parseInt(analyticsData.word_count),
           'currencyCode': 'EUR',
           'add': {'products': impressions},
           'items': items
         };
       }
+      items = [];
     }
 
 
@@ -186,7 +185,6 @@ document.addEventListener("DOMContentLoaded", function() {
         })
       }
       if(eventName === 'view_item_list' || eventName === 'select_item') {
-        var price = parseInt(words);
         if(analyticsData && analyticsData.tags) {
           var item_category = analyticsData.tags[0]
           var item_category2 = analyticsData.tags[1]
@@ -204,12 +202,11 @@ document.addEventListener("DOMContentLoaded", function() {
             'item_brand': analyticsData.author,
             'item_list_name': list_name,
             'item_list_id': list_id,
-            price,
+            'price': analyticsData.word_count,
             'index': index || undefined
           });
       }
       if(eventName === 'view_item' || eventName === 'add_to_cart') {
-        var price = parseInt(words);
         if(analyticsData && analyticsData.tags) {
           var item_category = analyticsData.tags[0]
           var item_category2 = analyticsData.tags[1]
@@ -225,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
             'item_category4': item_category4,
             'item_variant': themeColor || 'auto',
             'item_brand': analyticsData.author,
-            price,
+            'price': analyticsData.word_count,
             'quantity': 1
           });
       }
@@ -246,15 +243,13 @@ document.addEventListener("DOMContentLoaded", function() {
           }
 
           analyticsData = JSON.parse(analyticsData);
-          index = parseInt(event.target.dataset.analyticsListindex) +1;
-          words = event.target.dataset.analyticsWords;
-          eventName = event.target.dataset.analyticsEventname;
-          eventAction = event.target.dataset.analyticsAction;
-          eventName = 'select_item';
 
-          analyticsEvent(analyticsData, eventName, index);
-          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')      
-          toUniversalAnalytics(items, eventName, words)
+          // eventAction is for the click event instead of the eventName for the observed events
+          eventAction = analyticsData.event_action || event.target.dataset.analyticsAction;
+
+          analyticsEvent(analyticsData, eventAction, index);
+          toUniversalAnalytics(items, eventAction)
+          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title + "\nindex : " + analyticsData.index , 'success')      
 
           switch (eventAction) {
             case 'open_toc':
@@ -270,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 "event": eventAction,
                 "url": window.location.href,
                 "page_id": analyticsData.page_id,
-                "test": "test",
                 ecommerce,
                 analyticsData
               });
@@ -301,24 +295,24 @@ document.addEventListener("DOMContentLoaded", function() {
         if (entry.isIntersecting && entry.target.dataset.analytics) {
             analyticsData = JSON.parse(entry.target.dataset.analytics);
             
-            customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
+            customLog(analyticsData.event + ' in viewport - ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title + "\nindex : " + analyticsData.index , 'success')
             // get offset from top 
             var article = document.getElementById('promotion') || undefined;
             if (article) {
               var rect = article.getBoundingClientRect();
               offsetTop = window.pageYOffset + rect.top - rect.height;
             }
-            //
-            eventName = entry.target.dataset.analyticsEventname;
-            words = entry.target.dataset.analyticsWords;
-            index = parseInt(entry.target.dataset.analyticsListindex) +1;
             
+            //eventName = entry.target.dataset.analyticsEventname;
+            eventName = analyticsData.event_name;
+            index = analyticsData.index;
+                        
             analyticsEvent(analyticsData, eventName, index, offsetTop);
-            toUniversalAnalytics(items, eventName, words)
+            toUniversalAnalytics(items, eventName)
 
             window.dataLayer = window.dataLayer || [];
             var send_event = {
-              "event": entry.target.dataset.analyticsEventname,
+              "event": eventName,
               "event_name": "impression_"+analyticsData.event,
               "url": window.location.href,
               "page_id": analyticsData.page_id,
