@@ -17,10 +17,6 @@
     {{- partial "data-init.html" . }}
     {{- partial "head.html" . }}
 </head>
-<!-- Google Tag Manager -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TPZQ664"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager  -->
 <body class="
 {{- if (or (ne .Kind `page` ) (eq .Layout `archives`) (eq .Layout `search`)) -}}
 {{- print "list" -}}
@@ -31,6 +27,11 @@
 "
 data-analytics-scope="{{ .Scratch.Get "scope" }}"
 >
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://tagging.byrgeleeuwangh.com/ns.html?id=GTM-TPZQ664"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    
     {{- partialCached "header.html" . .Page}}
     <main class="main">
         {{- block "main" . }}

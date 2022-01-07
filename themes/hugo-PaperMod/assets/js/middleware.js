@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
           analyticsEvent(analyticsData, eventAction, index);
           toUniversalAnalytics(items, eventAction)
-          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title + "\nindex : " + analyticsData.index , 'success')      
+          customLog(analyticsData.event + ' click ' + '\nevent name \t: \t' + eventAction + "\ntitle \t\t: \t" + analyticsData.title + "\nindex \t\t: \t" + analyticsData.index , 'success')      
 
           switch (eventAction) {
             case 'open_toc':
@@ -295,7 +295,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (entry.isIntersecting && entry.target.dataset.analytics) {
             analyticsData = JSON.parse(entry.target.dataset.analytics);
             
-            customLog(analyticsData.event + ' in viewport - ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title + "\nindex : " + analyticsData.index , 'success')
             // get offset from top 
             var article = document.getElementById('promotion') || undefined;
             if (article) {
@@ -306,7 +305,14 @@ document.addEventListener("DOMContentLoaded", function() {
             //eventName = entry.target.dataset.analyticsEventname;
             eventName = analyticsData.event_name;
             index = analyticsData.index;
-                        
+            
+            if(eventName === 'view_item') {
+              customLog(analyticsData.event + ' in viewport - ' + "\ntitle : " + analyticsData.title , 'success')
+            }
+            else {
+              customLog('impression of ' + analyticsData.event + ' in viewport ' + '\nevent name \t: \t' + entry.target.dataset.analyticsEventname + "\ntitle \t\t: \t" + analyticsData.title + "\nindex \t\t: \t" + analyticsData.index , 'success')
+            }
+
             analyticsEvent(analyticsData, eventName, index, offsetTop);
             toUniversalAnalytics(items, eventName)
 
