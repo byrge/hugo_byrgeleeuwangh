@@ -7,8 +7,8 @@ draft: false
 summary: "Hire me when you need analytics help"
 type: "normal"
 pagetype: "hire-me"
-tags: ["netlify-function"]
-keywords: ["data-quality","cookies"]
+tags: ["hire, contact"]
+keywords: ["contact","free-lance"]
 ---
 ## Need help?     
 [Contact](/contact "Contact Form") me if you want to hire me or need help. I'm available and love to work with you. I can help you with:  

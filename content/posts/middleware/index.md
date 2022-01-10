@@ -1,5 +1,5 @@
 ---
-title: "Analytics API - what about it"
+title: "Analytics tagging API"
 summary: "Why should you create your own or make use of an existing analytics tagging API? And what do I mean by an analytics tagging API?"
 date: 2021-12-20T15:17:58+01:00
 page_id: bd074fc7199790f7c06b80c1ca6f60dd
@@ -24,7 +24,7 @@ The moment you have more teams responsilble for the front-end code you'll probab
 
 By creating your own – or make use of an existing analytics tagging API you're able to create your own functions or use existing functions available in the API.  
 
-In this post I describe how I creasted my own analytics tagging API and how you can make use of the tagging logic.
+In this post I describe how and why I creasted my own analytics tagging API and how you can make use of the tagging logic.
 
 
 ### Advantages
