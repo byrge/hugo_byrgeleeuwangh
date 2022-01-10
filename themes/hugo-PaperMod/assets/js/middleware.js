@@ -9,6 +9,15 @@ var second_part_listname = loc.replace(/\//g, "#");
 var list_name = list + second_part_listname
 var list_id = _current_week_number || _list_id;
 
+// Set the Queu for product impressions and promotions to bundle 
+var analyticsQueuDelay = 15 * 1000; // After x milliseconds (analyticsQueuDelay) the batch will be send to the data layer
+var maxBytes = 8000; // max bytes per request to Google Analytics
+var maxBatch = 10; // max product impressions [view_item_list] per request to Google Analytics
+
+// Other variables
+var value = 0;
+// End
+
 // Avo
 !function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
 inspector.__API_KEY__ = "bSxiHkugGILERgAKD5vv";
@@ -118,12 +127,15 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       if(eventName === 'view_item_list') {
-        return ecommerce = {
-          'value': parseInt(analyticsData.word_count),
-          'currencyCode': 'EUR',
-          impressions,
-          'items': items
-        };
+        // return ecommerce = {
+        //   'value': parseInt(analyticsData.word_count),
+        //   'currencyCode': 'EUR',
+        //   impressions,
+        //   'items': items
+        // };
+        analyticsUA_Queu.push(impressions[0]);
+        return value += parseInt(analyticsData.word_count); 
+        console.log("toUniversalAnalytics <><><><analyticsUA_Queu> ", analyticsUA_Queu);
       }
       if(eventName === 'select_item') {
         return ecommerce = {
@@ -163,7 +175,6 @@ document.addEventListener("DOMContentLoaded", function() {
       var ecommerce_items = [];
       items = [];
       var promotions = [];
-      var impressions = [];
       // var products = [];
       var promotion_data
       // var impression_data
@@ -205,6 +216,9 @@ document.addEventListener("DOMContentLoaded", function() {
             'price': analyticsData.word_count,
             'index': index || undefined
           });
+        if(eventName === 'view_item_list') {
+          analyticsQueu.push(ecommerce_items);
+        }
       }
       if(eventName === 'view_item' || eventName === 'add_to_cart') {
         if(analyticsData && analyticsData.tags) {
@@ -283,6 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // IntersectionObserver
+    var ecommerce_object
     if ('IntersectionObserver' in window) {
       let config = {
         //root: null,
@@ -302,8 +317,10 @@ document.addEventListener("DOMContentLoaded", function() {
               offsetTop = window.pageYOffset + rect.top - rect.height;
             }
             
-            //eventName = entry.target.dataset.analyticsEventname;
+            var event_name = entry.target.dataset.analyticsEventname;
+            var event__name = analyticsData
             eventName = analyticsData.event_name;
+            console.log("event_name <><><> ", event__name)
             index = analyticsData.index;
             
             if(eventName === 'view_item') {
@@ -314,26 +331,44 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             analyticsEvent(analyticsData, eventName, index, offsetTop);
-            toUniversalAnalytics(items, eventName)
+            
+            if(eventName !== 'view_item_list') {
+              toUniversalAnalytics(items, eventName);
+              window.dataLayer = window.dataLayer || [];
+              var send_event = {
+                "event": eventName,
+                "event_name": "impression_"+analyticsData.event,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                ecommerce,
+                analyticsData
+              };
+              window.dataLayer.push(send_event);
+            }
+            if(eventName === 'view_item_list') {
+              toUniversalAnalytics(items, eventName);
+              // console.log('ecommerce_object', ecommerce_object);
 
-            window.dataLayer = window.dataLayer || [];
-            var send_event = {
-              "event": eventName,
-              "event_name": "impression_"+analyticsData.event,
-              "url": window.location.href,
-              "page_id": analyticsData.page_id,
-              ecommerce,
-              analyticsData
-            };
-          window.dataLayer.push(send_event);
+              if(startTimerImpression == null) {
+                startTimerImpression = Date.now();
+              }
+              startBatchTimer("view_item_list", startTimerImpression)
+    
+              if (analyticsQueu.length === maxBatch) {
+                gaSendQueu()
+              }
+              else {
+                startBatchTimer("view_item_list", startTimerImpression)
+              }
+            }
 
           // Avo trackSchemaFromEvent
-          inspector.trackSchemaFromEvent(eventName, {
-            "event": eventName,
-            "url": window.location.href,
-            "page_id": analyticsData.page_id,
-            "ecommerce": items
-          });
+          // inspector.trackSchemaFromEvent(eventName, {
+          //   "event": eventName,
+          //   "url": window.location.href,
+          //   "page_id": analyticsData.page_id,
+          //   "ecommerce": items
+          // });
           self.unobserve(entry.target);
         }
       });
@@ -342,6 +377,99 @@ document.addEventListener("DOMContentLoaded", function() {
     logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
     } 
   }, false);
+
+
+//////
+// Function to Push data to a Datalayer
+// dataLayer function
+function sendDataToDatalayer(dataObject) {
+  // dataLayer declaration
+  window.dataLayer = window.dataLayer || [];
+
+  // Push the data to Google dataLayer
+  window.dataLayer.push(dataObject);
+  customLog('Sending Event: ' + dataObject.event + ' to data layer', 'success')
+}
+//////
+
+////////////////////////////////////////
+// Batch to Analytics Queu
+////////////////////////////////////////
+
+// Start the Batch Timer for Impressions
+
+var analyticsQueuTimerStarted = false;
+var analyticsQueu = [];
+var analyticsUA_Queu = [];
+var startTimerImpression
+var analyticsQueuAlert
+
+function startBatchTimer(arg, startTimer) {
+  // Check if the timer wasn't started already by ...BatchTimerStarted = false
+  // Find out which timer to start
+  if(arg === "view_item_list" && analyticsQueuTimerStarted === false) {
+    customLog('starting analyticsQueu timer...', 'notification')
+    startTimerImpression = startTimer
+    analyticsQueuTimerStarted = true;
+
+    // Check analyticsQueu max bytes to send within each hit
+    analyticsQueuAlert = JSON.stringify(analyticsQueu).length
+    
+    productImpressionsBatchTimer = setTimeout(function() {
+      var millis = Date.now() - startTimerImpression;
+      customLog("TIMER: analyticsQueu: " + Math.floor(millis/1000) + " seconds elapsed", "notification");
+      gaSendQueu();
+      analyticsQueuTimerStarted = false;
+    }, analyticsQueuDelay);
+  } else { customLog(arg + ' timer already running...', 'notification') }
+}
+// Stop the Batch Timer for Impressions and Promo's
+function stopBatchTimer(arg) {
+  if(arg === "view_item_list") {
+    window.clearTimeout(productImpressionsBatchTimer);
+    // reset variables
+    productImpressionsBatchTimer = null;
+    startTimerImpression = null;
+    analyticsQueuTimerStarted = 0; 
+  }
+}
+function gaSendQueu() {
+  if(analyticsQueu.length > 0) {
+      var productImpressionsToSend = {
+        'event': 'view_item_list',
+        'value': value,
+        'ecommerce': {
+          'currencyCode': 'EUR',
+          'impressions': analyticsUA_Queu,
+          'items': analyticsQueu
+        }
+      }
+    sendDataToDatalayer(productImpressionsToSend)  // Send the impressions
+    stopBatchTimer("impressions");          // Clear the batch timer
+
+    if (analyticsQueuAlert >= maxBytes) {
+      console.group('Warning')
+        customLog('Impressions Warning – Payload too many Kb – Size in bytes: ' + impressionsAlert, 'warning');
+      console.groupEnd
+    }
+    // reset queues and values
+    analyticsQueu = [];
+    analyticsUA_Queu = [];
+    value = 0;
+
+  }
+}
+// Send the Impressions before navigating to a new page (beforeunload event)
+//// 
+function analyticsQueuSendBatch(e) {
+  if(analyticsQueu.length > 0) {
+    customLog('analyticsQueu beforeunload > product impressions: ' + analyticsQueu.length , 'info');
+    gaSendQueu()
+  } 
+}
+window.addEventListener('beforeunload', analyticsQueuSendBatch);
+//
+/////
 
 ////
 // Custom Logging
