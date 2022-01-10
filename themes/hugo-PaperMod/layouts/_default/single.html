@@ -68,7 +68,7 @@
   <footer class="post-footer">
     {{ $event_name := dict "event_name" "add_to_cart" }}
     {{ $default_params := merge $default_params $event_name }}
-    <div data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .WordCount }}" data-analytics-eventname="add_to_cart"></div>
+    <div data-analytics= "{{ $default_params | jsonify }}" data-analytics-id="{{ $default_params.page_id }}" data-analytics-words="{{ .WordCount }}"></div>
 
     {{- if .Params.tags }}
     <ul class="post-tags">

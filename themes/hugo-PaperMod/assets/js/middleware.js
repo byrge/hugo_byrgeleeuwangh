@@ -270,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
               var send_event = ({
                 "event": eventAction,
                 "url": window.location.href,
+                "value": analyticsData.word_count,
                 "page_id": analyticsData.page_id,
                 "page_title": analyticsData.title
               });
@@ -278,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function() {
               var send_event = ({
                 "event": eventAction,
                 "url": window.location.href,
+                "value": analyticsData.word_count,
                 "page_id": analyticsData.page_id,
                 ecommerce,
                 analyticsData
@@ -317,17 +319,15 @@ document.addEventListener("DOMContentLoaded", function() {
               offsetTop = window.pageYOffset + rect.top - rect.height;
             }
             
-            var event_name = entry.target.dataset.analyticsEventname;
-            var event__name = analyticsData
+            // eventName = entry.target.dataset.analyticsEventname;
             eventName = analyticsData.event_name;
-            console.log("event_name <><><> ", event__name)
             index = analyticsData.index;
             
             if(eventName === 'view_item') {
               customLog(analyticsData.event + ' in viewport - ' + "\ntitle : " + analyticsData.title , 'success')
             }
             else {
-              customLog('impression of ' + analyticsData.event + ' in viewport ' + '\nevent name \t: \t' + entry.target.dataset.analyticsEventname + "\ntitle \t\t: \t" + analyticsData.title + "\nindex \t\t: \t" + analyticsData.index , 'success')
+              customLog('impression of ' + analyticsData.event + ' in viewport ' + '\nevent name \t: \t' + eventName + "\ntitle \t\t: \t" + analyticsData.title + "\nindex \t\t: \t" + analyticsData.index , 'success')
             }
 
             analyticsEvent(analyticsData, eventName, index, offsetTop);
@@ -339,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "event": eventName,
                 "event_name": "impression_"+analyticsData.event,
                 "url": window.location.href,
+                "value": analyticsData.word_count,
                 "page_id": analyticsData.page_id,
                 ecommerce,
                 analyticsData
@@ -347,7 +348,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             if(eventName === 'view_item_list') {
               toUniversalAnalytics(items, eventName);
-              // console.log('ecommerce_object', ecommerce_object);
 
               if(startTimerImpression == null) {
                 startTimerImpression = Date.now();
