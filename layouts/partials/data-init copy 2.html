@@ -1,0 +1,696 @@
+{{ with $.Page.Params }}
+
+{{- $author := ($.Params.author | default $.Site.Params.author)}}
+{{- $environment := cond (eq $.Site.Params.env "development") "dev" "prod" }}
+{{- $scope := $.Scratch.Get "scope" }}
+<!-- {{ printf "%#v" $.Kind }} -->
+<script>
+  // Set the version of the Middleware Analytics script
+  var version_middleware = "0.7";
+
+  // Avo
+  !function(){var t=window.inspector=window.inspector||[];t.methods=["trackSchemaFromEvent","trackSchema","setBatchSize","setBatchFlushSeconds"],t.factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t.push(r),t}};for(var e=0;e<t.methods.length;e++){var r=t.methods[e];t[r]=t.factory(r)}t.load=function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://cdn.avo.app/inspector/inspector-v1.min.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)},t._scriptVersion=1}();
+  inspector.__API_KEY__ = "bSxiHkugGILERgAKD5vv";
+  inspector.__ENV__ = "{{ $environment }}"; // or "prod"
+  inspector.__VERSION__ = version_middleware;
+  inspector.__APP_NAME__ = "byrgeleeuwangh"; 
+  inspector.load();
+</script>
+
+<!-- blog_posts -->
+<script>
+  var git_info = undefined;
+
+  // Set the version of the Middleware Analytics script
+  var version_middleware = 0.6;
+
+  {{- with $.GitInfo }}
+  {{ $git := . }}
+  var git_info = {
+    "abbreviatedHash": "{{$git.AbbreviatedHash}}",
+    "hash": "{{$git.Hash}}",
+    "commitDate": "{{ dateFormat "2-01-2006" $git.CommitDate }}",
+    "subject": "{{ $git.Subject }}",
+  };
+  {{- end }}  
+
+  // hash function
+  var sha256 = function sha256(ascii) {
+	function rightRotate(value, amount) {
+		return (value>>>amount) | (value<<(32 - amount));
+	};
+	
+	var mathPow = Math.pow;
+	var maxWord = mathPow(2, 32);
+	var lengthProperty = 'length'
+	var i, j; // Used as a counter across the whole file
+	var result = ''
+
+	var words = [];
+	var asciiBitLength = ascii[lengthProperty]*8;
+	
+	//* caching results is optional - remove/add slash from front of this line to toggle
+	// Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
+	// (we actually calculate the first 64, but extra values are just ignored)
+	var hash = sha256.h = sha256.h || [];
+	// Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes
+	var k = sha256.k = sha256.k || [];
+	var primeCounter = k[lengthProperty];
+	/*/
+	var hash = [], k = [];
+	var primeCounter = 0;
+	//*/
+
+	var isComposite = {};
+	for (var candidate = 2; primeCounter < 64; candidate++) {
+		if (!isComposite[candidate]) {
+			for (i = 0; i < 313; i += candidate) {
+				isComposite[i] = candidate;
+			}
+			hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
+			k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+		}
+	}
+	
+	ascii += '\x80' // Append Ƈ' bit (plus zero padding)
+	while (ascii[lengthProperty]%64 - 56) ascii += '\x00' // More zero padding
+	for (i = 0; i < ascii[lengthProperty]; i++) {
+		j = ascii.charCodeAt(i);
+		if (j>>8) return; // ASCII check: only accept characters in range 0-255
+		words[i>>2] |= j << ((3 - i)%4)*8;
+	}
+	words[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);
+	words[words[lengthProperty]] = (asciiBitLength)
+	
+	// process each chunk
+	for (j = 0; j < words[lengthProperty];) {
+		var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
+		var oldHash = hash;
+		// This is now the undefinedworking hash", often labelled as variables a...g
+		// (we have to truncate as well, otherwise extra entries at the end accumulate
+		hash = hash.slice(0, 8);
+		
+		for (i = 0; i < 64; i++) {
+			var i2 = i + j;
+			// Expand the message into 64 words
+			// Used below if 
+			var w15 = w[i - 15], w2 = w[i - 2];
+
+			// Iterate
+			var a = hash[0], e = hash[4];
+			var temp1 = hash[7]
+				+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1
+				+ ((e&hash[5])^((~e)&hash[6])) // ch
+				+ k[i]
+				// Expand the message schedule if needed
+				+ (w[i] = (i < 16) ? w[i] : (
+						w[i - 16]
+						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0
+						+ w[i - 7]
+						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1
+					)|0
+				);
+			// This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
+			var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0
+				+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj
+			
+			hash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
+			hash[4] = (hash[4] + temp1)|0;
+		}
+		
+		for (i = 0; i < 8; i++) {
+			hash[i] = (hash[i] + oldHash[i])|0;
+		}
+	}
+	
+	for (i = 0; i < 8; i++) {
+		for (j = 3; j + 1; j--) {
+			var b = (hash[i]>>(j*8))&255;
+			result += ((b < 16) ? 0 : '') + b.toString(16);
+		}
+	}
+	return result;
+};
+
+  {{ with $author }}
+  var author_email = {{ $author }}.email;
+  var author_name = {{ $author }}.name;
+  var author_email_hash = sha256(author_email);
+  {{end}}
+  // // create session id
+  // var session_id = function () {  
+  //   var d = new Date().getTime();
+  //   if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+  //       d += performance.now();
+  //   }
+  //   return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  //       var r = (d + Math.random() * 16) % 16 | 0;
+  //       d = Math.floor(d / 16);
+  //       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  //   });
+  // }
+  // create client_id
+  // var array = new Uint32Array(3);
+  // window.crypto.getRandomValues(array);
+  // date
+  function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
+  var options_weekday = { weekday: 'long' };
+  var options_day = { day: '2-digit' };
+  var options_month = { month: 'long' };
+  var options_month_digit = { month: '2-digit' };
+  var dateobj= new Date() ;
+  var year = dateobj.getFullYear();
+  var month = dateobj.getMonth() + 1;
+  var seconds = dateobj.getSeconds();
+  var minutes = dateobj.getMinutes();
+  var hour = dateobj.getHours();
+ 
+  // Cookies
+  const read_cookies = document.cookie;
+  const cookies = read_cookies.split(";").map((s) => s.split("=").map((s) => s.trim())).reduce((m, [k, v]) => (m.set(k, v), m), new Map());
+  let uuid = cookies.get("_uuid"); 
+  let sessionId = cookies.get("_sessionId");
+  let ga_cookie = cookies.get("_ga"); 
+  // user = Object.assign(user, session_id);
+
+
+  //// ISOWeek
+  function ISO8601_week_no(dt) {
+     var tdt = new Date(dt.valueOf());
+     var dayn = (dt.getDay() + 6) % 7;
+     tdt.setDate(tdt.getDate() - dayn + 3);
+     var firstThursday = tdt.valueOf();
+     tdt.setMonth(0, 1);
+     if (tdt.getDay() !== 4) 
+       {
+      tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+        }
+     return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+  }
+
+  var week_number = new Date(dateobj);
+
+  //// dataLayer
+  const removeEmpty = (obj) => {
+    let newObj = {};
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === Object(obj[key])) newObj[key] = removeEmpty(obj[key]);
+      else if (obj[key] !== undefined) newObj[key] = obj[key];
+    });
+    return newObj;
+  };
+  var _dataCollection = [];
+  _dataCollection = removeEmpty({
+    "event": "dataLayer_initialization",
+    "general": {
+      "git": git_info,
+      "environment": {{ $environment }},
+      "version_hugo": {{ hugo.Version }},
+      "version_middleware": version_middleware,
+      "theme_color": {{$.Site.Params.defaultTheme}},
+      "epoch": seconds_since_epoch(),
+      "date_full": dateobj.toString(),
+      "date": dateobj.toLocaleDateString('nl-NL'),
+      "ISOWeek": ISO8601_week_no(week_number),
+      "year": year,
+      "month": parseInt(dateobj.toLocaleDateString('en-GB', options_month_digit)),
+      "month_long": dateobj.toLocaleDateString('en-GB', options_month),
+      "day": parseInt(dateobj.toLocaleDateString('en-GB', options_day)),
+      "day_long": dateobj.toLocaleDateString('en-GB', options_weekday),
+      "time": dateobj.toLocaleTimeString(),
+      "hour": hour,
+      "minutes": minutes,
+      "seconds": seconds
+    },
+    "user": {
+      "uuid": uuid,
+      "session_id": sessionId,
+      "ga_cookie": ga_cookie
+    },
+    "page": {
+      "scope": "{{ $scope }}",
+      "page-type": "{{ $.Page.Params.pagetype }}",
+      "author_email_hashed": author_email_hash,
+      "author_name": author_name,
+      {{ with $.Params.tags }}"tags": {{$.Params.tags}},{{end}}
+      {{ with $.Params.title }}"title": {{$.Params.title}},{{end}}
+      {{ with $.Params.summary }}"summary": {{$.Params.summary}},{{end}}
+      {{ with .UniqueID }}"id": {{.UniqueID}},{{end}}
+      {{ with $.Site.Language.Lang }}"language": {{$.Site.Language.Lang}},{{end}}
+      {{ with $.Params.keywords }}"keywords": {{$.Params.keywords}},{{end}}
+      {{ with $.Page.Date }}"date_published": {{ dateFormat "2-01-2006" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}"year_published": {{ dateFormat "2006" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}"month_published": {{ dateFormat "01" $.Page.Date }},{{end}}
+      {{ with $.Page.Date }}{{ with $.Page.Lastmod }}"day_published": {{ dateFormat "2" $.Page.Date }}, "lastmod": {{ dateFormat "2-01-2006" $.Page.Lastmod }},{{end}}{{end}}
+      {{ with $.Params.draft }}"draft": {{ $.Params.draft }},{{end}}
+      {{ with $.File }}"id": {{ .UniqueID }},{{ end }}
+      {{ with $.Page.ReadingTime }}"reading_time": {{ $.Page.ReadingTime }},{{end}}
+      {{ with $.Page.WordCount }}"words": {{ $.Page.WordCount }},{{end}}
+      {{ with $.Params.aliases}}"aliases": {{$.Params.aliases}},{{end}}
+      {{ with $.Permalink }}"url": {{ $.Permalink }},{{end}}
+      {{ if $.IsHome }}"path": "/"{{else}}{{ with $.File }}"path": {{ .Dir }} + {{ end }}{{ with $.File }}{{ .BaseFileName }}{{ end }}{{ end }}
+    }
+  });
+
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push(_dataCollection);
+  customLog(' [ Started Debug View ] ' + 'v' + version_middleware , 'start')
+
+
+<!-- /////////////////////////// -->
+<!-- Analytics script -->
+<!-- /////////////////////////// -->
+
+  /// Cookies
+  var cookieObj = {};
+
+function getPageCookies(){
+
+  // cookie is a string containing a semicolon-separated list, this split puts it into an array
+  var cookieArr = document.cookie.split(";");
+
+  // Iterate the array of flat cookies to get their key value pair
+  for(var i = 0; i < cookieArr.length; i++){
+
+      // Remove the standardized whitespace
+      var cookieSeg = cookieArr[i].trim();
+
+      // Index of the split between key and value
+      var firstEq = cookieSeg.indexOf("=");
+
+      // Assignments
+      var name = cookieSeg.substr(0,firstEq);
+      var value = cookieSeg.substr(firstEq+1);
+      cookieObj[name] = value;
+ }
+ return cookieObj;
+};
+getPageCookies();
+
+  // Viewport Size
+  // Get Viewport resize
+var viewportHeigth
+var viewportWidth
+function getViewportSize(w) {
+
+  // Use the specified window or the current window if no argument
+  w = w || window;
+
+  // This works for all browsers except IE8 and before
+  if (w.innerWidth != null) return { viewportWidth: w.innerWidth, viewportHeigth: w.innerHeight };
+
+  // For IE (or any browser) in Standards mode
+  var d = w.document;
+  if (document.compatMode == "CSS1Compat")
+      return { viewportWidth: d.documentElement.clientWidth,
+         viewportHeigth: d.documentElement.clientHeight };
+
+  // For browsers in Quirks mode
+  return { viewportWidth: d.body.clientWidth, viewportHeigth: d.body.clientHeight };
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // theme color
+    var themeColor = localStorage.getItem("pref-theme") || undefined;
+    
+    // performance
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        var pageReload = 'yes'; // reloaded
+      } else {
+        var pageReload = 'no'; // not reloaded
+      }
+    }
+
+    // Git info
+    if (window.__data_git) {
+    git_info = {
+        "abbreviatedHash": window.__data_git.abbreviatedHash,
+        "hash": window.__data_git.hash,
+        "commitDate": window.__data_git.commitDate,
+        "subject": window.__data_git.subject
+      }
+    }
+
+    // push to datalayer
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+    "event": "init",
+      'event': 'dom page',
+      'theme_color_user': themeColor || 'auto',
+      'page': {
+        'page_reload': pageReload,
+        'cookies': cookieObj,
+        'viewport': getViewportSize(){{ if ne $.Kind "page" }},
+        'git': git_info{{- end }}
+      }
+    })
+
+    /////// events
+    var events_array, analytics_events_arr = [];
+    events_array = document.querySelectorAll('[data-analytics-event]');
+
+    for (var i in events_array) if (events_array.hasOwnProperty(i)) {
+      var data = (events_array[i].getAttribute('data-analytics-event'));
+      var eventJSON = JSON.parse(data);
+      analytics_events_arr.push(eventJSON);
+    }
+
+    var events = analytics_events_arr.map(item =>{
+      var rItem = {};
+      rItem = {
+          event_name: item[0],
+          event_location: item[3],
+          event_url: item[4],
+          event_startdate: item[1],
+      };
+      return rItem;
+    });
+    if(events && events.length) {
+      dataLayer.push({
+        event: 'upcoming event',
+        page_path: window.location.pathname,
+        scope: "{{ $scope }}",
+        page_type: "{{ $.Page.Params.pagetype }}",
+        events
+      });
+    }
+
+    /////// blog posts
+    var logging_arr = [];
+    logging_arr = document.querySelectorAll('[data-analytics]');
+    var analytics_blogposts = [];
+
+    for (var i in logging_arr) if (logging_arr.hasOwnProperty(i)) {
+      var data = (logging_arr[i].getAttribute('data-analytics'));
+      var blogpostJSON = JSON.parse(data);
+      analytics_blogposts.push(blogpostJSON);
+    }
+
+    ////////
+    // function to translate GA4 to Google Universal Analytics
+    var ecommerce_translation = [];
+    var ecommerce = [];
+    function toUniversalAnalytics(items, eventName, price) {
+      impressions = items.map(items => {
+          return removeEmpty({
+              name: items.item_name,
+              brand: items.item_brand,
+              id: items.item_id,
+              price: items.price,
+              category: items.item_category,
+              variant: items.item_category2,
+              position: items.index,
+              list: items.item_list_name,
+              quantity: 1
+          });
+      });
+      if(eventName === 'view_item_list') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'currencyCode': 'EUR',
+          impressions,
+          'items': items
+        };
+      }
+      if(eventName === 'view_item') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'actionField': {},
+          'detail': {'products': impressions},
+          'items': items
+        };
+      }
+      if(eventName === 'select_item') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'actionField': {},
+          'click': {'products': impressions},
+          'items': items
+        };
+      }
+      if(eventName === 'add_to_cart') {
+        return ecommerce = {
+          'value': parseInt(price),
+          'currencyCode': 'EUR',
+          'add': {'products': impressions},
+          'items': items
+        };
+      }
+    }
+
+
+    ///////
+    // Observer for blog post impressions
+    ///////
+    var items = [];
+    var analyticsData, eventName, index, offsetTop
+    function analyticsEvent(analyticsData, eventName, index){
+      var ecommerce_items = [];
+      items = [];
+      var promotions = [];
+      var impressions = [];
+      // var products = [];
+      var promotion_data
+      // var impression_data
+      // var product_data
+      if(eventName === 'view_promotion' || eventName === 'select_promotion') {
+        ecommerce_items = removeEmpty({
+          'promotion_id': analyticsData.ISOWeek,
+          'promotion_name': analyticsData.name,
+          'creative_name': analyticsData.publishDate + '|' + analyticsData.expiryDate,
+          'creative_slot': 'top - '+offsetTop,
+          'location_id': window.location.pathname,
+          'index': index
+        });
+        promotion_data = removeEmpty({
+          'name': analyticsData.name,
+          'creative': window.location.pathname,
+          'position': 'top - '+offsetTop,
+          'id': analyticsData.ISOWeek
+        })
+      }
+      if(eventName === 'view_item_list' || eventName === 'select_item') {
+        var price = parseInt(words);
+        if(analyticsData && analyticsData.tags) {
+          var item_category = analyticsData.tags[0]
+          var item_category2 = analyticsData.tags[1]
+          var item_category3 = analyticsData.tags[2]
+          var item_category4 = analyticsData.tags[3] 
+        }
+        ecommerce_items = removeEmpty({
+            'item_id': analyticsData.page_id,
+            'item_name': analyticsData.title,
+            item_category,
+            item_category2,
+            item_category3,
+            item_category4,
+            'item_variant': themeColor || 'auto',
+            'item_brand': analyticsData.author,
+            'item_list_name': window.location.pathname,
+            'item_list_id': {{ with $.Kind }}{{$.Kind}}+{{$.Type}},{{end}}
+            price,
+            'index': index || undefined
+          });
+      }
+      if(eventName === 'view_item' || eventName === 'add_to_cart') {
+        var price = parseInt(words);
+        if(analyticsData && analyticsData.tags) {
+          var item_category = analyticsData.tags[0]
+          var item_category2 = analyticsData.tags[1]
+          var item_category3 = analyticsData.tags[2]
+          var item_category4 = analyticsData.tags[3] 
+        }
+        ecommerce_items = removeEmpty({
+            'item_id': analyticsData.page_id,
+            'item_name': analyticsData.title,
+            'item_category': item_category,
+            'item_category2': item_category2,
+            'item_category3': item_category3,
+            'item_category4': item_category4,
+            'item_variant': themeColor || 'auto',
+            'item_brand': analyticsData.author,
+            price,
+            'quantity': 1
+          });
+      }
+      items.push(ecommerce_items);
+      promotions.push(promotion_data);
+      return items     
+    }
+
+    // Click Listener
+    document.addEventListener('click', function (event) {
+      if (event.target.hasAttribute('data-analytics-action')) {
+          var dataset = event.target.dataset;
+          var analyticsData = event.target.dataset.analytics;
+          analyticsData = JSON.parse(analyticsData);
+          index = parseInt(event.target.dataset.analyticsListindex) +1;
+          words = event.target.dataset.analyticsWords;
+          eventName = event.target.dataset.analyticsEventname;
+          eventAction = event.target.dataset.analyticsAction;
+          eventName = 'select_item';
+
+          analyticsEvent(analyticsData, eventName, index);
+          customLog(analyticsData.event + ' click – ' + eventAction + "\ntitle : " + analyticsData.title , 'success')      
+          toUniversalAnalytics(items, eventName, words)
+
+          switch (eventAction) {
+            case 'open_toc':
+              var send_event = ({
+                "event": eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                "page_title": analyticsData.title
+              });
+              break;
+            default:
+              var send_event = ({
+                "event": eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                "test": "test",
+                ecommerce,
+                analyticsData
+              });
+            // Avo trackSchemaFromEvent
+              inspector.trackSchemaFromEvent(eventAction, {
+                'event': eventAction,
+                "url": window.location.href,
+                "page_id": analyticsData.page_id,
+                "ecommerce": items
+              });
+          }
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(send_event);
+      }
+    });
+
+    // IntersectionObserver
+    if ('IntersectionObserver' in window) {
+      let config = {
+        //root: null,
+        rootMargin: '10px',
+        threshold: 0.8
+      };
+
+    let observer = new IntersectionObserver(function (entries, self) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.dataset.analytics) {
+            analyticsData = JSON.parse(entry.target.dataset.analytics);
+            
+            customLog(analyticsData.event + ' in viewport – ' + entry.target.dataset.analyticsEventname + "\ntitle : " + analyticsData.title , 'success')
+            // get offset from top 
+            var article = document.getElementById('promotion') || undefined;
+            if (article) {
+              var rect = article.getBoundingClientRect();
+              offsetTop = window.pageYOffset + rect.top - rect.height;
+            }
+            //
+            eventName = entry.target.dataset.analyticsEventname;
+            words = entry.target.dataset.analyticsWords;
+            index = parseInt(entry.target.dataset.analyticsListindex) +1;
+            
+            analyticsEvent(analyticsData, eventName, index, offsetTop);
+            toUniversalAnalytics(items, eventName, words)
+
+            window.dataLayer = window.dataLayer || [];
+            var send_event = {
+              "event": entry.target.dataset.analyticsEventname,
+              "event_name": "impression_"+analyticsData.event,
+              "url": window.location.href,
+              "page_id": analyticsData.page_id,
+              ecommerce,
+              analyticsData
+            };
+          window.dataLayer.push(send_event);
+
+          // Avo trackSchemaFromEvent
+          inspector.trackSchemaFromEvent(eventName, {
+            "event": eventName,
+            "url": window.location.href,
+            "page_id": analyticsData.page_id,
+            "ecommerce": items
+          });
+        
+          self.unobserve(entry.target);
+        }
+      });
+    }, config);
+
+    logging_arr.forEach(content => observer.observe(content)); // watch blog posts, events and sponsors
+    } 
+  }, false);
+
+////
+// Custom Logging
+//// emoji https://emojipedia.org/emoji/
+function customLog(message, color='black') {
+  var logType = 'log';
+  switch (color) {
+      case 'success':  
+          color = 'color: green';	
+          emoji = String.fromCodePoint(0x1F44F);
+          break
+      case 'info':     
+          color = 'background: #bc5090; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x1F44D);
+          logType = 'info';
+          break;
+      case 'validation':     
+          color = 'background: #21e5d7; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'notification':     
+          color = 'background: #eee; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'error':   
+          color = 'background: #ff6361; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;'; 
+          logType = 'error';
+          break;
+      case 'warning':  
+          color = 'background: #D93B38; color: white; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x26A0);
+          logType = 'warn';
+          break;
+      case 'productinfo':  
+          color = 'background: #ffa600; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          logType = 'info';
+          break;
+      case 'start':  
+          color = 'background: #ffa600; color: black; padding: 2px 4px; border-radius: 4px 4px 4px 4px;';
+          emoji = String.fromCodePoint(0x1F44C);
+          logType = 'info';
+          break;
+          
+      default: 
+          color = color
+      }
+
+  var debug_status = localStorage.getItem('debug_status');
+  if(debug_status) {
+    console[logType](`${emoji}` + " " + `%c${message}`, `${color}`);
+  }
+}
+</script>
+
+<script>
+  ////////////////////
+  // Web Vitals performance
+  ////////////////////
+  function sendToGTM(name, delta, id) {
+    dataLayer.push({
+      event: 'web-vitals',
+      web_vitals: name
+    });
+  }
+  window.addEventListener('load', (event) => {
+    webVitals.getCLS(sendToGTM);
+    webVitals.getFID(sendToGTM);
+    webVitals.getLCP(sendToGTM);
+  });
+</script>
+{{ end }}

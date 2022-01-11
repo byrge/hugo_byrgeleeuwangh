@@ -4,7 +4,17 @@
     <h4 class="related">Related posts</h4>
         <table class="related">
             {{ range . }}
-            <tr>
+            
+            <!---->
+            {{ $default_params := .Params }}
+            {{ $event := dict "event" "blogpost" }}
+            {{ $word_count := dict "word_count" .WordCount }}
+            {{ $event_name := dict "event_name" "view_item_list" }}
+            {{ $event_action := dict "event_action" "select_item" }}
+            {{ $default_params := merge $default_params $event $word_count $event_name $event_action }}
+            <!---->
+
+            <tr id='analytics' data-analytics="{{ $default_params | jsonify }}">
                 <td class="related"><svg class="svg icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 15.889v-2.223s-3.78-.114-7 3.333c1.513-6.587 7-7.778 7-7.778v-2.221l5 4.425-5 4.464z"/></svg> <a class="related" href="{{ .RelPermalink }}"> {{ .Title }}</a></td>
                 <td class="related date"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ {{ dateFormat "Jan 2, 2006" .Page.Lastmod }} ]</td>
             </tr>

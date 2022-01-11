@@ -10,7 +10,7 @@ var list_name = list + second_part_listname
 var list_id = _current_week_number || _list_id;
 
 // Set the Queu for product impressions and promotions to bundle 
-var analyticsQueuDelay = 15 * 1000; // After x milliseconds (analyticsQueuDelay) the batch will be send to the data layer
+var analyticsQueuDelay = 6 * 1000; // After x milliseconds (analyticsQueuDelay) the batch will be send to the data layer
 var maxBytes = 8000; // max bytes per request to Google Analytics
 var maxBatch = 10; // max product impressions [view_item_list] per request to Google Analytics
 
