@@ -30,9 +30,18 @@ HUGO_VERSION = "0.91.2"
 [context.next.environment]
 HUGO_ENABLEGITINFO = "true"
 
-# Role-based redirects do not have a “to” property.
-/admin/*	        200!	  Role=admin
-/admin/*	/     	401!
+[[redirects]]
+  from = "/"
+  to = "/admin/*"
+  status = 200
+  force = false
+  conditions = {Role = ["admin"]}
+
+  from = "/admin/*"
+  to = "/"
+  status = 401
+  force = false
+
 
 [[headers]]
   for = "/*"
