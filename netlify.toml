@@ -31,16 +31,11 @@ HUGO_VERSION = "0.91.2"
 HUGO_ENABLEGITINFO = "true"
 
 [[redirects]]
-  from = "/"
-  to = "/admin/*"
+  from = "/*"
+  to = "/admin/:splat"
   status = 200
-  force = false
   conditions = {Role = ["admin"]}
 
-  from = "/admin/*"
-  to = "/"
-  status = 401
-  force = false
 
 
 [[headers]]
