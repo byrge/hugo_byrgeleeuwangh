@@ -30,17 +30,6 @@ HUGO_VERSION = "0.91.2"
 [context.next.environment]
 HUGO_ENABLEGITINFO = "true"
 
-[[redirects]]
-  from = "/admin/*"
-  status = 200
-  conditions = {Role = ["admin"]}
-  
-[[redirects]]
-  from = "/tags/*"
-  to = "/admin/:splat"
-  status = 200
-  conditions = {Cookie = ["nf_jwt"]}
-
 [[headers]]
   for = "/*"
   [headers.values]
