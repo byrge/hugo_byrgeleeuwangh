@@ -32,7 +32,6 @@ HUGO_ENABLEGITINFO = "true"
 
 [[redirects]]
   from = "/admin/*"
-  to = "/admin/:splat"
   status = 200
   conditions = {Role = ["admin"]}
 
