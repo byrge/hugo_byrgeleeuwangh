@@ -35,11 +35,6 @@ HUGO_ENABLEGITINFO = "true"
   status = 200
   conditions = {Role = ["admin"]}
 
-[[redirects]]
-  from = "/admin/*"
-  to = "/"
-  status = 401
-
 [[headers]]
   for = "/*"
   [headers.values]
