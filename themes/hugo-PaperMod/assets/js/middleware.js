@@ -445,7 +445,7 @@ function gaSendQueu() {
         }
       }
     sendDataToDatalayer(productImpressionsToSend)  // Send the impressions
-    stopBatchTimer("impressions");          // Clear the batch timer
+    stopBatchTimer("impressions");                 // Clear the batch timer
 
     if (analyticsQueuAlert >= maxBytes) {
       console.group('Warning')
@@ -461,13 +461,38 @@ function gaSendQueu() {
 }
 // Send the Impressions before navigating to a new page (beforeunload event)
 //// 
-function analyticsQueuSendBatch(e) {
+function analyticsQueuSendBatch(nextState) {
   if(analyticsQueu.length > 0) {
-    customLog('analyticsQueu beforeunload > product impressions: ' + analyticsQueu.length , 'info');
+    customLog('analyticsQueu :' + nextState + ' > product impressions: ' + analyticsQueu.length , 'info');
     gaSendQueu()
   } 
 }
-window.addEventListener('beforeunload', analyticsQueuSendBatch);
+//window.addEventListener('beforeunload', analyticsQueuSendBatch);
+
+const getState = () => {
+  if (document.visibilityState === 'hidden') {
+    return 'hidden';
+  }
+  if (document.hasFocus()) {
+    return 'active';
+  }
+  return 'passive';
+};
+let state = getState();
+
+// Accepts a next state and, if there's been a state change, logs the
+// change to the console. It also updates the `state` value defined above.
+const logStateChange = (nextState) => {
+  const prevState = state;
+  if (nextState === 'hidden' || nextState === 'passive' ) {
+    analyticsQueuSendBatch(nextState);
+    console.log(`State change: ${prevState} >>> ${nextState}`);
+    state = nextState;
+  }
+};
+['pageshow', 'focus', 'blur', 'visibilitychange', 'resume'].forEach((type) => {
+  window.addEventListener(type, () => logStateChange(getState()), {capture: true});
+});
 //
 /////
 

@@ -1,9 +1,4 @@
 name,start_date, end_date, location, url
-Superweek ,2021-01-02,2021-01-02,virtual,https://www.superweek.hu
-Superweek1,2021-02-16,2021-02-19,virtual,https://www.superweek.hu
-Superweek11,2021-02-21,2021-02-23,virtual,https://www.superweek.hu
-Superweek2,2014-03-01,2014-03-02,Hungary,https://www.superweek.hu
-Superweek3,2020-04-01,2020-04-05,virtual,https://www.superweek.hu
-Superweek4,2022-05-01,2022-05-02,virtual,https://www.superweek.hu
-Superweek5,2019-06-01,2019-06-02,Hungary,https://www.superweek.hu
-Superweek6,2017-09-28,2017-09-30,Hungary,https://www.superweek.hu
+Superweek ,2022-01-31,2021-02-04, Budapest, Hungary,https://www.superweek.hu
+Heroes of Data Privacy, 2023-01-26,2023-01-27, virtual, https://www.heroesofdataprivacy.com/
+Measurecamp Amsterdam, 2022-05-22, 2022-05-22, Amsterdam Art Center - Amsterdam, https://amsterdam.measurecamp.org/
