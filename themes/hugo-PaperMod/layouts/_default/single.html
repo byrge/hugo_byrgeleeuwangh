@@ -41,7 +41,7 @@
   <div id='analytics' data-analytics= "{{ $default_params | jsonify }}">{{ .Summary }}</div>
   
   <!-- sponsor -->
-  {{- if and (ne $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}
+  {{ if and (not $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}
     {{- partial "sponsor.html" . }}
   {{- end }}
 
