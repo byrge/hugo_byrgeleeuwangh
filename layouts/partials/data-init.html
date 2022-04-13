@@ -7,6 +7,7 @@
 {{- $environment := cond (eq $.Site.Params.env "development") "dev" "prod" }}
 <!-- {{- $scope := $.Scratch.Get "scope" }} -->
 <!-- {{ printf "%#v" $author_email }} -->
+<!-- {{ printf "%#v" $.Site.Params.env }} -->
 
 <script>
     // settings
@@ -39,22 +40,6 @@
   };
   {{- end }}
 
-  // // create session id
-  // var session_id = function () {  
-  //   var d = new Date().getTime();
-  //   if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
-  //       d += performance.now();
-  //   }
-  //   return 'xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-  //       var r = (d + Math.random() * 16) % 16 | 0;
-  //       d = Math.floor(d / 16);
-  //       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-  //   });
-  // }
-  // create client_id
-  // var array = new Uint32Array(3);
-  // window.crypto.getRandomValues(array);
-  // date
   function seconds_since_epoch(){ return Math.floor( Date.now() / 1000 ) }
   var options_weekday = { weekday: 'long' };
   var options_day = { day: '2-digit' };
@@ -73,7 +58,6 @@
   let uuid = cookies.get("_uuid"); 
   let sessionId = cookies.get("_sessionId");
   let ga_cookie = cookies.get("_ga"); 
-  // user = Object.assign(user, session_id);
 
   // ISOWeek
   function ISO8601_week_no(dt) {
