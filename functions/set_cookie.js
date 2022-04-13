@@ -7,21 +7,9 @@ exports.handler = async (event, context) => {
   const current_domain = ( host_value.match(/:/g) ) ? host_value.slice( 0, host_value.indexOf(":") ) : event.headers.host
   console.log('current_domain: ',current_domain)
 
-  // format logging
-  const styles = [
-    'color: black',
-    'background: yellow',
-    'font-size: 30px',
-    'border: 1px solid red',
-    'padding: 10px',
-  ].join(';');
-
   // function create uuid
   var create_uuid = function () {
-    console.log('%c%s', styles, 'function create_uuid started');
-
-    //console.log('function create_uuid started');
-
+    console.log('function create_uuid started');
     const ip_encode = new Buffer.from(event.headers['client-ip']);
     const ip_value = ip_encode.toString('base64');
     const seconds_since_epoch = Math.round(Date.now() / 1000)
@@ -30,8 +18,7 @@ exports.handler = async (event, context) => {
 
   // function create session id
   var session_id = function () {
-    console.log('%c%s', styles, 'function session_id started');
-
+    console.log('function session_id started');
     var d = new Date().getTime();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
         d += performance.now();
@@ -134,7 +121,9 @@ exports.handler = async (event, context) => {
       //// no header cookies available
       //   so write cookies [sessionId and uuid] first time
       const uuid = create_uuid();
+      console.log("uuid created!", uuid)
       const sessionId = session_id();
+      console.log("sessionId created!", sessionId)
       const set_multi_value_headers = {"Set-Cookie": [`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`, `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
 
       return {
