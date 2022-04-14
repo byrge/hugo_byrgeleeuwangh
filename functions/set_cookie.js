@@ -8,13 +8,27 @@ exports.handler = async (event, context) => {
   console.log('current_domain: ',current_domain)
 
   // function create uuid
-  var create_uuid = function () {
-    console.log('function create_uuid started');
-    const ip_encode = new Buffer.from(event.headers['client-ip']);
-    const ip_value = ip_encode.toString('base64');
-    const seconds_since_epoch = Math.round(Date.now() / 1000)
-    return ip_value + '-' + seconds_since_epoch;
-  }
+  // var create_uuid = function () {
+  //   console.log('function create_uuid started');
+  //   console.log('IP Address', event.headers['client-ip']);
+  //   const ip_encode = Buffer.from(event.headers['client-ip']);
+  //   console.log('ip_encode', ip_encode);
+  //   const ip_value = ip_encode.toString('base64');
+  //   const seconds_since_epoch = Math.round(Date.now() / 1000)
+  //   return ip_value + '-' + seconds_since_epoch;
+  // }
+  var create_uuid = function (){
+    var dt = new Date().getTime();
+    const seconds_since_epoch = Math.round(Date.now() / 1000);
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    uuid = uuid+'.'+seconds_since_epoch
+    return uuid;
+}
+
 
   // function create session id
   var session_id = function () {
@@ -55,6 +69,7 @@ exports.handler = async (event, context) => {
 
   ///////////
   const cookie_header_part = "; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict'";
+  console.log(">> cookie_header_part: ", cookie_header_part)
 
   if(headers_cookies) {
     let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
@@ -67,13 +82,13 @@ exports.handler = async (event, context) => {
 
     let cookieHeadersFromReq = [];
     Object.keys(cookies).forEach(key => {
-      cookieHeadersFromReq.push(key + "=" + cookies[key] + "; Path=/; Domain=localhost; Max-Age=31536000; Secure; SameSite=strict");
+      cookieHeadersFromReq.push(key + "=" + cookies[key] + cookie_header_part);
     });
   
     var multiValueHeaders = {
       'Set-Cookie': cookieHeadersFromReq
     }
-    console.log("multiValueHeaders: ", multiValueHeaders)
+    console.log(">> multiValueHeaders: ", multiValueHeaders)
 
     
     let uuid = cookies['_uuid'];
