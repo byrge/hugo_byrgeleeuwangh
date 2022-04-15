@@ -121,13 +121,20 @@ exports.handler = async (event, context) => {
     }
     //_initial_referrer
     let cookieHeadersInitialReferer
+    let utm_marketing = param_utmSource + ' / ' + param_utmMedium || undefined;
+    utm_marketing = utm_marketing.toLowerCase();
+    let utm_marketing_name = param_utmCampaign || undefined;
+    utm_marketing_name = utm_marketing_name.toLowerCase();
 
     if(!initial_referrer && param_gclid) {
       cookieHeadersInitialReferer = `_initial_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_initial_referrer gclid cookie created!")
     } else if(!initial_referrer && param_utmSource) {
-      cookieHeadersInitialReferer = `_initial_referrer=${param_utmSource}/${param_utmMedium}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      cookieHeadersInitialReferer = `_initial_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_initial_referrer utm cookie created!")
+    } else if(!param_utmSource && !param_gclid) {
+      cookieHeadersRecentReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_recent_referrer Direct cookie created!")
     }
     if(cookieHeadersInitialReferer) {
       cookieHeadersFromReq.push(cookieHeadersInitialReferer);
@@ -138,13 +145,22 @@ exports.handler = async (event, context) => {
     if(param_gclid && initial_referrer !== 'Paid Search') {
       cookieHeadersRecentReferer = `_recent_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_recent_referrer gclid cookie created!")
-    } else if(param_utmSource && initial_referrer && initial_referrer !== param_utmSource/param_utmMedium) {
-      cookieHeadersRecentReferer = `_recent_referrer=${param_utmSource}/${param_utmMedium}/${param_utmCampaign}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+    } else if(utm_marketing && utm_marketing !== initial_referrer) {
+      cookieHeadersRecentReferer = `_recent_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_recent_referrer utm cookie created!")
+    } else if(!param_utmSource && !param_gclid) {
+      cookieHeadersRecentReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_recent_referrer Direct cookie created!")
     }
     if(cookieHeadersRecentReferer) {
       cookieHeadersFromReq.push(cookieHeadersRecentReferer);
     }
+
+    //_marketing_campaign
+    if(utm_marketing_name) {
+      cookieHeadersRecentReferer = `_marketing_campaign=${utm_marketing_name}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("utm_marketing campaign cookie created!")
+    } 
 
     // Set cookie headers
     var multiValueHeaders = {
