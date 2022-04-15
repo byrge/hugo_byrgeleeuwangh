@@ -143,7 +143,7 @@ exports.handler = async (event, context) => {
       cookieHeadersInitialReferer = `_initial_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_initial_referrer utm cookie created!")
     } else if(!param_utmSource && !param_gclid) {
-      cookieHeadersRecentReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      cookieHeadersInitialReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
       console.log("_recent_referrer Direct cookie created!")
     }
     if(cookieHeadersInitialReferer) {
@@ -192,7 +192,7 @@ exports.handler = async (event, context) => {
       //   so write cookies [sessionId and uuid] first time
       const uuid = create_uuid();
       console.log("uuid created!", uuid)
-      const sessionId = session_id();
+      let sessionId = session_id();
       if(uuid) {
         let uuid8 = uuid.substring(0, 8);
         sessionId += '.'+uuid8;
