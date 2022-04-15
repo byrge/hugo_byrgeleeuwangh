@@ -18,6 +18,7 @@ exports.handler = async (event, context) => {
   //   return ip_value + '-' + seconds_since_epoch;
   // }
   var create_uuid = function (){
+    console.log('function uuid started');
     var dt = new Date().getTime();
     const seconds_since_epoch = Math.round(Date.now() / 1000);
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -68,7 +69,7 @@ exports.handler = async (event, context) => {
   };
 
   ///////////
-  const cookie_header_part = "; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict'";
+  const cookie_header_part = `; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict'`;
   console.log(">> cookie_header_part: ", cookie_header_part)
 
   if(headers_cookies) {
@@ -84,46 +85,25 @@ exports.handler = async (event, context) => {
     Object.keys(cookies).forEach(key => {
       cookieHeadersFromReq.push(key + "=" + cookies[key] + cookie_header_part);
     });
-  
-    var multiValueHeaders = {
-      'Set-Cookie': cookieHeadersFromReq
-    }
-    console.log(">> multiValueHeaders: ", multiValueHeaders)
-
     
     let uuid = cookies['_uuid'];
     if(!uuid) {
       uuid = create_uuid();
-      cookieHeadersFromReq.push(`_uuid=${uuid}; Path=/; Domain=localhost; Max-Age=31536000; Secure; SameSite=strict`);
+      cookieHeadersFromReq.push( `_uuid=${uuid}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict` );
       console.log("uuid created!", uuid)
     }
     let sessionId = cookies['_sessionId'];
     if(!sessionId) {
       sessionId = session_id();
-      cookieHeadersFromReq.push(`_sessionId=${sessionId}; Path=/; Domain=localhost; Max-Age=31536000; Secure; SameSite=strict`);
+      //cookieHeadersFromReq.push(`_sessionId=${sessionId}`+ cookie_header_part);
+      cookieHeadersFromReq.push( `_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict` );
       console.log("sessionId created!", sessionId)
     }
 
-    // if (cookies['_ga'] && cookies['_ga_TSKQWXB2BC'] && cookies['_gac_UA-55505440-1'] && cookies['_uuid'] && cookies['_sessionId']) {
-    //   // all cookies available
-    //   // set cookies for _ga, _ga_TSKQWXB2BC, _gac_UA-55505440-1, uuid and sessionId
-    //   // console.log('all cookies available from header')
-    //   // console.log('uuid: ', cookies['_uuid'])
-    //   // console.log('sessionId: ', cookies['_sessionId'])
-    //   // console.log('ga: ', cookies['_ga'])
-    //   // console.log('_gac_UA-55505440-1: ', cookies['_gac_UA-55505440-1'])
-    //   // console.log('ga_TSKQWXB2BC: ', cookies['_ga_TSKQWXB2BC'])
-    //   // set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_ga_TSKQWXB2BC=${ga_TSKQWXB2BC}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_gac_UA-55505440-1=${gac}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
-    // } 
-    // else if (cookies['_ga'] && cookies['_ga_TSKQWXB2BC'] && cookies['_gac_UA-55505440-1'] && cookies['_uuid'] && cookies['_sessionId']) {
-    //   // console.log('no cookies available from header')
-    //   // set_multi_value_headers = {"Set-Cookie": [`_ga=${ga}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_ga_TSKQWXB2BC=${ga_TSKQWXB2BC}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
-    // }
-    // else if ( !cookies['_uuid'] && !cookies['_sessionId']) {
-    //   //  STEP 4 -- write cookies [sessionId and uuid] first time
-    //   console.log('STEP 4 -- no uuid and sessionId')
-    //   // set_multi_value_headers = {"Set-Cookie": [`_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`,`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`]};    
-    // }
+    var multiValueHeaders = {
+      'Set-Cookie': cookieHeadersFromReq
+    }
+    console.log(">> multiValueHeaders: ", multiValueHeaders)
 
     // write cookies
     return {
