@@ -2,21 +2,30 @@ exports.handler = async (event, context) => {
   // const location = event.queryStringParameters.location || "home";
   const headers_cookies = event.headers.cookie || undefined;
   const host_value = event.headers.host || "localhost";
+  //const header_value = event.headers;
+  //console.log('header_value: ', header_value)
+  const header_referer_value = event.headers.referer;
+  console.log('header_referer_value: ', header_referer_value)
+  let searchQuery = header_referer_value.split("?");
+  searchQuery = '?'+searchQuery[1];
+  let params = new URLSearchParams(searchQuery);
+  // get Marketing parameters
+  let param_gclid = params.get('gclid');
+  let param_utmSource = params.get('utm_source');
+  let param_utmMedium = params.get('utm_medium');
+  let param_utmCampaign = params.get('utm_campaign');
+  let param_utmCampaignId = params.get('utm_id');
+
+  const header_platform_value = event.headers['sec-ch-ua-platform'];
+  console.log('header_platform_value: ', header_platform_value)
+  const header_ua_value = event.headers['user-agent'];
+  console.log('header_ua_value: ', header_ua_value)
+  
 
   // set custom domain -- remove port number
   const current_domain = ( host_value.match(/:/g) ) ? host_value.slice( 0, host_value.indexOf(":") ) : event.headers.host
   console.log('current_domain: ',current_domain)
 
-  // function create uuid
-  // var create_uuid = function () {
-  //   console.log('function create_uuid started');
-  //   console.log('IP Address', event.headers['client-ip']);
-  //   const ip_encode = Buffer.from(event.headers['client-ip']);
-  //   console.log('ip_encode', ip_encode);
-  //   const ip_value = ip_encode.toString('base64');
-  //   const seconds_since_epoch = Math.round(Date.now() / 1000)
-  //   return ip_value + '-' + seconds_since_epoch;
-  // }
   var create_uuid = function (){
     console.log('function uuid started');
     var dt = new Date().getTime();
@@ -28,7 +37,7 @@ exports.handler = async (event, context) => {
     });
     uuid = uuid+'.'+seconds_since_epoch
     return uuid;
-}
+  }
 
 
   // function create session id
@@ -70,7 +79,6 @@ exports.handler = async (event, context) => {
 
   ///////////
   const cookie_header_part = `; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict'`;
-  console.log(">> cookie_header_part: ", cookie_header_part)
 
   if(headers_cookies) {
     let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
@@ -86,20 +94,59 @@ exports.handler = async (event, context) => {
       cookieHeadersFromReq.push(key + "=" + cookies[key] + cookie_header_part);
     });
     
+    // check existing cookies set by me
     let uuid = cookies['_uuid'];
+    let sessionId = cookies['_sessionId'];
+    let gclid_first_attribution = cookies['_gclid_first_attribution'];
+    let initial_referrer = cookies['_initial_referrer'];
+
     if(!uuid) {
       uuid = create_uuid();
       cookieHeadersFromReq.push( `_uuid=${uuid}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict` );
       console.log("uuid created!", uuid)
     }
-    let sessionId = cookies['_sessionId'];
     if(!sessionId) {
       sessionId = session_id();
-      //cookieHeadersFromReq.push(`_sessionId=${sessionId}`+ cookie_header_part);
-      cookieHeadersFromReq.push( `_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict` );
+      if(uuid) {
+        let uuid8 = uuid.substring(0, 8);
+        sessionId += '.'+uuid8;
+      }
+      cookieHeadersFromReq.push( `_sessionId=${sessionId}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict` );
       console.log("sessionId created!", sessionId)
     }
+    //_gclid_first_attribution
+    if(!gclid_first_attribution && param_gclid) {
+      cookieHeadersFromReq.push( `_gclid_first_attribution=${param_gclid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict` );
+      console.log("gclid cookie created!", param_gclid)
+    }
+    //_initial_referrer
+    let cookieHeadersInitialReferer
 
+    if(!initial_referrer && param_gclid) {
+      cookieHeadersInitialReferer = `_initial_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_initial_referrer gclid cookie created!")
+    } else if(!initial_referrer && param_utmSource) {
+      cookieHeadersInitialReferer = `_initial_referrer=${param_utmSource}/${param_utmMedium}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_initial_referrer utm cookie created!")
+    }
+    if(cookieHeadersInitialReferer) {
+      cookieHeadersFromReq.push(cookieHeadersInitialReferer);
+    }
+    
+    //_recent_referrer
+    let cookieHeadersRecentReferer
+    if(param_gclid && initial_referrer !== 'Paid Search') {
+      cookieHeadersRecentReferer = `_recent_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_recent_referrer gclid cookie created!")
+    } else if(param_utmSource && initial_referrer && initial_referrer !== param_utmSource/param_utmMedium) {
+      cookieHeadersRecentReferer = `_recent_referrer=${param_utmSource}/${param_utmMedium}/${param_utmCampaign}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+      console.log("_recent_referrer utm cookie created!")
+    }
+    if(cookieHeadersRecentReferer) {
+      cookieHeadersFromReq.push(cookieHeadersRecentReferer);
+    }
+
+    // Set cookie headers
     var multiValueHeaders = {
       'Set-Cookie': cookieHeadersFromReq
     }
@@ -118,6 +165,10 @@ exports.handler = async (event, context) => {
       const uuid = create_uuid();
       console.log("uuid created!", uuid)
       const sessionId = session_id();
+      if(uuid) {
+        let uuid8 = uuid.substring(0, 8);
+        sessionId += '.'+uuid8;
+      }
       console.log("sessionId created!", sessionId)
       const set_multi_value_headers = {"Set-Cookie": [`_sessionId=${sessionId}; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`, `_uuid=${uuid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`]};
 
