@@ -2,10 +2,9 @@ exports.handler = async (event, context) => {
   // const location = event.queryStringParameters.location || "home";
   const headers_cookies = event.headers.cookie || undefined;
   const host_value = event.headers.host || "localhost";
-  //const header_value = event.headers;
-  //console.log('header_value: ', header_value)
+  const header_value = event.headers;
+  console.log('header_value: ', header_value)
   const header_referer_value = event.headers.referer;
-  console.log('header_referer_value: ', header_referer_value)
   let searchQuery = header_referer_value.split("?");
   searchQuery = '?'+searchQuery[1];
   let params = new URLSearchParams(searchQuery);
@@ -18,8 +17,7 @@ exports.handler = async (event, context) => {
 
   const header_platform_value = event.headers['sec-ch-ua-platform'];
   console.log('header_platform_value: ', header_platform_value)
-  const header_ua_value = event.headers['user-agent'];
-  console.log('header_ua_value: ', header_ua_value)
+  //const header_ua_value = event.headers['user-agent'];
   
 
   // set custom domain -- remove port number
@@ -122,9 +120,13 @@ exports.handler = async (event, context) => {
     //_initial_referrer
     let cookieHeadersInitialReferer
     let utm_marketing = param_utmSource + ' / ' + param_utmMedium || undefined;
-    utm_marketing = utm_marketing.toLowerCase();
+    if(utm_marketing){
+      utm_marketing = utm_marketing.toLowerCase();
+    }
     let utm_marketing_name = param_utmCampaign || undefined;
-    utm_marketing_name = utm_marketing_name.toLowerCase();
+    if(utm_marketing_name){
+      utm_marketing_name = utm_marketing_name.toLowerCase();
+    }
 
     if(!initial_referrer && param_gclid) {
       cookieHeadersInitialReferer = `_initial_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
