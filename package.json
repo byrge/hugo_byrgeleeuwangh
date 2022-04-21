@@ -1,0 +1,4 @@
+"scripts": {
+    "prebuild": "node ./scripts/installer.js",
+    "build": "react-scripts build"
+  },
