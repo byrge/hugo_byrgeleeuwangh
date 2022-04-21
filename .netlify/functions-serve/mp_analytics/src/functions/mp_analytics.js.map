@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../Users/byrge/Documents/GitHub/functions/mp_analytics.ts"],
+  "sourceRoot": "/var/folders/k7/xt8mgtmj7t909n5rn3z3wq380000gq/T/tmp-15935-NP4a8kY0h93U",
+  "sourcesContent": ["import { Handler, Context, Callback, APIGatewayEvent } from 'aws-lambda'\n\ninterface HelloResponse {\n  statusCode: number\n  body: string\n}\n\nconst handler: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {\n  const params = event.queryStringParameters\n  const response: HelloResponse = {\n    statusCode: 200,\n    body: JSON.stringify({\n      msg: `Hello world ${Math.floor(Math.random() * 10)}`,\n      params,\n    }),\n  }\n\n  callback(undefined, response)\n}\n\nexport { handler }"],
+  "mappings": ";;;;;;;;;AAAA;AAAA;AAAA;AAOA,IAAM,UAAmB,CAAC,OAAwB,SAAkB,aAAuB;AACzF,QAAM,SAAS,MAAM;AACrB,QAAM,WAA0B;AAAA,IAC9B,YAAY;AAAA,IACZ,MAAM,KAAK,UAAU;AAAA,MACnB,KAAK,eAAe,KAAK,MAAM,KAAK,WAAW;AAAA,MAC/C;AAAA;AAAA;AAIJ,WAAS,QAAW;AAAA;",
+  "names": []
+}

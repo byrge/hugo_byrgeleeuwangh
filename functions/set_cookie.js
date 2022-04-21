@@ -174,6 +174,13 @@ exports.handler = async (event, context) => {
       cookieHeadersFromReq.push(cookieHeadersMarketingCampaignName);
     }
 
+    // Set cookie with version number for cookie.js
+    let cookie_js_version = 0.9;
+    let cookieHeadersVersionNumber = undefined;
+    cookieHeadersVersionNumber = `_cookiejs_version=${cookie_js_version}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+    cookieHeadersFromReq.push(cookieHeadersVersionNumber);
+
+
     // Set cookie headers
     var multiValueHeaders = {
       'Set-Cookie': cookieHeadersFromReq
