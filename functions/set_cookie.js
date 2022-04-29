@@ -1,16 +1,20 @@
 exports.handler = async (event, context) => {
   // const location = event.queryStringParameters.location || "home";
+  //console.log('queryStringParameters >>>> ', event["queryStringParameters"]);
+
   const headers_cookies = event.headers.cookie || undefined;
   const host_value = event.headers.host || "localhost";
   const header_value = event.headers;
   //console.log('header_value: ', header_value)
-  const header_referer_value = event.headers.referer;
-  let searchQuery = header_referer_value.split("?");
-  searchQuery = '?'+searchQuery[1];
+  let searchQuery = event["queryStringParameters"];
+  //searchQuery = '?'+searchQuery;
   let params = new URLSearchParams(searchQuery);
+  console.log('params <> ', params)
   // get Marketing parameters
   let param_gclid = params.get('gclid');
-  let param_utmSource = params.get('utm_source');
+  let param_utmSource = params.get('utm_source') || undefined;
+  console.log('params <> param_utmSource <> ', param_utmSource)
+
   let param_utmMedium = params.get('utm_medium');
   let param_utmCampaign = params.get('utm_campaign');
   let param_utmCampaignId = params.get('utm_id');
@@ -126,56 +130,75 @@ exports.handler = async (event, context) => {
       cookieHeadersFromReq.push( `_gclid_first_attribution=${param_gclid}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict` );
       console.log("gclid cookie created!", param_gclid)
     }
-    //_initial_referrer
-    let utm_marketing = param_utmSource + ' / ' + param_utmMedium || undefined;
-    if(utm_marketing){
-      utm_marketing = utm_marketing.toLowerCase();
+    // marketing settings
+    let utm_marketing = undefined;
+    let utm_marketing_name = undefined;
+
+    if(param_utmSource) {
+      utm_marketing = param_utmSource + ' / ' + param_utmMedium;
+      console.log("utm_marketing set to : ", utm_marketing)
+      if(utm_marketing){
+        utm_marketing = utm_marketing.toLowerCase();
+        console.log("utm_marketing lowercase to : ", utm_marketing)
+      }
+      utm_marketing_name = param_utmCampaign;
+      if(utm_marketing_name){
+        utm_marketing_name = utm_marketing_name.toLowerCase();
+      }
     }
-    let utm_marketing_name = param_utmCampaign || undefined;
-    if(utm_marketing_name){
-      utm_marketing_name = utm_marketing_name.toLowerCase();
+  
+    //_initial_referrer
+    if(initial_referrer) {
+      console.log("1 no initital referrer set because already available")
+    } else {
+      if(param_gclid) {
+        cookieHeadersInitialReferer = `_initial_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+        console.log("_initial_referrer gclid cookie created!")
+      } else if(param_utmSource) {
+        cookieHeadersInitialReferer = `_initial_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+        console.log("_initial_referrer utm cookie created!")
+      } else if(!param_utmSource && !param_gclid) {
+        cookieHeadersInitialReferer = `_initial_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+        console.log("_initial_referrer Direct cookie created!")
+      }
+      if(cookieHeadersInitialReferer) {
+        cookieHeadersFromReq.push(cookieHeadersInitialReferer);
+      }
+      console.log("1 initial_referrer cookieHeadersFromReq <><>>>>> ", cookieHeadersFromReq)
     }
 
-    if(!initial_referrer && param_gclid) {
-      cookieHeadersInitialReferer = `_initial_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_initial_referrer gclid cookie created!")
-    } else if(!initial_referrer && param_utmSource) {
-      cookieHeadersInitialReferer = `_initial_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_initial_referrer utm cookie created!")
-    } else if(!param_utmSource && !param_gclid) {
-      cookieHeadersInitialReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_recent_referrer Direct cookie created!")
-    }
-    if(cookieHeadersInitialReferer) {
-      cookieHeadersFromReq.push(cookieHeadersInitialReferer);
-    }
     
     //_recent_referrer
     if(param_gclid && initial_referrer !== 'Paid Search') {
       cookieHeadersRecentReferer = `_recent_referrer=Paid Search; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_recent_referrer gclid cookie created!")
-    } else if(utm_marketing && utm_marketing !== initial_referrer) {
+      console.log("1_recent_referrer set to gclid")
+    } else if(param_utmSource) {
       cookieHeadersRecentReferer = `_recent_referrer=${utm_marketing}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_recent_referrer utm cookie created!")
+      console.log("2_recent_referrer set to utm: ", utm_marketing)
     } else if(!param_utmSource && !param_gclid) {
       cookieHeadersRecentReferer = `_recent_referrer=(Direct); Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("_recent_referrer Direct cookie created!")
+      console.log("3_recent_referrer set to Direct")
     }
     if(cookieHeadersRecentReferer) {
+      console.log('2 _recent_referrer cookieHeadersRecentReferer', cookieHeadersRecentReferer)
       cookieHeadersFromReq.push(cookieHeadersRecentReferer);
     }
+    console.log("2 _recent_referrer cookieHeadersFromReq <><>>>>> ", cookieHeadersFromReq)
+
 
     //_marketing_campaign
-    if(utm_marketing_name) {
+    if(param_utmCampaign) {
       cookieHeadersMarketingCampaignName = `_marketing_campaign=${utm_marketing_name}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-      console.log("utm_marketing_name campaign cookie created!")
+      console.log("utm_marketing_name is set to campaign value from utm_campaign")
     } 
     if(cookieHeadersMarketingCampaignName) {
       cookieHeadersFromReq.push(cookieHeadersMarketingCampaignName);
     }
 
+    console.log("3 cookieHeadersFromReq <><>>>>> ", cookieHeadersFromReq)
+
     // Set cookie with version number for cookie.js
-    let cookie_js_version = 0.9;
+    let cookie_js_version = 0.95;
     let cookieHeadersVersionNumber = undefined;
     cookieHeadersVersionNumber = `_cookiejs_version=${cookie_js_version}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
     cookieHeadersFromReq.push(cookieHeadersVersionNumber);
