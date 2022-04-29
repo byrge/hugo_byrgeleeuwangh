@@ -59,19 +59,10 @@ exports.handler = async (event, context) => {
     //  analyticsRequestBody.append(paramName, body.params[paramName])
     //}
 
-  // Send event to Google Analytics
+    // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
     let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/j/collect?';
     console.log('mp - analyticsRequestBody: ', gtm_server_url+analyticsRequestBody.toString())
-
-
-    // fetch(ga_url, {
-    // method: "POST",
-    // headers: {'Content-Type': 'application/json'}, 
-    // body: JSON.stringify(analyticsRequestBody)
-    // }).then(res => {
-    // console.log("Request complete! response:", res);
-    // });
 
     await axios({
         method: 'post',
