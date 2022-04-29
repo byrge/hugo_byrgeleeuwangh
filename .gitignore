@@ -4,3 +4,4 @@ resources/*
 data/old_functions/
 layouts/partials/data-init copy.html
 data/.DS_Store
+.DS_Store
