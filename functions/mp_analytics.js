@@ -48,7 +48,7 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("el", event["path"])
 
     // Set user language
-    let user_lang = 'nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7';
+    let user_lang = event.headers['accept-language'];
     user_lang = user_lang.split(',')[0];
     analyticsRequestBody.append("ul", user_lang)
 
