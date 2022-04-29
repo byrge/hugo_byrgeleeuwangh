@@ -1,6 +1,21 @@
 {
-    "scripts": {
-    "prebuild": "node ./scripts/installer.js",
-    "build": "react-scripts build"
+  "name": "github",
+  "description": "## Technical Web Analyst",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byrge/hugo_byrgeleeuwangh.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/byrge/hugo_byrgeleeuwangh/issues"
+  },
+  "homepage": "https://github.com/byrge/hugo_byrgeleeuwangh#readme",
+  "dependencies": {
+    "netlify-lambda": "^2.0.15",
+    "axios": "^8.6.0"
   }
 }

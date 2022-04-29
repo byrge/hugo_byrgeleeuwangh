@@ -17,8 +17,6 @@ exports.handler = async (event, context) => {
     }, {});
 
     let client_id = cookies['_ga'];
-    console.log('mp - cookies client_id: ', client_id);
-
 
     const analyticsRequestBody = new URLSearchParams();
     analyticsRequestBody.append("v", "1");
@@ -33,11 +31,13 @@ exports.handler = async (event, context) => {
     // Override user IP (but anonymize it first)
     analyticsRequestBody.append("uip", event.headers["client-ip"])
 
-      // GA makes us send a cid parameter, so we send a new UUID every time
-    // because we don't actually want to track users across requests
-    analyticsRequestBody.append("cid", client_id);
+    // GA makes us send a cid parameter, so we pick this from the cookie in the request
+    let cookie_client_id = client_id;
+    let split_cookie_client_id = cookie_client_id.split(".");
+    let new_cookie_client_id = split_cookie_client_id[2]+"."+split_cookie_client_id[3];
+    analyticsRequestBody.append("cid", new_cookie_client_id);
 
-    // Override user agent
+    // user agent
     analyticsRequestBody.append("ua", event.headers["user-agent"])
 
     // Set event data
@@ -47,21 +47,39 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("ea", "function")
     analyticsRequestBody.append("el", event["path"])
 
+    // Set user language
+    let user_lang = 'nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7';
+    user_lang = user_lang.split(',')[0];
+    analyticsRequestBody.append("ul", user_lang)
+
+    console.log('queryStringParameters >>>> ', event["queryStringParameters"]);
+    
+
     //for (const paramName in body.params) {
     //  analyticsRequestBody.append(paramName, body.params[paramName])
     //}
 
   // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
-    console.log('mp - analyticsRequestBody: ', ga_url+analyticsRequestBody.toString())
+    let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/j/collect?';
+    console.log('mp - analyticsRequestBody: ', gtm_server_url+analyticsRequestBody.toString())
 
-    await axios.post(
-        "https://www.google-analytics.com/collect?",
-        analyticsRequestBody.toString()
-      )
+
+    // fetch(ga_url, {
+    // method: "POST",
+    // headers: {'Content-Type': 'application/json'}, 
+    // body: JSON.stringify(analyticsRequestBody)
+    // }).then(res => {
+    // console.log("Request complete! response:", res);
+    // });
+
+    await axios({
+        method: 'post',
+        url: "https://www.google-analytics.com/collect?",
+        data: analyticsRequestBody.toString()
+    })
 
     return {
         statusCode: 200,
     };
-
 }
