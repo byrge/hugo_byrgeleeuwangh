@@ -2,16 +2,19 @@ const axios = require('axios');
   
 exports.handler = async (event, context) => {
     var netlify_context = context.clientContext
+    console.log('context <><> ', context)
+
     const isEmpty = Object.keys(netlify_context).length === 0;
     if(!isEmpty) {
         console.log('Netlify Context isn\'t isEmpty')
         function extractNetlifySiteFromContext(context) {
             data = context.clientContext.custom.netlify
             decoded = JSON.parse(Buffer.from(data, "base64").toString("utf-8"))
+            console.log('decoded <><> ', decoded)
             return decoded
         }
         const parsedContext = extractNetlifySiteFromContext(context)
-        console.log(parsedContext)
+        console.log('parsedContext <><> ', parsedContext)
     } else {
         console.log('Netlify Context isEmpty')
     }
