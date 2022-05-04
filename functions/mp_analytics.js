@@ -29,7 +29,9 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("aip", "1");
 
     // Override user IP (but anonymize it first)
-    analyticsRequestBody.append("uip", event.headers["client-ip"])
+    let user_ipaddress = event.headers["client-ip"] || event.headers["x-nf-client-connection-ip"];
+    console.log('user_ipaddress ', user_ipaddress)
+    analyticsRequestBody.append("uip", user_ipaddress);
 
     // GA makes us send a cid parameter, so we pick this from the cookie in the request
     let cookie_client_id = client_id;
