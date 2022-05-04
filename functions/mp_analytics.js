@@ -1,6 +1,7 @@
 const axios = require('axios');
   
 exports.handler = async (event, context) => {
+    console.log('context <><>  ', context)
     console.log('mp - started: ')
     console.log('mp - event : ', event)
 
@@ -24,6 +25,7 @@ exports.handler = async (event, context) => {
 
     // Set document path
     analyticsRequestBody.append("dp", event["path"])
+    console.log('event["path"] <><>  ', event["path"])
 
     // enable IP anonymization, even though we're doing it here anyway
     analyticsRequestBody.append("aip", "1");
@@ -67,6 +69,12 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("ea", event["path"])
     let user_platform = event.headers['sec-ch-ua-platform'];
     analyticsRequestBody.append("el", user_platform);
+
+    // Set Netlify request ID
+    let netlify_request_id = event.headers["X-Nf-Request-Id"];
+    if(netlify_request_id) {
+        analyticsRequestBody.append("cd10", netlify_request_id);
+    }
 
     // queryStringParameters
     let searchQuery = event["queryStringParameters"];
