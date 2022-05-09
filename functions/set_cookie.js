@@ -224,7 +224,7 @@ exports.handler = async (event, context) => {
     }
 
     // Set cookie with version number for cookie.js
-    let cookie_js_version = 0.97;
+    let cookie_js_version = 0.98;
     let cookieHeadersVersionNumber = undefined;
     cookieHeadersVersionNumber = `_cookiejs_version=${cookie_js_version}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
     cookieHeaders.push(cookieHeadersVersionNumber);

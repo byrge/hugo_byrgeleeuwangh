@@ -1,8 +1,9 @@
 const axios = require('axios');
-  
+
 exports.handler = async (event, context) => {
     var netlify_context = context.clientContext
-    console.log('context <><> ', context)
+    console.log('Netlify context <><> ', netlify_context)
+    console.log('Netlify <> event < event context ><> ', event)
 
     const isEmpty = Object.keys(netlify_context).length === 0;
     if(!isEmpty) {
@@ -40,10 +41,6 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("v", "1");
     analyticsRequestBody.append("ds", "netlify_function");
 
-    // Set document path
-    analyticsRequestBody.append("dp", event["path"])
-    console.log('event["path"] <><>  ', event["path"])
-
     // enable IP anonymization, even though we're doing it here anyway
     analyticsRequestBody.append("aip", "1");
 
@@ -61,10 +58,10 @@ exports.handler = async (event, context) => {
     // user agent
     analyticsRequestBody.append("ua", event.headers["user-agent"])
 
-    // referer
-    let user_referer = event.headers['referer'] || undefined;
-    if(user_referer) {
-        analyticsRequestBody.append("dr", user_referer);
+    // Set document location
+    let user_document_location = event.headers['referer'] || undefined;
+    if(user_document_location) {
+        analyticsRequestBody.append("dl", user_document_location);
     }
 
     // set country
@@ -117,8 +114,8 @@ exports.handler = async (event, context) => {
         analyticsRequestBody.append("gclid", param_gclid);
     }
     let google_organic = undefined;
-    if(user_referer) {
-        google_organic = user_referer.includes('google');
+    if(user_document_location) {
+        google_organic = user_document_location.includes('google'); // TO DO > CONTEXT
     }
     if(!param_gclid && google_organic) {
         console.log('set organic params')
