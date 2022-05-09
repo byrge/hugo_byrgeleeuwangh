@@ -58,13 +58,13 @@
         {{ $event_url := index $r 4 }}
 <!-- 2 weeks ahead by setting AddDate 14 -->
 {{- if and ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_end_date_time).After now) ($.homepage) }}
-{{ printf "%#v" . ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_start_date_time).After (now.AddDate 0 0 -1)) }}
+<!-- {{ printf "%#v" . ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_start_date_time).After (now.AddDate 0 0 -1)) }} -->
 
-<table class="eventhome">
+<!-- <table class="eventhome">
     <tr>
-        <td title="upcoming event: {{ $event_name }}" class="event homepage"><span class="mirror">{{ $icon_loudspeaker | emojify }}</span> <a href="/events">YESSSSS {{ $event_start_date.Month }} {{ $event_start_date.Day }}, {{ $event_start_date.Year }}: {{ $event_name }}, {{ $event_location }}</a></td>
+        <td title="upcoming event: {{ $event_name }}" class="event homepage"><span class="mirror">{{ $icon_loudspeaker | emojify }}</span> <a href="/events">{{ $event_start_date.Month }} {{ $event_start_date.Day }}, {{ $event_start_date.Year }}: {{ $event_name }}, {{ $event_location }}</a></td>
     </tr>
-</table>
+</table> -->
 
 {{- end }}
 {{- end }}
