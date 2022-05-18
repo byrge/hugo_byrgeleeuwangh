@@ -145,12 +145,12 @@ exports.handler = async (event, context) => {
 
     // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
-    let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/j/collect?';
-    console.log('mp - analyticsRequestBody: ', ga_url+analyticsRequestBody.toString())
+    let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/collect?';
+    console.log('mp - analyticsRequestBody: ', gtm_server_url+analyticsRequestBody.toString())
 
     await axios({
         method: 'post',
-        url: "https://www.google-analytics.com/collect?",
+        url: gtm_server_url,
         data: analyticsRequestBody.toString()
     })
 
