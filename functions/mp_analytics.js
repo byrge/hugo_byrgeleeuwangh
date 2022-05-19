@@ -122,7 +122,7 @@ exports.handler = async (event, context) => {
         analyticsRequestBody.append("cs", 'google');
         analyticsRequestBody.append("cm", 'organic');
     }
-    else if(!param_utmSource && !param_gclid) {
+    else if(!param_utmSource && !param_gclid && !google_organic) {
         console.log('no params > direct')
         analyticsRequestBody.append("cs", '(direct)');
         analyticsRequestBody.append("cm", '(none)');
@@ -146,15 +146,27 @@ exports.handler = async (event, context) => {
     // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
     let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/collect?';
-    console.log('mp - analyticsRequestBody: ', gtm_server_url+analyticsRequestBody.toString())
+    let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
+    console.log('mp - analyticsRequestBody: ', url_endpoint)
 
-    await axios({
+    // Axios
+    var config = {
         method: 'post',
-        url: gtm_server_url,
-        data: analyticsRequestBody.toString()
-    })
+        url: url_endpoint,
+        headers: { 
+          'x-gtm-server-preview': 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBkYjY1MjllNGRiOTIyMzg2ZjM='
+        }
+      };
+      
+      await axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     return {
-        statusCode: 200,
+        statusCode: 200
     };
 }
