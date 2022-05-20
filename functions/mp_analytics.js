@@ -1,17 +1,14 @@
 const axios = require('axios');
 
 exports.handler = async (event, context) => {
-    var netlify_context = context.clientContext
-    console.log('Netlify context <><> ', netlify_context)
-    console.log('Netlify <> event < event context ><> ', event)
+    var netlify_context = context.clientContext;
 
     const isEmpty = Object.keys(netlify_context).length === 0;
     if(!isEmpty) {
-        console.log('Netlify Context isn\'t isEmpty')
         function extractNetlifySiteFromContext(context) {
             data = context.clientContext.custom.netlify
             decoded = JSON.parse(Buffer.from(data, "base64").toString("utf-8"))
-            console.log('decoded <><> ', decoded)
+            console.log('Netlify context decoded <><> ', decoded)
             return decoded
         }
         const parsedContext = extractNetlifySiteFromContext(context)
@@ -21,10 +18,9 @@ exports.handler = async (event, context) => {
     }
         
     console.log('mp - started: ')
-    console.log('mp - event : ', event)
 
     const header_value = event.headers;
-    console.log('mp - header_value: ', header_value)
+    // console.log('mp - header_value - event.headers: ', header_value)
 
     const headers_cookies = event.headers.cookie || undefined;
     let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
@@ -46,7 +42,6 @@ exports.handler = async (event, context) => {
 
     // Override user IP (but anonymize it first)
     let user_ipaddress = event.headers["client-ip"] || event.headers["x-nf-client-connection-ip"];
-    console.log('user_ipaddress ', user_ipaddress)
     analyticsRequestBody.append("uip", user_ipaddress);
 
     // GA makes us send a cid parameter, so we pick this from the cookie in the request
@@ -59,9 +54,14 @@ exports.handler = async (event, context) => {
     analyticsRequestBody.append("ua", event.headers["user-agent"])
 
     // Set document location
-    let user_document_location = event.headers['referer'] || undefined;
+    let user_document_location = event.headers['referer'] || event.rawUrl;
+    console.log('user_document_location <><><>>>>>> ', user_document_location)
     if(user_document_location) {
         analyticsRequestBody.append("dl", user_document_location);
+        let url_from_referer = new URL(user_document_location)
+        let url_path = url_from_referer.pathname;
+        console.log(url_path)
+        analyticsRequestBody.append("dp", url_path);
     }
 
     // set country
@@ -122,7 +122,7 @@ exports.handler = async (event, context) => {
         analyticsRequestBody.append("cs", 'google');
         analyticsRequestBody.append("cm", 'organic');
     }
-    else if(!param_utmSource && !param_gclid && !google_organic) {
+    else if(!param_utmSource && !param_gclid) {
         console.log('no params > direct')
         analyticsRequestBody.append("cs", '(direct)');
         analyticsRequestBody.append("cm", '(none)');
@@ -145,8 +145,10 @@ exports.handler = async (event, context) => {
 
     // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
-    let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/collect?';
+    let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/mp?';
     let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
+    let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBlMGFlOTU2MzkxMGMyNzBmNDE='
+    
     console.log('mp - analyticsRequestBody: ', url_endpoint)
 
     // Axios
@@ -154,7 +156,7 @@ exports.handler = async (event, context) => {
         method: 'post',
         url: url_endpoint,
         headers: { 
-          'x-gtm-server-preview': 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBkYjY1MjllNGRiOTIyMzg2ZjM='
+          'x-gtm-server-preview': preview_header
         }
       };
       
