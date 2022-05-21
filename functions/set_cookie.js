@@ -1,8 +1,18 @@
 exports.handler = async (event, context) => {
   const headers_cookies = event.headers.cookie || undefined;
   const host_value = event.headers.host || "localhost";
-  const event_referer = event.headers['referer'];
-  const url = new URL(event_referer);
+  
+  let event_referer = event.headers['referer'];
+  //console.log('event <>>>> ', event)
+  let url = undefined;
+  if(event_referer) {
+    url = new URL(event_referer);
+  } else {
+    event_referer = event.rawUrl
+    console.log('rawUrl <>>>> ', event_referer)
+    url = new URL(event_referer);
+  }
+  
   const params = new URLSearchParams(url.search);
 
   // get Marketing parameters

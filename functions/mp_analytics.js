@@ -147,7 +147,7 @@ exports.handler = async (event, context) => {
     let ga_url = 'https://www.google-analytics.com/collect?';
     let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/mp?';
     let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
-    let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBlMGFlOTU2MzkxMGMyNzBmNDE='
+    let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBlNjU1ZWUzZWFjNjU2OGZkOGM='
     
     console.log('mp - analyticsRequestBody: ', url_endpoint)
 
