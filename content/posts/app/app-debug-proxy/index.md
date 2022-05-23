@@ -30,13 +30,14 @@ So, follow the next steps for the first time installation of the proxy:
 2. Install via your terminal `brew install mitmproxy`. You'll need [Homebrew](https://brew.sh/) on your Mac
 3. Start your proxy with the command: `mitmweb` in your terminal
 4. Open your OS X settings panel and go to `sharing`
-5. In `sharing` activate internet sharing and share your connection via LAN on your WiFi
+5. In `sharing` activate internet sharing and share your connection via LAN on your WiFi. Your WiFi needs to be active!
 6. Open `network` in your OS X settings panel and note your IP address
-7. Go to your mobile device and find and connect to your shared WiFi network (Computer Name in your OS X settings panel)
+7. Go to your mobile device and find and connect to your shared WiFi network (Computer Name in your OS X settings panel). In `Sharing` enable WiFi and set your WiFi password in WiFi Options… 
 8. When your mobile device is connected to your Mac shared WiFi network edit your proxy settings. For `Server` you need to add your IP address of step 6. The `port` should be `8080`
+9. Check if MITM is running in your terminal! 
 9. Now visit with your mobile device web browser to [mitm.it](https://mitm.it) and click to install the correct SSL certificate
-10. After installation of your certificate you still have to enable the certificate on your iPhone. To verify go to `Settings` → `General` → `Profile` (iOS 11) and `Settings` → `General` → `Device Management` on iOS 9 and above devices
-11. Next step is to turn on the toggle button to trust the mitm root certificate: `Settings` → `General` → `About` → `Certificate Trust Settings` (iOS 10 and above devices) 
+10. After installation of your certificate you still have to enable the certificate on your iPhone. To verify go to `Settings` → `General` → `VPN & Device Management` → `Profile` (iOS 15)
+11. Next step is to turn on the toggle button (on the bottom) to trust the mitm root certificate: `Settings` → `General` → `About` → `Trusted Certificates` → `Certificate Trust Settings` (iOS 15) 
 12. Now you are able to open your app and you should see your requests coming from your app in the web interface of the MITM proxy
 
   
@@ -48,6 +49,11 @@ Find your ip address –_to use in step 8_– in your MacOS network settings:
 ### Start MITM web via the terminal  
 
 {{< img src="images/mitm-terminal.png" alt="Start MITM web via the terminal" >}}
+
+### Check your Privacy settings in iOS
+Check if you have enabled any privacy features in iOS which could block the Google Analytics tracking in MITM. In `Privacy` → `Tracking` the app you want to track should be enabled (toggle on) in the list. Also check if you have any add blockers installed on your iPhone. If so, disable them temporarily!
+
+{{< img src="images/app_tracking_privacy_settings" alt="Check your Privacy Settings for App Tracking" >}}
 
 ## Install MITM on Android / MacOS
 You need to install the [proxy](https://mitmproxy.org/) via the terminal, but no worries. There is also a Web Interface after installation to monitor your app traffic.
