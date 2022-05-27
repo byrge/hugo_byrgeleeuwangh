@@ -6,7 +6,7 @@
 {{ .Content }}
 
 <!-- Event listing -->
-{{- partial "events.html" (dict "homepage" false) }}
+{{- partial "events.html" (dict "cxt" . "IsHome" false) }}
 <!-- end-->
 
 {{- end  }}{{/* end main */}}

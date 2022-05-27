@@ -34,7 +34,7 @@
 {{- partial "sponsor.html" . }}
 
 <!-- events -->
-{{- partial "events.html" (dict "homepage" true) }}
+{{- partial "events.html" (dict "cxt" . "IsHome" true) }}
 
 {{- else }}
 {{- $class = "first-entry" }}

@@ -3,7 +3,7 @@
 {{ $sep := ";" }}
 {{ $sponsors := getCSV $sep $url }}
     
-    {{ range $i, $r := $sponsors | first 20 }}
+    {{ range $i, $r := $sponsors | first 50 }}
         <!-- not first row because of headers -->
         {{ if ne $i 0 }}
 
@@ -21,8 +21,10 @@
         {{ $sponsor_email := index $r 7 }}
     
         {{ $sponsor_availability_text := replace ( replace $sponsorship_sold "NO" "Available" ) "YES" "Sold" }}
+        <!-- {{ printf "%#v" $sponsor_availability_text }} -->
 
         {{ $default_params := dict "event" "sponsor" "name" $sponsor_name "title" $sponsor_name "publishDate" $sponsor_publishDate "expiryDate" $sponsor_expiryDate "availability" $sponsor_availability_text "ISOWeek" $sponsor_ISOWeek }}
+        <!-- {{ printf "%#v" $default_params }} -->
 
             <!-- show Sponsorship on page -->
             {{- if and ((time $sponsor_publishDate).Before now) ((time $sponsor_expiryDate).After now ) (eq $sponsorship_sold "YES") }}

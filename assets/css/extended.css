@@ -13,10 +13,21 @@ span.mirror {
     transform: scale(-1, 1);
 }
 td.event.listing {
-  width: 30vw;
   text-align: left;
   margin: 1vh;
   padding: .5rem .5rem;
+}
+td.event.listing.date {
+  font-size: 75%;
+  width: 18vw;
+}
+td.event.listing.name {
+  font-size: 85%;
+  width: 22vw;
+}
+td.event.listing.location {
+  font-size: 85%;
+  width: 24w;
 }
 table.eventhome {
   overflow-x: hidden;
