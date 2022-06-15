@@ -32,6 +32,8 @@ exports.handler = async (event, context) => {
     }, {});
 
     let client_id = cookies['_ga'];
+    let preview_header_gtm = cookies['_gtm_preview'] + '=';
+    console.log('mp - gtm preview header: ', preview_header_gtm)
 
     const analyticsRequestBody = new URLSearchParams();
     analyticsRequestBody.append("v", "1");
@@ -147,18 +149,26 @@ exports.handler = async (event, context) => {
     let ga_url = 'https://www.google-analytics.com/collect?';
     let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/mp?';
     let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
-    let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODBlNjU1ZWUzZWFjNjU2OGZkOGM='
+    //let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODE2N2EyYjk4ZmRmODYyOTRmMzg='
     
     console.log('mp - analyticsRequestBody: ', url_endpoint)
 
     // Axios
-    var config = {
-        method: 'post',
-        url: url_endpoint,
-        headers: { 
-          'x-gtm-server-preview': preview_header
-        }
-      };
+    if(preview_header_gtm) {
+        var config = {
+            method: 'post',
+            url: url_endpoint,
+          };
+    } else {
+        var config = {
+            method: 'post',
+            url: url_endpoint,
+            headers: { 
+              'x-gtm-server-preview': preview_header_gtm
+            }
+          };
+    }
+   
       
       await axios(config)
       .then(function (response) {

@@ -38,7 +38,7 @@
   </header>
   {{- partial "cover.html" (dict "cxt" . "IsHome" false) }}
   
-  <div id='analytics' data-analytics= "{{ $default_params | jsonify }}">{{ .Summary }}</div>
+  <div class="summary single" id='analytics' data-analytics= "{{ $default_params | jsonify }}">{{ .Summary }}.</div></div>
   
   <!-- sponsor -->
   {{ if and (not $.IsHome) (ne $.Page.Params.Type "page") (ne $.Page.Params.Type "form") }}

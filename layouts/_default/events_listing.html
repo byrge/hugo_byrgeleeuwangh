@@ -3,7 +3,7 @@
 <header class="page-header">
   <h1>{{ .Title }}</h1>
 </header>
-{{ .Content }}
+ {{ .Content }}
 
 <!-- Event listing -->
 {{- partial "events.html" (dict "cxt" . "IsHome" false) }}

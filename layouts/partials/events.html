@@ -23,6 +23,7 @@
 {{- if and ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_end_date_time).After now) ($.IsHome) }}
 
 {{ $default_params := dict "event" "event" "title" $event_name "start_date" $event_start_date "end_date" $event_end_date "location" $event_location "url" $event_url }}
+<!-- homepage event listing -->
 <article class="event entry" data-analytics= "{{ $default_params | jsonify }}">
     <table class="eventhome">
         <tr>
@@ -30,7 +31,6 @@
         </tr>
     </table>
 </article>
-
 {{- end }}
 {{- end }}
 {{- end }}
@@ -38,13 +38,21 @@
 
 <!-- show first upcoming event -->
 {{ range $i, $r := $events }}
+<<<<<<< Updated upstream
 {{- if eq $i 0 }}
     {{- if not $.IsHome }}
+=======
+
+{{- if eq $i 0 }}
+    {{- if not $.homepage }}
+>>>>>>> Stashed changes
         <h3 class="events first">first upcoming event</h3>
     {{- end }}
 {{- end }}
         <!-- not first row because of headers -->
+        
     {{ if ne $i 0 }}
+
         <!-- define variables -->
         {{ $event_start_date := index $r 1 }}
         {{ $event_start_date := (time $event_start_date) }}
@@ -60,7 +68,12 @@
         {{ $show_event_publishdate := $show_event_start.Before now }}
 
         {{- if and ($show_event) ($show_event_publishdate) }}
+<<<<<<< Updated upstream
         {{- if not $.IsHome }}
+=======
+
+        {{- if not $.homepage }}
+>>>>>>> Stashed changes
         <article class="event-entry first">
             <table class="eventnothome">
                 <tr>
@@ -77,9 +90,18 @@
 
 <!-- show coming events -->
 {{ range $i, $r := $events }}
+<<<<<<< Updated upstream
 {{- if eq $i 0 }}   
     {{- if not $.IsHome }}
         <h3 class="events">coming events</h3>{{- end }}{{- end }}
+=======
+
+{{- if eq $i 0 }}
+    {{- if not $.homepage }}
+        <h3 class="events">coming events</h3>
+    {{- end }}
+{{- end }}
+>>>>>>> Stashed changes
         <!-- not first row because of headers -->
     {{ if ne $i 0 }}
         <!-- define variables -->

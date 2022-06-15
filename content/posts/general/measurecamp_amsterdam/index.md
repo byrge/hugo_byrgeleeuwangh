@@ -13,7 +13,6 @@ tocOpen: false
 draft: false
 ---
 
-# Measurecamp Amsterdam 2022
 Last Saterday I visited Measurecamp Amsterdam and gave my first presentation. I presented a playground for GTM Server. How to setup your local and online environment so you can test and debug with GTM Server.
 
 ## My setup
@@ -28,12 +27,13 @@ My setup exists of the following
 - [Netlify](https://netlify.com "Netlify for Hugo hosting") Netlify as hosting platform
 - Netlify function for server to gtm server tagging
 - Netlify function for server side cookies
-- [Stape.io](https://stape.io "GTM Server from Stape.io") as my GTM Server setup
+- [Stape.io](https://stape.io "GTM Server from Stape.io") as my GTM Server setup environment
 
+{{< img src="images/netlify_logo.png" alt="Netlify Logo" >}}
 
 I played with client to server ([Data Tag](https://stape.io/blog/sending-data-from-google-tag-manager-web-container-to-the-server-container "Data Tag from Stape.io")) and server to server ([Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1 "Measurement Protocol for Universal Analytics")). All the tools above helped me to play with GTM Server and see how things work. I tested the server to server setup and learned how to read the cookie information to sent along the mp request to GTM Server.
 
-The Data Tag helped me to learn about how to sent the complete dataLayer object to GTM Server and be abl eto use th edata in there to sent along with other Events.
+The Data Tag helped me to learn about how to sent the complete dataLayer object to GTM Server and be able to use the data in there to sent along with other Events.
 
 You can find the [presentation](/pdf/MeasureCamp_AMS_2022.pdf "MeasureCamp presentation") here. 
 

@@ -289,3 +289,9 @@ span.sponsored_text {
 h2.sponsor_name {
   font-size: 2vh;
 }
+
+div.summary {
+  font-size: smaller;
+  font-style: italic;
+  padding-bottom: 3vh;
+}
