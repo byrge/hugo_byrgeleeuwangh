@@ -38,14 +38,8 @@
 
 <!-- show first upcoming event -->
 {{ range $i, $r := $events }}
-<<<<<<< Updated upstream
 {{- if eq $i 0 }}
     {{- if not $.IsHome }}
-=======
-
-{{- if eq $i 0 }}
-    {{- if not $.homepage }}
->>>>>>> Stashed changes
         <h3 class="events first">first upcoming event</h3>
     {{- end }}
 {{- end }}
@@ -68,12 +62,7 @@
         {{ $show_event_publishdate := $show_event_start.Before now }}
 
         {{- if and ($show_event) ($show_event_publishdate) }}
-<<<<<<< Updated upstream
         {{- if not $.IsHome }}
-=======
-
-        {{- if not $.homepage }}
->>>>>>> Stashed changes
         <article class="event-entry first">
             <table class="eventnothome">
                 <tr>
@@ -90,18 +79,11 @@
 
 <!-- show coming events -->
 {{ range $i, $r := $events }}
-<<<<<<< Updated upstream
-{{- if eq $i 0 }}   
-    {{- if not $.IsHome }}
-        <h3 class="events">coming events</h3>{{- end }}{{- end }}
-=======
-
 {{- if eq $i 0 }}
-    {{- if not $.homepage }}
+    {{- if not $.IsHome }}
         <h3 class="events">coming events</h3>
     {{- end }}
 {{- end }}
->>>>>>> Stashed changes
         <!-- not first row because of headers -->
     {{ if ne $i 0 }}
         <!-- define variables -->
