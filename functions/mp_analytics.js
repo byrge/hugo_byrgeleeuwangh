@@ -158,14 +158,14 @@ exports.handler = async (event, context) => {
         var config = {
             method: 'post',
             url: url_endpoint,
+            headers: { 
+                'x-gtm-server-preview': preview_header_gtm
+            }
           };
     } else {
         var config = {
             method: 'post',
             url: url_endpoint,
-            headers: { 
-              'x-gtm-server-preview': preview_header_gtm
-            }
           };
     }
    
