@@ -32,8 +32,13 @@ exports.handler = async (event, context) => {
     }, {});
 
     let client_id = cookies['_ga'];
-    let preview_header_gtm = cookies['_gtm_preview'] + '=';
-    console.log('mp - gtm preview header: ', preview_header_gtm)
+    let preview_header_gtm = cookies['x-gtm-server-preview'];
+    if(preview_header_gtm) {
+        preview_header_gtm = preview_header_gtm + '=';
+    } else {
+        preview_header_gtm = undefined;
+    }
+    console.log('mp - gtm preview header from cookie: ', preview_header_gtm)
 
     const analyticsRequestBody = new URLSearchParams();
     analyticsRequestBody.append("v", "1");
@@ -81,8 +86,9 @@ exports.handler = async (event, context) => {
     // Set event data
     analyticsRequestBody.append("tid", "UA-55505440-1")
     analyticsRequestBody.append("t", "event")
-    analyticsRequestBody.append("ec", "Netlify Function")
-    analyticsRequestBody.append("ea", event["path"])
+    analyticsRequestBody.append("ec", "server2server")
+    // analyticsRequestBody.append("ea", event["path"])
+    analyticsRequestBody.append("ea", "Netlify Function")
     let user_platform = event.headers['sec-ch-ua-platform'];
     analyticsRequestBody.append("el", user_platform);
 
@@ -149,12 +155,13 @@ exports.handler = async (event, context) => {
     let ga_url = 'https://www.google-analytics.com/collect?';
     let gtm_server_url = 'https://tagging.byrgeleeuwangh.com/mp?';
     let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
-    //let preview_header = 'ZW52LTN8QnlqQzdKRkIwLXFrdTdqOF91SXJYZ3wxODE2N2EyYjk4ZmRmODYyOTRmMzg='
     
     console.log('mp - analyticsRequestBody: ', url_endpoint)
 
     // Axios
-    if(preview_header_gtm) {
+    // live preview or localhost
+    if (preview_header_gtm || user_document_location.includes('localhost')) {
+        console.log('mp - debug > preview_header_gtm: ', preview_header_gtm);
         var config = {
             method: 'post',
             url: url_endpoint,
@@ -162,15 +169,16 @@ exports.handler = async (event, context) => {
                 'x-gtm-server-preview': preview_header_gtm
             }
           };
-    } else {
+    // no preview
+    } else if (!preview_header_gtm && !user_document_location.includes('localhost')) {
+        console.log('mp - normal request')
         var config = {
             method: 'post',
-            url: url_endpoint,
-          };
+            url: url_endpoint
+        };
     }
-   
       
-      await axios(config)
+    await axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
       })
