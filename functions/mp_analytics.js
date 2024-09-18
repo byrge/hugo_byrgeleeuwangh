@@ -20,16 +20,19 @@ exports.handler = async (event, context) => {
     console.log('mp - started: ')
 
     const header_value = event.headers;
-    // console.log('mp - header_value - event.headers: ', header_value)
+    console.log('mp - header_value - event.headers: ', header_value)
 
+    
     const headers_cookies = event.headers.cookie || undefined;
-    let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
-        let strParts = str.split("=");
-        if (strParts[0] && strParts[1]) { 
-            obj[strParts[0].replace(/\s+/g, '')] = strParts[1].trim();
-        }
-        return obj;
-    }, {});
+    if(headers_cookies) {
+        let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
+            let strParts = str.split("=");
+            if (strParts[0] && strParts[1]) { 
+                obj[strParts[0].replace(/\s+/g, '')] = strParts[1].trim();
+            }
+            return obj;
+        }, {});
+    }
 
     let client_id = cookies['_ga'];
     let preview_header_gtm = cookies['x-gtm-server-preview'];
@@ -160,23 +163,14 @@ exports.handler = async (event, context) => {
 
     // Axios
     // live preview or localhost
-    if (preview_header_gtm || user_document_location.includes('localhost')) {
-        console.log('mp - debug > preview_header_gtm: ', preview_header_gtm);
-        var config = {
-            method: 'post',
-            url: url_endpoint,
-            headers: { 
-                'x-gtm-server-preview': preview_header_gtm
-            }
-          };
-    // no preview
-    } else if (!preview_header_gtm && !user_document_location.includes('localhost')) {
-        console.log('mp - normal request')
-        var config = {
-            method: 'post',
-            url: url_endpoint
-        };
-    }
+    console.log('mp - debug > preview_header_gtm: ', preview_header_gtm);
+    var config = {
+        method: 'post',
+        url: url_endpoint,
+        headers: preview_header_gtm ? { 
+            'x-gtm-server-preview': preview_header_gtm
+        } : null
+    } 
       
     await axios(config)
       .then(function (response) {
