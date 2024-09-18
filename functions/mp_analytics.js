@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
     let client_id = cookies['_ga'];
     let preview_header_gtm = cookies['x-gtm-server-preview'];
     if(preview_header_gtm) {
-        preview_header_gtm = preview_header_gtm + '=';
+        preview_header_gtm = preview_header_gtm /*+ '=';*/
     } else {
         preview_header_gtm = undefined;
     }
