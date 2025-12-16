@@ -109,18 +109,6 @@ exports.handler = async (event, context) => {
     //   }
     // });
 
-    // Function to create new cookie headers
-    let cookie_to_set
-    function create_cookie_to_set(cookievalue) {
-      if(cookie_to_set) {
-        cookie_to_set += '; ';
-        cookie_to_set += cookievalue;
-      } else {
-        cookie_to_set = cookievalue;
-      }
-      debugFunction('create_cookie_to_set: ', cookievalue)
-    }
-
     // Function for debug. Set cookie `cookie_debug` with value to true
     function debugFunction(text, param) {
       let cookie_debug = cookies['cookie_debug'];
@@ -132,6 +120,18 @@ exports.handler = async (event, context) => {
           console.log(debug_text, text)
         }
       }  
+    }
+    
+    // Function to create new cookie headers
+    let cookie_to_set
+    function create_cookie_to_set(cookievalue) {
+      if(cookie_to_set) {
+        cookie_to_set += '; ';
+        cookie_to_set += cookievalue;
+      } else {
+        cookie_to_set = cookievalue;
+      }
+      debugFunction('create_cookie_to_set: ', cookievalue)
     }
     
     debugFunction('qsp params',params)
