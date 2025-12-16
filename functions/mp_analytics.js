@@ -34,7 +34,7 @@ exports.handler = async (event, context) => {
         }, {});
     }
 
-    let client_id = cookies['_ga'];
+    let client_id = cookies['_ga'] || 'GA1.1.476680768.1765913766';
     let preview_header_gtm = cookies['x-gtm-server-preview'];
     if(preview_header_gtm) {
         preview_header_gtm = preview_header_gtm /*+ '=';*/
