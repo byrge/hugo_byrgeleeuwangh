@@ -28,6 +28,13 @@ exports.handler = async (event, context) => {
 
     let client_id;
     let preview_header_gtm;
+    let initial_referer;
+    let marketing_campaign;
+    let gclid_first_attribution;
+    let recent_referrer;
+    let cookiejs_version;
+    let initial_landing_page;
+
     if(headers_cookies) {
         let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
             let strParts = str.split("=");
@@ -41,12 +48,12 @@ exports.handler = async (event, context) => {
         console.log('mp - client_id: ', client_id) // GA UA > GA4
 
         // get cookies from set_cookie.js function and send as custom definition to ga
-        let initial_referer = cookies['_initial_referrer']; // cd7
-        let marketing_campaign = cookies['_marketing_campaign']; // cd8
-        let gclid_first_attribution = cookies['_gclid_first_attribution']; // cd9
-        let recent_referrer = cookies['_recent_referrer']; // cd10
-        let cookiejs_version = cookies['_cookiejs_version']; // cd11
-        let initial_landing_page = cookies['_initial_landing_page']; // cd12
+        initial_referer = cookies['_initial_referrer']; // cd7
+        marketing_campaign = cookies['_marketing_campaign']; // cd8
+        gclid_first_attribution = cookies['_gclid_first_attribution']; // cd9
+        recent_referrer = cookies['_recent_referrer']; // cd10
+        cookiejs_version = cookies['_cookiejs_version']; // cd11
+        initial_landing_page = cookies['_initial_landing_page']; // cd12
 
         //
         preview_header_gtm = cookies['x-gtm-server-preview'];
