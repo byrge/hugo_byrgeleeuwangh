@@ -36,8 +36,23 @@ exports.handler = async (event, context) => {
             }
             return obj;
         }, {});
+        // Set values based on cookies
         client_id = cookies['_ga'] || undefined;
-        console.log('mp - headers_cookies - headers.cookie: ', headers_cookies)
+        console.log('mp - client_id: ', client_id) // GA UA > GA4
+
+        // get cookies from set_cookie.js function and send as custom definition to ga
+        let initial_referer = cookies['_initial_referrer']; // cd7
+        let marketing_campaign = cookies['_marketing_campaign']; // cd8
+        let gclid_first_attribution = cookies['_gclid_first_attribution']; // cd9
+        let recent_referrer = cookies['_recent_referrer']; // cd10
+        let cookiejs_version = cookies['_cookiejs_version']; // cd11
+        let initial_landing_page = cookies['_initial_landing_page']; // cd12
+        analyticsRequestBody.append("cd7", initial_referer);
+        analyticsRequestBody.append("cd8", marketing_campaign);
+        analyticsRequestBody.append("cd9", gclid_first_attribution);
+        analyticsRequestBody.append("cd10", recent_referrer);
+        analyticsRequestBody.append("cd11", cookiejs_version);
+        analyticsRequestBody.append("cd12", initial_landing_page);
 
         //
         preview_header_gtm = cookies['x-gtm-server-preview'];
@@ -144,21 +159,6 @@ exports.handler = async (event, context) => {
         analyticsRequestBody.append("cs", '(direct)');
         analyticsRequestBody.append("cm", '(none)');
     }
-
-    // get cookies from set_cookie.js function and send as custom definition to ga
-    let initial_referer = cookies['_initial_referrer']; // cd7
-    let marketing_campaign = cookies['_marketing_campaign']; // cd8
-    let gclid_first_attribution = cookies['_gclid_first_attribution']; // cd9
-    let recent_referrer = cookies['_recent_referrer']; // cd10
-    let cookiejs_version = cookies['_cookiejs_version']; // cd11
-    let initial_landing_page = cookies['_initial_landing_page']; // cd12
-    analyticsRequestBody.append("cd7", initial_referer);
-    analyticsRequestBody.append("cd8", marketing_campaign);
-    analyticsRequestBody.append("cd9", gclid_first_attribution);
-    analyticsRequestBody.append("cd10", recent_referrer);
-    analyticsRequestBody.append("cd11", cookiejs_version);
-    analyticsRequestBody.append("cd12", initial_landing_page
-    );
 
     // Send event to Google Analytics
     let ga_url = 'https://www.google-analytics.com/collect?';
