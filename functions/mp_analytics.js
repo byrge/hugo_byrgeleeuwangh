@@ -24,6 +24,7 @@ exports.handler = async (event, context) => {
 
     
     const headers_cookies = event.headers.cookie || undefined;
+    console.log('mp - headers_cookies - headers.cookie: ', headers_cookies)
     if(headers_cookies) {
         let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
             let strParts = str.split("=");
@@ -32,16 +33,18 @@ exports.handler = async (event, context) => {
             }
             return obj;
         }, {});
-    }
+        let client_id = cookies['_ga'] || undefined;
+        console.log('mp - headers_cookies - headers.cookie: ', headers_cookies)
 
-    let client_id = cookies['_ga'] || 'GA1.1.476680768.1765913766';
-    let preview_header_gtm = cookies['x-gtm-server-preview'];
-    if(preview_header_gtm) {
-        preview_header_gtm = preview_header_gtm /*+ '=';*/
-    } else {
-        preview_header_gtm = undefined;
+        //
+        let preview_header_gtm = cookies['x-gtm-server-preview'];
+        if(preview_header_gtm) {
+            preview_header_gtm = preview_header_gtm /*+ '=';*/
+            console.log('mp - gtm preview header from cookie: ', preview_header_gtm)
+        } else {
+            preview_header_gtm = undefined;
+        }
     }
-    console.log('mp - gtm preview header from cookie: ', preview_header_gtm)
 
     const analyticsRequestBody = new URLSearchParams();
     analyticsRequestBody.append("v", "1");
