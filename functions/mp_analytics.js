@@ -58,7 +58,7 @@ exports.handler = async (event, context) => {
         //
         preview_header_gtm = cookies['x-gtm-server-preview'];
         if(preview_header_gtm) {
-            preview_header_gtm = preview_header_gtm /*+ '=';*/
+            preview_header_gtm = preview_header_gtm + '=';
             console.log('mp - gtm preview header from cookie: ', preview_header_gtm)
         } else {
             preview_header_gtm = undefined;
@@ -66,25 +66,6 @@ exports.handler = async (event, context) => {
     }
 
     const analyticsRequestBody = new URLSearchParams();
-
-    if(initial_referer) {
-        analyticsRequestBody.append("cd7", initial_referer);
-    }
-    if(marketing_campaign) {
-        analyticsRequestBody.append("cd8", marketing_campaign);
-    }
-    if(gclid_first_attribution) {
-        analyticsRequestBody.append("cd9", gclid_first_attribution);
-    }
-    if(recent_referrer) {
-        analyticsRequestBody.append("cd10", recent_referrer);
-    }
-    if(cookiejs_version) {
-        analyticsRequestBody.append("cd11", cookiejs_version);
-    }
-    if(initial_landing_page) {
-        analyticsRequestBody.append("cd12", initial_landing_page);
-    }
 
     analyticsRequestBody.append("v", "1");
     analyticsRequestBody.append("ds", "netlify_function");
@@ -179,6 +160,25 @@ exports.handler = async (event, context) => {
         console.log('no params > direct')
         analyticsRequestBody.append("cs", '(direct)');
         analyticsRequestBody.append("cm", '(none)');
+    }
+
+    if(initial_referer) {
+        analyticsRequestBody.append("cd7", initial_referer);
+    }
+    if(marketing_campaign) {
+        analyticsRequestBody.append("cd8", marketing_campaign);
+    }
+    if(gclid_first_attribution) {
+        analyticsRequestBody.append("cd9", gclid_first_attribution);
+    }
+    if(recent_referrer) {
+        analyticsRequestBody.append("cd10", recent_referrer);
+    }
+    if(cookiejs_version) {
+        analyticsRequestBody.append("cd11", cookiejs_version);
+    }
+    if(initial_landing_page) {
+        analyticsRequestBody.append("cd12", initial_landing_page);
     }
 
     // Send event to Google Analytics
