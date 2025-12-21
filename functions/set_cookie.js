@@ -88,8 +88,8 @@ exports.handler = async (event, context) => {
   };
 
   ///////////
-  const cookie_header_part = `; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
-  const cookie_header_part_session = `; Path=/; Domain=${current_domain}; ${secure}; SameSite=strict`;
+  const cookie_header_part = `; Path=/; Domain=${current_domain}; HttpOnly; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
+  const cookie_header_part_session = `; Path=/; Domain=${current_domain}; HttpOnly; ${secure}; SameSite=strict`;
 
   if(headers_cookies) {
     let cookies = headers_cookies.split(";").reduce(function(obj, str, index) {
@@ -234,7 +234,7 @@ exports.handler = async (event, context) => {
     }
 
     // Set cookie with version number for cookie.js
-    let cookie_js_version = 0.98;
+    let cookie_js_version = 0.99;
     let cookieHeadersVersionNumber = undefined;
     cookieHeadersVersionNumber = `_cookiejs_version=${cookie_js_version}; Path=/; Domain=${current_domain}; Max-Age=${maxAge}; ${secure}; SameSite=strict`;
     cookieHeaders.push(cookieHeadersVersionNumber);
