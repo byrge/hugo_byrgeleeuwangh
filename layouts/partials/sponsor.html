@@ -1,25 +1,21 @@
-<!-- Get CSV data -->
-{{ $url := "/data/sponsors/sponsors.csv" }}
-{{ $sep := ";" }}
-{{ $sponsors := getCSV $sep $url }}
+<!-- Get JSON data -->
+{{ $sponsors := .Site.Data.sponsors }}
     
     {{ range $i, $r := $sponsors | first 50 }}
-        <!-- not first row because of headers -->
-        {{ if ne $i 0 }}
 
         <!-- define variables -->
-        {{ $sponsor_publishDate := index $r 0 }}
+        {{ $sponsor_publishDate := $r.publishDate }}
         {{ $sponsor_publishDate_time := (time $sponsor_publishDate).Format "02 Jan" }}
-        {{ $sponsor_expiryDate := index $r 1 }}
+        {{ $sponsor_expiryDate := $r.expiryDate }}
         {{ $sponsor_expiryDate_time := ((time $sponsor_expiryDate).Add (-24 | duration "hour" )).Format "02 Jan" }}
-        <!-- if we have an *errors.errorString check the csv file (too many -> ;)  -->
-        {{ $sponsor_ISOWeek := int (index $r 2) }}
-        {{ $sponsorship_sold := index $r 3 }}
-        {{ $sponsor_name := index $r 4 }}
-        {{ $sponsor_text := index $r 5 }}
-        {{ $sponsor_link := index $r 6 }}
-        {{ $sponsor_email := index $r 7 }}
-    
+        <!-- if we have an error check the json file  -->
+        {{ $sponsor_ISOWeek := $r.isoWeek }}
+        {{ $sponsorship_sold := $r.sold }}
+        {{ $sponsor_name := $r.sponsorName }}
+        {{ $sponsor_text := $r.sponsorText }}
+        {{ $sponsor_link := $r.sponsorLink }}
+        {{ $sponsor_email := $r.sponsorEmail }}
+
         {{ $sponsor_availability_text := replace ( replace $sponsorship_sold "NO" "Available" ) "YES" "Sold" }}
         <!-- {{ printf "%#v" $sponsor_availability_text }} -->
 
@@ -44,5 +40,4 @@
                 <a id="analytics" class="entry-link" data-analytics="{{ $default_params | jsonify }}" data-analytics-eventname="view_promotion" data-analytics-action="select_promotion" data-analytics-listindex="{{$i}}" href="{{$sponsor_link}}?utm_source=byrgeleeuwangh&amp;utm_medium=website&amp;utm_campaign={{ $sponsor_publishDate_time | lower }}-{{ $sponsor_expiryDate_time | lower }}" title="link: {{ $sponsor_link }}" target="_blank" rel="noopener noreferrer"></a>
               </article>
             {{- end }}
-        {{- end }}
     {{- end }}

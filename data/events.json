@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Superweek",
+    "startDate": "2022-01-31",
+    "endDate": "2022-02-04",
+    "location": "Budapest - Hungary",
+    "url": "https://www.superweek.hu"
+  },
+  {
+    "name": "Heroes of Data Privacy",
+    "startDate": "2023-01-26",
+    "endDate": "2023-01-27",
+    "location": "virtual",
+    "url": "https://www.heroesofdataprivacy.com/"
+  },
+  {
+    "name": "Measurecamp Amsterdam",
+    "startDate": "2022-05-22",
+    "endDate": "2022-05-22",
+    "location": "Amsterdam Art Center - Amsterdam",
+    "url": "https://amsterdam.measurecamp.org/"
+  },
+  {
+    "name": "MeasureCamp Copenhagen",
+    "startDate": "2022-06-11",
+    "endDate": "2022-06-11",
+    "location": "Aller Huset - Havneholmen 33 1561 Copenhagen K",
+    "url": "https://copenhagen.measurecamp.org/"
+  }
+]

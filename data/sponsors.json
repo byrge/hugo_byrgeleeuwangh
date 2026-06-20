@@ -1,0 +1,542 @@
+[
+  {
+    "publishDate": "2020-12-28",
+    "expiryDate": "2022-01-04",
+    "isoWeek": 53,
+    "sold": "NO",
+    "sponsorName": "Digital Power",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Customer Experience, Data Science en Data Engineering. In multidisciplinaire teams zijn we jouw datapartner.",
+    "sponsorLink": "ttps://digital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-01-04",
+    "expiryDate": "2022-01-11",
+    "isoWeek": 1,
+    "sold": "YES",
+    "sponsorName": "Test 2",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-01-11",
+    "expiryDate": "2022-01-17",
+    "isoWeek": 2,
+    "sold": "NO",
+    "sponsorName": "Test 3",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-01-18",
+    "expiryDate": "2022-01-25",
+    "isoWeek": 3,
+    "sold": "YES",
+    "sponsorName": "Digital Power",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://digital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-01-25",
+    "expiryDate": "2022-02-01",
+    "isoWeek": 4,
+    "sold": "YES",
+    "sponsorName": "Digital Power 2",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://digital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-02-01",
+    "expiryDate": "2022-02-11",
+    "isoWeek": 5,
+    "sold": "YES",
+    "sponsorName": "Digital Power 3",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://digital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-02-08",
+    "expiryDate": "2022-02-15",
+    "isoWeek": 6,
+    "sold": "NO",
+    "sponsorName": "Test 7",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-02-15",
+    "expiryDate": "2022-02-22",
+    "isoWeek": 7,
+    "sold": "NO",
+    "sponsorName": "Test 8",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-02-22",
+    "expiryDate": "2022-03-01",
+    "isoWeek": 8,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-03-01",
+    "expiryDate": "2022-03-08",
+    "isoWeek": 9,
+    "sold": "YES",
+    "sponsorName": "Digital Power 4",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-03-08",
+    "expiryDate": "2022-03-15",
+    "isoWeek": 10,
+    "sold": "NO",
+    "sponsorName": "Digital Power 4",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-03-15",
+    "expiryDate": "2022-03-22",
+    "isoWeek": 11,
+    "sold": "YES",
+    "sponsorName": "Digital Power 4",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-03-22",
+    "expiryDate": "2022-03-29",
+    "isoWeek": 12,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-03-29",
+    "expiryDate": "2022-04-05",
+    "isoWeek": 13,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-04-05",
+    "expiryDate": "2022-04-12",
+    "isoWeek": 14,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-04-12",
+    "expiryDate": "2022-04-19",
+    "isoWeek": 15,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-04-19",
+    "expiryDate": "2022-04-26",
+    "isoWeek": 16,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-04-26",
+    "expiryDate": "2022-05-03",
+    "isoWeek": 17,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-05-03",
+    "expiryDate": "2022-05-10",
+    "isoWeek": 18,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-05-10",
+    "expiryDate": "2022-05-17",
+    "isoWeek": 19,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-05-17",
+    "expiryDate": "2022-05-24",
+    "isoWeek": 20,
+    "sold": "YES",
+    "sponsorName": "Digital Power 4",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-05-24",
+    "expiryDate": "2022-05-31",
+    "isoWeek": 21,
+    "sold": "NO",
+    "sponsorName": "Digital Power 5",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-05-31",
+    "expiryDate": "2022-06-07",
+    "isoWeek": 22,
+    "sold": "NO",
+    "sponsorName": "Digital Power 5",
+    "sponsorText": "Digital Power is een team van specialisten met passie voor data. We helpen organisaties, groot en klein, effectief te werken met data. Onze mensen zijn gespecialiseerd in Data Analytics, Technical Web Analytics, Data Science en Data Engineering. Wij zijn jouw datapartner.",
+    "sponsorLink": "https://igital-power.com",
+    "sponsorEmail": "email@sponsor.nl"
+  },
+  {
+    "publishDate": "2022-06-07",
+    "expiryDate": "2022-06-14",
+    "isoWeek": 23,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-06-14",
+    "expiryDate": "2022-06-21",
+    "isoWeek": 24,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-06-21",
+    "expiryDate": "2022-06-28",
+    "isoWeek": 25,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-06-28",
+    "expiryDate": "2022-07-05",
+    "isoWeek": 26,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-07-05",
+    "expiryDate": "2022-07-12",
+    "isoWeek": 27,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-07-12",
+    "expiryDate": "2022-07-19",
+    "isoWeek": 28,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-07-19",
+    "expiryDate": "2022-07-26",
+    "isoWeek": 29,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-07-26",
+    "expiryDate": "2022-08-02",
+    "isoWeek": 30,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-08-02",
+    "expiryDate": "2022-08-09",
+    "isoWeek": 31,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-08-09",
+    "expiryDate": "2022-08-16",
+    "isoWeek": 32,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-08-16",
+    "expiryDate": "2022-08-23",
+    "isoWeek": 33,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-08-23",
+    "expiryDate": "2022-08-30",
+    "isoWeek": 34,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-08-30",
+    "expiryDate": "2022-09-06",
+    "isoWeek": 35,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-09-06",
+    "expiryDate": "2022-09-13",
+    "isoWeek": 36,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-09-13",
+    "expiryDate": "2022-09-20",
+    "isoWeek": 37,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-09-20",
+    "expiryDate": "2022-09-27",
+    "isoWeek": 38,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-09-27",
+    "expiryDate": "2022-10-04",
+    "isoWeek": 39,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-10-04",
+    "expiryDate": "2022-10-11",
+    "isoWeek": 40,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-10-11",
+    "expiryDate": "2022-10-18",
+    "isoWeek": 41,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-10-18",
+    "expiryDate": "2022-10-25",
+    "isoWeek": 42,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-10-25",
+    "expiryDate": "2022-11-01",
+    "isoWeek": 43,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-11-01",
+    "expiryDate": "2022-11-08",
+    "isoWeek": 44,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-11-08",
+    "expiryDate": "2022-11-15",
+    "isoWeek": 45,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-11-15",
+    "expiryDate": "2022-11-22",
+    "isoWeek": 46,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-11-22",
+    "expiryDate": "2022-11-29",
+    "isoWeek": 47,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-11-29",
+    "expiryDate": "2022-12-06",
+    "isoWeek": 48,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-12-06",
+    "expiryDate": "2022-12-13",
+    "isoWeek": 49,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-12-13",
+    "expiryDate": "2022-12-20",
+    "isoWeek": 50,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-12-20",
+    "expiryDate": "2022-12-27",
+    "isoWeek": 51,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-12-27",
+    "expiryDate": "2022-01-03",
+    "isoWeek": 52,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  },
+  {
+    "publishDate": "2022-01-03",
+    "expiryDate": "2022-01-10",
+    "isoWeek": 1,
+    "sold": "NO",
+    "sponsorName": "",
+    "sponsorText": "",
+    "sponsorLink": "",
+    "sponsorEmail": ""
+  }
+]

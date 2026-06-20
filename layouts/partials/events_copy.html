@@ -3,18 +3,18 @@
 <!-- Get CSV data -->
 {{ $url := "/data/events/events.csv" }}
 {{ $sep := "," }}
-{{ $events := getCSV $sep $url }}
+{{ $events := hugo.Data.events.events }}
 {{ range $i, $r := $events }}
         <!-- not first row because of headers -->
     {{ if ne $i 0 }}
         <!-- define variables -->
-        {{ $event_start_date := index $r 1 }}
+        {{ $event_start_date := $r.startDate }}
         {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
+        {{ $event_end_date := $r.endDate }}
         {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
+        {{ $event_name := $r.name }}
+        {{ $event_location := $r.location }}
+        {{ $event_url := $r.url }}
 
         <!-- date logic for showing events 1 month before the event -->
         {{ $show_event_start := $event_start_date.AddDate 0 0 0 }}
@@ -46,7 +46,7 @@
         <!-- not first row because of headers -->
     {{ if ne $i 0 }}
         <!-- define variables -->
-        {{ $event_start_date := index $r 1 }}
+        {{ $event_start_date := $r.startDate }}
         {{ $event_start_date := (time $event_start_date) }}
         {{ $event_end_date := index $r 2 }}
         {{ $event_end_date := (time $event_end_date) }}

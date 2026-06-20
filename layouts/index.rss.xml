@@ -5,36 +5,31 @@
     <link>{{ .Permalink }}</link>
     <description>Recent content {{ if ne  .Title  .Site.Title }}{{ with .Title }}in {{.}} {{ end }}{{ end }}on {{ .Site.Title }}</description>
     <generator>Hugo -- gohugo.io</generator>{{ with .Site.LanguageCode }}
-    <language>{{.}}</language>{{end}}{{ with .Site.Author.email }}
-    <managingEditor>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</managingEditor>{{end}}{{ with .Site.Author.email }}
-    <webMaster>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</webMaster>{{end}}{{ with .Site.Copyright }}
+    <language>{{.}}</language>{{end}}{{ with .Site.Params.author.email }}
+    <managingEditor>{{.}}{{ with $.Site.Params.author.name }} ({{.}}){{end}}</managingEditor>{{end}}{{ with .Site.Params.author.email }}
+    <webMaster>{{.}}{{ with $.Site.Params.author.name }} ({{.}}){{end}}</webMaster>{{end}}{{ with .Site.Copyright }}
     <copyright>{{.}}</copyright>{{end}}{{ if not .Date.IsZero }}
     <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
     {{- with .OutputFormats.Get "RSS" -}}
     {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{- end -}}
     <!-- sponsor of the week -->
-    <!-- Get CSV data -->
-{{ $url := "/data/sponsors/sponsors.csv" }}
-{{ $sep := ";" }}
-{{ $sponsors := getCSV $sep $url }}
+    <!-- Get JSON data -->
+{{ $sponsors := .Site.Data.sponsors }}
     
     {{ range $i, $r := $sponsors | first 20 }}
-        <!-- not first row because of headers -->
-        {{ if ne $i 0 }}
 
         <!-- define variables -->
-        {{ $sponsor_publishDate := index $r 0 }}
+        {{ $sponsor_publishDate := $r.publishDate }}
         {{ $sponsor_publishDate_time := (time $sponsor_publishDate).Format "02 Jan" }}
-        {{ $sponsor_expiryDate := index $r 1 }}
+        {{ $sponsor_expiryDate := $r.expiryDate }}
         {{ $sponsor_expiryDate_time := ((time $sponsor_expiryDate).Add (-24 | duration "hour" )).Format "02 Jan" }}
-        <!-- if we have an *errors.errorString check the csv file (too many -> ;)  -->
-        {{ $sponsor_ISOWeek := int (index $r 2) }}
-        {{ $sponsorship_sold := index $r 3 }}
-        {{ $sponsor_name := index $r 4 }}
-        {{ $sponsor_text := index $r 5 }}
-        {{ $sponsor_link := index $r 6 }}
-        {{ $sponsor_email := index $r 7 }}
+        {{ $sponsor_ISOWeek := $r.isoWeek }}
+        {{ $sponsorship_sold := $r.sold }}
+        {{ $sponsor_name := $r.sponsorName }}
+        {{ $sponsor_text := $r.sponsorText }}
+        {{ $sponsor_link := $r.sponsorLink }}
+        {{ $sponsor_email := $r.sponsorEmail }}
     
         {{ $sponsor_availability_text := replace ( replace $sponsorship_sold "NO" "Available" ) "YES" "Sold" }}
 
@@ -55,24 +50,19 @@
             </item>
 
             {{- end }}
-        {{- end }}
     {{- end }}
     <!-- event -->
-    <!-- Get CSV data -->
-    {{ $url := "/data/events/events.csv" }}
-    {{ $sep := "," }}
-    {{ $events := getCSV $sep $url }}
+    <!-- Get JSON data -->
+    {{ $events := .Site.Data.events }}
     {{ range $i, $r := $events }}
-            <!-- not first row because of headers -->
-        {{ if ne $i 0 }}
             <!-- define variables -->
-            {{ $event_start_date := index $r 1 }}
+            {{ $event_start_date := $r.startDate }}
             {{ $event_start_date := (time $event_start_date) }}
-            {{ $event_end_date := index $r 2 }}
+            {{ $event_end_date := $r.endDate }}
             {{ $event_end_date := (time $event_end_date) }}
-            {{ $event_name := index $r 0 }}
-            {{ $event_location := index $r 3 }}
-            {{ $event_url := index $r 4 }}
+            {{ $event_name := $r.name }}
+            {{ $event_location := $r.location }}
+            {{ $event_url := $r.url }}
 
             <!-- date logic for showing events 1 month before the event -->
             {{ $show_event := $event_start_date.After now }}
@@ -92,7 +82,6 @@
                 <description>{{ $event_name | html }}</description>
             </item>
             {{- end }}
-        {{- end }}
     {{- end }}
     <!-- end event -->
 

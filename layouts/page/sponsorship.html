@@ -10,7 +10,7 @@
 <!-- Get CSV data -->
 {{ $url := "/data/sponsors/sponsors.csv" }}
 {{ $sep := ";" }}
-{{ $sponsors := getCSV $sep $url }}
+{{ $sponsors := hugo.Data.sponsors.sponsors }}
     
     <div class="sponsorship table">
         <table class="availability-table">

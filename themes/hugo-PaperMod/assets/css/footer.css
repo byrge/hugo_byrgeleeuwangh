@@ -51,6 +51,12 @@
 .top-link:focus {
     outline: 0
 }
+.w3c-validate {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--secondary);
+}
 
 @media screen and (max-width:800px) {
     .list .top-link {

@@ -1,24 +1,20 @@
 {{ $icon_loudspeaker := ":loudspeaker:" }}
 
 <!-- Publish Event on homepage -->
-<!-- Get CSV data -->
-{{ $url := "/data/events/events.csv" }}
-{{ $sep := "," }}
-{{ $events := getCSV $sep $url }}
+<!-- Get JSON data -->
+{{ $events := .Site.Data.events }}
 {{ range $i, $r := $events }}
 
-    <!-- not first row because of headers -->
-    {{ if ne $i 0 }}
         <!-- define variables -->
-        {{ $event_start_date_time := index $r 1 }}
-        {{ $event_end_date_time := index $r 2 }}
-        {{ $event_start_date := index $r 1 }}
-        {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
-        {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
+        {{ $event_start_date_time := $r.startDate }}
+        {{ $event_start_date_time := (time $event_start_date_time) }}
+        {{ $event_end_date_time := $r.endDate }}
+        {{ $event_end_date_time := (time $event_end_date_time) }}
+        {{ $event_name := $r.name }}
+        {{ $event_location := $r.location }}
+        {{ $event_url := $r.url }}
+        {{ $event_start_date := (time $r.startDate) }}
+        {{ $event_end_date := (time $r.endDate) }}
 <!-- 2 weeks ahead by setting AddDate plus 14 AND check if IsHome -->
 {{- if and ((time $event_start_date_time).Before (now.AddDate 0 0 14)) ((time $event_end_date_time).After now) ($.IsHome) }}
 
@@ -31,7 +27,6 @@
         </tr>
     </table>
 </article>
-{{- end }}
 {{- end }}
 {{- end }}
 <!---->
@@ -48,13 +43,11 @@
     {{ if ne $i 0 }}
 
         <!-- define variables -->
-        {{ $event_start_date := index $r 1 }}
-        {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
-        {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
+        {{ $event_start_date := (time $r.startDate) }}
+        {{ $event_end_date := (time $r.endDate) }}
+        {{ $event_name := $r.name }}
+        {{ $event_location := $r.location }}
+        {{ $event_url := $r.url }}
 
         <!-- date logic for showing events 1 month before the event -->
         {{ $show_event := $event_start_date.After now }}
@@ -84,16 +77,12 @@
         <h3 class="events">coming events</h3>
     {{- end }}
 {{- end }}
-        <!-- not first row because of headers -->
-    {{ if ne $i 0 }}
         <!-- define variables -->
-        {{ $event_start_date := index $r 1 }}
-        {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
-        {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
+        {{ $event_start_date := (time $r.startDate) }}
+        {{ $event_end_date := (time $r.endDate) }}
+        {{ $event_name := $r.name }}
+        {{ $event_location := $r.location }}
+        {{ $event_url := $r.url }}
 
         <!-- date logic for showing events 1 month before the event -->
         {{ $show_event := $event_start_date.After now }}
@@ -116,22 +105,17 @@
         </article>
         {{- end }}
         {{- end }}
-    {{- end }}
 {{- end }}
 
 <!-- show past events -->
 {{ range $i, $r := $events }}
 {{- if eq $i 0 }}{{- if not $.IsHome }}<h3 class="events">past events</h3>{{- end }}{{- end }}
-        <!-- not first row because of headers -->
-    {{ if ne $i 0 }}
         <!-- define variables -->
-        {{ $event_start_date := index $r 1 }}
-        {{ $event_start_date := (time $event_start_date) }}
-        {{ $event_end_date := index $r 2 }}
-        {{ $event_end_date := (time $event_end_date) }}
-        {{ $event_name := index $r 0 }}
-        {{ $event_location := index $r 3 }}
-        {{ $event_url := index $r 4 }}
+        {{ $event_start_date := (time $r.startDate) }}
+        {{ $event_end_date := (time $r.endDate) }}
+        {{ $event_name := $r.name }}
+        {{ $event_location := $r.location }}
+        {{ $event_url := $r.url }}
 
         <!-- date logic for showing past events -->
         {{ $show_event_past := $event_start_date.Before now }}
@@ -150,5 +134,4 @@
         </article>
         {{- end }}
         {{- end }}
-    {{- end }}
 {{- end }}
