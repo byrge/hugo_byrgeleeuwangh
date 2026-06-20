@@ -8,23 +8,23 @@ exports.handler = async (event, context) => {
         function extractNetlifySiteFromContext(context) {
             data = context.clientContext.custom.netlify
             decoded = JSON.parse(Buffer.from(data, "base64").toString("utf-8"))
-            console.log('Netlify context decoded <><> ', decoded)
+            console.log('V2 - V2 - Netlify context decoded <><> ', decoded)
             return decoded
         }
         const parsedContext = extractNetlifySiteFromContext(context)
-        console.log('parsedContext <><> ', parsedContext)
+        console.log('V2 - parsedContext <><> ', parsedContext)
     } else {
-        console.log('Netlify Context isEmpty')
+        console.log('V2 - Netlify Context isEmpty')
     }
         
-    console.log('mp - started: ')
+    console.log('V2 - mp - started: ')
 
     const header_value = event.headers;
-    console.log('mp - header_value - event.headers: ', header_value)
+    console.log('V2 - mp - header_value - event.headers: ', header_value)
 
     
     const headers_cookies = event.headers.cookie || undefined;
-    console.log('mp - headers_cookies - headers.cookie: ', headers_cookies)
+    console.log('V2 - mp - headers_cookies - headers.cookie: ', headers_cookies)
 
     let client_id;
     let preview_header_gtm;
@@ -45,21 +45,21 @@ exports.handler = async (event, context) => {
         }, {});
         // Set values based on cookies
         client_id = cookies['_ga'] || undefined;
-        console.log('mp - client_id: ', client_id) // GA UA > GA4
+        console.log('V2 - mp - client_id: ', client_id) // GA UA > GA4
 
-        // get cookies from set_cookie.js function and send as custom definition to ga
-        initial_referer = cookies['_initial_referrer']; // cd7
-        marketing_campaign = cookies['_marketing_campaign']; // cd8
-        gclid_first_attribution = cookies['_gclid_first_attribution']; // cd9
-        recent_referrer = cookies['_recent_referrer']; // cd10
-        cookiejs_version = cookies['_cookiejs_version']; // cd11
-        initial_landing_page = cookies['_initial_landing_page']; // cd12
+        // get cookies from set_cookie.js function and send as custom definitions to GA4
+        initial_referer = cookies['_initial_referrer']; // initial_referrer
+        marketing_campaign = cookies['_marketing_campaign']; // marketing_campaign
+        gclid_first_attribution = cookies['_gclid_first_attribution']; // gclid_first_attribution
+        recent_referrer = cookies['_recent_referrer']; // recent_referrer
+        cookiejs_version = cookies['_cookiejs_version']; // cookiejs_version
+        initial_landing_page = cookies['_initial_landing_page']; // initial_landing_page
 
         //
         preview_header_gtm = cookies['x-gtm-server-preview'];
         if(preview_header_gtm) {
             preview_header_gtm = preview_header_gtm + '=';
-            console.log('mp - gtm preview header from cookie: ', preview_header_gtm)
+            console.log('V2 - mp - gtm preview header from cookie: ', preview_header_gtm)
         } else {
             preview_header_gtm = undefined;
         }
@@ -88,7 +88,7 @@ exports.handler = async (event, context) => {
 
     // Set document location
     let user_document_location = event.headers['referer'] || event.rawUrl;
-    console.log('user_document_location <><><>>>>>> ', user_document_location)
+    console.log('V2 - user_document_location <><><>>>>>> ', user_document_location)
     if(user_document_location) {
         analyticsRequestBody.append("dl", user_document_location);
         let url_from_referer = new URL(user_document_location)
@@ -134,7 +134,7 @@ exports.handler = async (event, context) => {
     let param_utmCampaign = params.get('utm_campaign') || undefined;
 
     if(param_utmSource && param_utmMedium) {
-        console.log('set utm params')
+        console.log('V2 - set utm params')
         analyticsRequestBody.append("cs", param_utmSource);
         analyticsRequestBody.append("cm", param_utmMedium);
     }
@@ -142,7 +142,7 @@ exports.handler = async (event, context) => {
         analyticsRequestBody.append("cn", param_utmCampaign);
     }
     if(param_gclid) {
-        console.log('set gclid params')
+        console.log('V2 - set gclid params')
         analyticsRequestBody.append("cs", 'google');
         analyticsRequestBody.append("cm", 'cpc');
         analyticsRequestBody.append("gclid", param_gclid);
@@ -152,12 +152,12 @@ exports.handler = async (event, context) => {
         google_organic = user_document_location.includes('google'); // TO DO > CONTEXT
     }
     if(!param_gclid && google_organic) {
-        console.log('set organic params')
+        console.log('V2 - set organic params')
         analyticsRequestBody.append("cs", 'google');
         analyticsRequestBody.append("cm", 'organic');
     }
     else if(!param_utmSource && !param_gclid) {
-        console.log('no params > direct')
+        console.log('V2 - no params > direct')
         analyticsRequestBody.append("cs", '(direct)');
         analyticsRequestBody.append("cm", '(none)');
     }
@@ -186,11 +186,11 @@ exports.handler = async (event, context) => {
     let gtm_server_url = 'https://hola.byrgeleeuwangh.com/mp?';
     let url_endpoint = gtm_server_url+analyticsRequestBody.toString()
     
-    console.log('mp - analyticsRequestBody: ', url_endpoint)
+    console.log('V2 - mp - analyticsRequestBody: ', url_endpoint)
 
     // Axios
     // live preview or localhost
-    console.log('mp - debug > preview_header_gtm: ', preview_header_gtm);
+    console.log('V2 - mp - debug > preview_header_gtm: ', preview_header_gtm);
     var config = {
         method: 'post',
         url: url_endpoint,
