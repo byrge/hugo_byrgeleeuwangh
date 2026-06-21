@@ -62,7 +62,7 @@ socialIcons: # optional
 | 36  | steam         | steampowered.com                |
 | 37  | telegram      | telegram.org                    |
 | 38  | twitch        | twitch.tv                       |
-| 39  | twitter       | twitter.com                     |
+| 39  | x             | x.com                     |
 | 40  | youtube       | youtube.com                     |
 | 41  | other         | -                               |
 
@@ -72,7 +72,7 @@ socialIcons: # optional
 
 | No. | Platform |
 | --- | -------- |
-| 1   | twitter  |
+| 1   | x        |
 | 2   | linkedin |
 | 3   | reddit   |
 | 4   | facebook |

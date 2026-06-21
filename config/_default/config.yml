@@ -154,8 +154,8 @@ params:
         #   url: "#"
         - name: linkedin
           url: "https://www.linkedin.com/in/byrgeleeuwangh/"
-        - name: twitter
-          url: "https://twitter.com/leeuwangh"
+        - name: x (twitter)
+          url: "https://x.com/leeuwangh"
         - name: github
           url: "https://github.com/byrge/hugo_byrgeleeuwangh"
         - name: codepen
@@ -174,7 +174,7 @@ privacy:
     x:
         disabled: false
         enableDNT: true
-        simple: true
+        simple: false
 
     instagram:
         disabled: false

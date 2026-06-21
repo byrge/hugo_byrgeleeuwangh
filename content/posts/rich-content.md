@@ -25,7 +25,7 @@ Hugo ships with several [Built-in Shortcodes](https://gohugo.io/content-manageme
 
 ---
 
-## Twitter Simple Shortcode
+## X (Twitter) Simple Shortcode
 
 {{< x user="leeuwangh" id="1085870671291310081" >}}
 

@@ -323,11 +323,11 @@ Displays a Scroll-to-Top button in right-bottom corner
 
 #### Open-Graph support
 
-#### Twitter Cards Support
+#### X (Twitter) Cards Support
 
 #### Syntax highlighting
 
-#### Twitter cards and opengraph tags support
+#### X (Twitter) cards and opengraph tags support
 
 #### RSS feeds
 

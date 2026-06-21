@@ -42,7 +42,7 @@ When Hugo builds your site, your copy of `list.html` will be used instead of the
 
 ## Enable Social-Metadata and SEO
 
-These include OpenGraph, Twitter Cards and Schema.
+These include OpenGraph, X (Twitter) Cards and Schema.
 
 ```yml
 params:
