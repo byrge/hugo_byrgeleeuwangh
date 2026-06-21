@@ -94,7 +94,6 @@
 {{- partial "extend_head.html" . -}}
 <!-- Misc -->
 {{- if hugo.IsProduction | or (eq .Site.Params.env "production") }}
-{{- template "partials/templates/opengraph.html" . }}
-{{- template "partials/templates/twitter_cards.html" . }}
+<!-- Twitter Cards -->
 {{- template "partials/templates/schema_json.html" . }}
 {{- end }}

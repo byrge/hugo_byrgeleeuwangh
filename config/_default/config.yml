@@ -154,12 +154,12 @@ params:
         #   url: "#"
         - name: linkedin
           url: "https://www.linkedin.com/in/byrgeleeuwangh/"
-        - name: x (twitter)
-          url: "https://x.com/leeuwangh"
+        #- name: x (twitter)
+        #  url: "https://x.com/leeuwangh"
         - name: github
           url: "https://github.com/byrge/hugo_byrgeleeuwangh"
-        - name: codepen
-          url: "#"
+        #- name: codepen
+        #  url: "#"
 
 taxonomies:
     category: categories
@@ -171,14 +171,14 @@ privacy:
         disabled: false
         simple: true
 
-    x:
-        disabled: false
-        enableDNT: true
-        simple: false
+    #x:
+    #    disabled: false
+    #    enableDNT: true
+    #     simple: false
 
-    instagram:
-        disabled: false
-        simple: true
+    #instagram:
+    #    disabled: false
+    #    simple: true
 
     youtube:
         disabled: false
@@ -187,5 +187,5 @@ privacy:
 services:
     instagram:
         disableInlineCSS: true
-    x:
-        disableInlineCSS: true
+    #x:
+    #    disableInlineCSS: true
